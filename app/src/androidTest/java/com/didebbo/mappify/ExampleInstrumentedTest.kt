@@ -1,4 +1,4 @@
-package com.example.mappify
+package com.didebbo.mappify
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

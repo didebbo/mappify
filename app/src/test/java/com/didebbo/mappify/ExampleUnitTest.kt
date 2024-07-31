@@ -1,4 +1,4 @@
-package com.example.mappify
+package com.didebbo.mappify
 
 import org.junit.Test
 

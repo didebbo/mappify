@@ -1,4 +1,4 @@
-package com.example.mappify.data.model
+package com.didebbo.mappify.data.model
 
 import com.google.android.gms.maps.model.LatLng
 

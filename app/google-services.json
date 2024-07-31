@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1070004597211",
+    "project_id": "mappify-d13d0",
+    "storage_bucket": "mappify-d13d0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1070004597211:android:68a0976a8bf183563337fe",
+        "android_client_info": {
+          "package_name": "com.github.didebbo.mappify"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1070004597211-apr3v3brbq8ai641l5ldhfjvt41bij1j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.github.didebbo.mappify",
+            "certificate_hash": "564f113785fa903124417726835888d7d27a8a31"
+          }
+        },
+        {
+          "client_id": "1070004597211-mao63euircrv9jnp4ecnc4paplchidcv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgJPV6FlyWAsaRcekN1JlIouMRWBcokIg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1070004597211-mao63euircrv9jnp4ecnc4paplchidcv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

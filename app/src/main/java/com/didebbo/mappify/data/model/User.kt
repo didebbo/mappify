@@ -1,4 +1,4 @@
-package com.example.mappify.data.model
+package com.didebbo.mappify.data.model
 
 data class User(
     private val id: String,

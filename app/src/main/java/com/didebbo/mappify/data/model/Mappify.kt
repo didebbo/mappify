@@ -1,4 +1,4 @@
-package com.example.mappify.data.model
+package com.didebbo.mappify.data.model
 
 data class Mappify(
     private val markerPosts: ArrayList<MarkerPost>
