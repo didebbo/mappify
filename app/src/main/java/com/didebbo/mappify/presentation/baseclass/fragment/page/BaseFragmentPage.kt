@@ -9,6 +9,7 @@ import com.didebbo.mappify.presentation.baseclass.activity.BaseActivityInterface
 
 interface BaseFragmentPageInterface {
     val parentActivity: BaseActivityInterface?
+    fun onBackAction(): Boolean
 }
 
 abstract class BaseFragmentPage: Fragment(), BaseFragmentPageInterface {
@@ -21,6 +22,10 @@ abstract class BaseFragmentPage: Fragment(), BaseFragmentPageInterface {
         savedInstanceState: Bundle?
     ): View? {
         return inflateView(inflater,container,savedInstanceState)
+    }
+
+    override fun onBackAction(): Boolean {
+        return false
     }
 
     abstract fun inflateView(

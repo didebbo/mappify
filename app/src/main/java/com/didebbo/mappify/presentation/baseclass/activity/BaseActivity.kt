@@ -1,6 +1,10 @@
 package com.didebbo.mappify.presentation.baseclass.activity
 
 import android.os.Bundle
+import android.util.Log
+import android.window.OnBackInvokedDispatcher
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph
@@ -9,6 +13,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.viewbinding.ViewBinding
+import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentPage
 import com.github.didebbo.mappify.R
 import com.github.didebbo.mappify.databinding.BaseActivityLayoutBinding
 
@@ -40,7 +45,12 @@ abstract class BaseActivity: AppCompatActivity(), BaseActivityInterface {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        return navController.navigateUp() || super.onSupportNavigateUp()
+        val currentFragment = baseNavHostFragment.childFragmentManager.primaryNavigationFragment as? BaseFragmentPage
+        currentFragment?.let { currentFragment ->
+            Log.i("GN", "$currentFragment")
+            if(!currentFragment.onBackAction()) return navController.navigateUp()
+        }
+        return super.onSupportNavigateUp()
     }
 
     fun setupActionBarWithNavGraph(graphResId: Int) {

@@ -7,6 +7,7 @@
 
     <fragment android:name="com.didebbo.mappify.presentation.fragment.destination.LoginPage"
         android:id="@+id/loginPage"
+        android:label="Login"
         tools:layout="@layout/login_page_layout">
         <action
             android:id="@+id/navigate_from_loginPage_to_registerPage"
@@ -16,6 +17,7 @@
 
     <fragment android:name="com.didebbo.mappify.presentation.fragment.destination.RegisterPage"
         android:id="@+id/registerPage"
+        android:label="Register"
         tools:layout="@layout/register_page_layout">
         <action
             android:id="@+id/navigate_from_registerPage_to_loginPage"
