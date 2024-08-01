@@ -1,36 +1,26 @@
 package com.didebbo.mappify.presentation.baseclass.fragment.page
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.didebbo.mappify.presentation.baseclass.activity.BaseActivityInterface
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupActionBarWithNavController
+import com.didebbo.mappify.presentation.baseclass.activity.BaseActivity
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
-interface BaseFragmentPageInterface {
-    val parentActivity: BaseActivityInterface?
-    fun onBackAction(): Boolean
-}
+abstract class BaseFragmentPage: Fragment() {
 
-abstract class BaseFragmentPage: Fragment(), BaseFragmentPageInterface {
-    override val parentActivity: BaseActivityInterface?
-        get() = activity as? BaseActivityInterface
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflateView(inflater,container,savedInstanceState)
-    }
-
-    override fun onBackAction(): Boolean {
+    val parentActivity: BaseActivity? by lazy { activity as? BaseActivity }
+    private  val navController: NavController? by lazy { parentActivity?.navController }
+    open fun onSupportNavigateUp(): Boolean? {
         return false
     }
-
-    abstract fun inflateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View
 }
