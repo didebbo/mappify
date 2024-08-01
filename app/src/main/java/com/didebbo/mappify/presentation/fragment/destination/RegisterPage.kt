@@ -7,7 +7,9 @@ import android.view.ViewGroup
 import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentPage
 import com.didebbo.mappify.presentation.viewmodel.PreLoginViewModel
 import com.github.didebbo.mappify.databinding.RegisterPageLayoutBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class RegisterPage: BaseFragmentPage<PreLoginViewModel>(PreLoginViewModel::class.java) {
 
     private lateinit var registerPageLayoutBinding: RegisterPageLayoutBinding
@@ -25,7 +27,7 @@ class RegisterPage: BaseFragmentPage<PreLoginViewModel>(PreLoginViewModel::class
         super.onViewCreated(view, savedInstanceState)
 
         registerPageLayoutBinding.emailRegisterButton.setOnClickListener {
-            viewModel.registerUser()
+            viewModel.createUserWithEmailAndPassword("prova@gmail.com","password1234")
         }
     }
 }
