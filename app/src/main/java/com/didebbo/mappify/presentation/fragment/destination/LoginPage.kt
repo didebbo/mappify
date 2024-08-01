@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import com.didebbo.mappify.data.model.UserAuth
 import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentPage
 import com.didebbo.mappify.presentation.view.activity.PostLoginActivity
+import com.didebbo.mappify.presentation.view.activity.PreLoginActivity
 import com.didebbo.mappify.presentation.viewmodel.PreLoginViewModel
 import com.github.didebbo.mappify.R
 import com.github.didebbo.mappify.databinding.LoginPageLayoutBinding
@@ -19,6 +20,7 @@ import kotlinx.coroutines.launch
 class LoginPage: BaseFragmentPage<PreLoginViewModel>(PreLoginViewModel::class.java) {
 
     private lateinit var loginPageLayoutBinding: LoginPageLayoutBinding
+    private val preLoginActivity: PreLoginActivity? by lazy { parentActivity as? PreLoginActivity }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,8 +47,7 @@ class LoginPage: BaseFragmentPage<PreLoginViewModel>(PreLoginViewModel::class.ja
 
             lifecycleScope.launch {
                 if(viewModel.signInWithEmailAndPassword(userAuth)) {
-                    val postLogin = Intent(context,PostLoginActivity::class.java)
-                    startActivity(postLogin)
+                    preLoginActivity?.navigateToPostLogin()
                 } else {
                     Snackbar.make(loginPageLayoutBinding.root,"Invalid User", Snackbar.LENGTH_SHORT).show()
                 }

@@ -1,5 +1,6 @@
 package com.didebbo.mappify.presentation.baseclass.activity
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
@@ -32,6 +33,7 @@ abstract class BaseActivity<VM: ViewModel>(): AppCompatActivity() {
         setContentView(baseActivityLayoutBinding.root)
     }
 
+    @Suppress("UNCHECKED_CAST")
     override fun onSupportNavigateUp(): Boolean {
         val currentFragment = baseNavHostFragment.childFragmentManager.primaryNavigationFragment as? BaseFragmentPage<VM>
         currentFragment?.let {
@@ -45,5 +47,16 @@ abstract class BaseActivity<VM: ViewModel>(): AppCompatActivity() {
         navController.setGraph(navigationId)
         val appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController,appBarConfiguration)
+    }
+
+    fun navigateToDestination(resId: Int) {
+        navController.navigate(resId)
+    }
+    fun popBackStack() {
+        navController.popBackStack()
+    }
+
+    fun navigateToActivity(intent: Intent) {
+        startActivity(intent)
     }
 }

@@ -6,8 +6,11 @@ import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.auth
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.tasks.await
+import java.lang.Exception
 import kotlin.coroutines.suspendCoroutine
 
 
@@ -32,11 +35,12 @@ class FirebaseDataProvider {
     }
 
     suspend fun signInWithEmailAndPassword(userAuth: UserAuth): Boolean {
-        return suspendCancellableCoroutine { continuation ->
-            auth.signInWithEmailAndPassword(userAuth.email,userAuth.password).addOnCompleteListener {
-               continuation.resume(it.isSuccessful, null)
-            }
+        return try {
+            auth.signInWithEmailAndPassword(userAuth.email,userAuth.password).await().user != null
+        } catch (e: Exception) {
+            false
         }
+
     }
 
 
