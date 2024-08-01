@@ -46,10 +46,16 @@ class LoginPage: BaseFragmentPage<PreLoginViewModel>(PreLoginViewModel::class.ja
             )
 
             lifecycleScope.launch {
-                if(viewModel.signInWithEmailAndPassword(userAuth)) {
-                    preLoginActivity?.navigateToPostLogin()
-                } else {
-                    Snackbar.make(loginPageLayoutBinding.root,"Invalid User", Snackbar.LENGTH_SHORT).show()
+                viewModel.signInWithEmailAndPassword(userAuth).let { result ->
+                    result.exceptionOrNull()?.let {
+                        Snackbar.make(loginPageLayoutBinding.root,it.localizedMessage,Snackbar.LENGTH_SHORT).show()
+                    }
+                    result.getOrNull()?.let { success ->
+                        if(success)
+                            preLoginActivity?.navigateToPostLogin()
+                        else
+                            Snackbar.make(loginPageLayoutBinding.root,"User Not Found",Snackbar.LENGTH_SHORT).show()
+                    }
                 }
             }
         }

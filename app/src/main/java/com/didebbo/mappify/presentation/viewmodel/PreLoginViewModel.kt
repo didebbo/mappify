@@ -28,10 +28,10 @@ class PreLoginViewModel @Inject constructor(
             loginRepository.createUserWithEmailAndPassword(userAuth)
     }
 
-    suspend fun signInWithEmailAndPassword(userAuth: UserAuth): Boolean {
+    suspend fun signInWithEmailAndPassword(userAuth: UserAuth): Result<Boolean> {
         return withContext(Dispatchers.IO) {
             if(userAuth.isUserAuthValid()) loginRepository.signInWithEmailAndPassword(userAuth)
-            else false
+            else Result.failure(Exception("Invalid Credentials"))
         }
     }
 }
