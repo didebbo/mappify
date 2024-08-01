@@ -5,14 +5,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavOptions
 import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentPage
 import com.didebbo.mappify.presentation.view.activity.PostLoginActivity
 import com.didebbo.mappify.presentation.view.activity.PreLoginActivity
+import com.didebbo.mappify.presentation.viewmodel.PreLoginViewModel
 import com.github.didebbo.mappify.R
 import com.github.didebbo.mappify.databinding.LoginPageLayoutBinding
 
-class LoginPage: BaseFragmentPage() {
+class LoginPage: BaseFragmentPage<PreLoginViewModel>(PreLoginViewModel::class.java) {
 
     private lateinit var loginPageLayoutBinding: LoginPageLayoutBinding
 

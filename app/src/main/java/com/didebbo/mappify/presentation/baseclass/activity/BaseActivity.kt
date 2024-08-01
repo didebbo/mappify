@@ -11,7 +11,7 @@ import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentPage
 import com.github.didebbo.mappify.R
 import com.github.didebbo.mappify.databinding.BaseActivityLayoutBinding
 
-abstract class BaseActivity<VM: ViewModel>: AppCompatActivity() {
+abstract class BaseActivity<VM: ViewModel>(): AppCompatActivity() {
 
     private lateinit var baseActivityLayoutBinding: BaseActivityLayoutBinding
     private lateinit var baseNavHostFragment: NavHostFragment
@@ -33,7 +33,7 @@ abstract class BaseActivity<VM: ViewModel>: AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        val currentFragment = baseNavHostFragment.childFragmentManager.primaryNavigationFragment as? BaseFragmentPage
+        val currentFragment = baseNavHostFragment.childFragmentManager.primaryNavigationFragment as? BaseFragmentPage<VM>
         currentFragment?.let {
             if(it.onSupportNavigateUp() == false)
                 return navController.navigateUp()
