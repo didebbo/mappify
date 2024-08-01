@@ -1,5 +1,6 @@
 package com.didebbo.mappify.domain.repository
 
+import com.didebbo.mappify.data.model.UserAuth
 import com.didebbo.mappify.data.provider.FirebaseDataProvider
 import com.google.firebase.auth.FirebaseUser
 import javax.inject.Inject
@@ -17,11 +18,11 @@ class LoginRepository @Inject constructor(
         return firebaseDataProvider.isSignedIn()
     }
 
-    fun createUserWithEmailAndPassword(email: String, password: String) {
-        firebaseDataProvider.createUserWithEmailAndPassword(email, password)
+    fun createUserWithEmailAndPassword(userAuth: UserAuth) {
+        firebaseDataProvider.createUserWithEmailAndPassword(userAuth)
     }
 
-    fun signInWithEmailAndPassword(email: String, password: String) {
-        firebaseDataProvider.signInWithEmailAndPassword(email, password)
+    fun signInWithEmailAndPassword(userAuth: UserAuth) {
+        firebaseDataProvider.signInWithEmailAndPassword(userAuth)
     }
 }
