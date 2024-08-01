@@ -2,6 +2,7 @@ package com.didebbo.mappify.presentation.baseclass.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -10,7 +11,7 @@ import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentPage
 import com.github.didebbo.mappify.R
 import com.github.didebbo.mappify.databinding.BaseActivityLayoutBinding
 
-abstract class BaseActivity: AppCompatActivity() {
+abstract class BaseActivity<VM: ViewModel>: AppCompatActivity() {
 
     private lateinit var baseActivityLayoutBinding: BaseActivityLayoutBinding
     private lateinit var baseNavHostFragment: NavHostFragment
@@ -20,6 +21,7 @@ abstract class BaseActivity: AppCompatActivity() {
     }
 
     abstract val navigationId: Int
+    abstract val viewModel: VM
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
