@@ -1,15 +1,11 @@
 package com.didebbo.mappify.presentation.fragment.destination
 
-import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModel
-import androidx.navigation.NavOptions
 import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentPage
-import com.didebbo.mappify.presentation.view.activity.PostLoginActivity
-import com.didebbo.mappify.presentation.view.activity.PreLoginActivity
 import com.didebbo.mappify.presentation.viewmodel.PreLoginViewModel
 import com.github.didebbo.mappify.R
 import com.github.didebbo.mappify.databinding.LoginPageLayoutBinding
@@ -33,9 +29,15 @@ class LoginPage: BaseFragmentPage<PreLoginViewModel>(PreLoginViewModel::class.ja
         loginPageLayoutBinding.registerButton.setOnClickListener {
             parentActivity?.navController?.navigate(resId = R.id.navigate_from_loginPage_to_registerPage)
         }
+
         loginPageLayoutBinding.loginButton.setOnClickListener {
-            val intent = Intent(context,PostLoginActivity::class.java)
-            startActivity(intent)
+            val email = loginPageLayoutBinding.emailTextField.text.toString()
+            val password = loginPageLayoutBinding.passwordTextField.text.toString()
+            viewModel.signInWithEmailAndPassword(email,password)
+        }
+
+        loginPageLayoutBinding.loginWithGoogleButton.setOnClickListener {
+            Log.i("gn", "${viewModel.getUser()?.email}")
         }
     }
 }
