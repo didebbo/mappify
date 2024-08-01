@@ -22,7 +22,7 @@ class LoginRepository @Inject constructor(
         firebaseDataProvider.createUserWithEmailAndPassword(userAuth)
     }
 
-    fun signInWithEmailAndPassword(userAuth: UserAuth) {
-        firebaseDataProvider.signInWithEmailAndPassword(userAuth)
+    suspend fun signInWithEmailAndPassword(userAuth: UserAuth): Boolean {
+        return firebaseDataProvider.signInWithEmailAndPassword(userAuth)
     }
 }

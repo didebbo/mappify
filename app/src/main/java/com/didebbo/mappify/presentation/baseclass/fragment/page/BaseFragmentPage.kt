@@ -13,7 +13,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 abstract class BaseFragmentPage<VM: ViewModel>(private val viewModelClass: Class<VM>): Fragment() {
 
     @Suppress("UNCHECKED_CAST")
-    private val parentActivity: BaseActivity<VM>? by lazy { activity as? BaseActivity<VM> }
+    val parentActivity: BaseActivity<VM>? by lazy { activity as? BaseActivity<VM> }
     val viewModel: VM by lazy { ViewModelProvider(requireActivity())[viewModelClass] }
 
     val navController: NavController? by lazy { parentActivity?.navController }
