@@ -33,8 +33,9 @@ class LoginPage: BaseFragmentPage<PreLoginViewModel>(PreLoginViewModel::class.ja
 
         viewModel.getUser().observe(viewLifecycleOwner) {
             loginPageLayoutBinding.userEmailTextField.text = it?.email
-            loginPageLayoutBinding.userEmailTextField.visibility= if(it != null) View.VISIBLE else View.GONE
-            loginPageLayoutBinding.emailTextField.visibility= if(it == null) View.VISIBLE else View.GONE
+            loginPageLayoutBinding.userEmailTextField.visibility = if(it != null) View.VISIBLE else View.GONE
+            loginPageLayoutBinding.emailTextField.visibility = if(it == null) View.VISIBLE else View.GONE
+            loginPageLayoutBinding.createNewAccountButton.visibility = if(it == null) View.VISIBLE else View.GONE
         }
 
         loginPageLayoutBinding.createNewAccountButton.setOnClickListener {

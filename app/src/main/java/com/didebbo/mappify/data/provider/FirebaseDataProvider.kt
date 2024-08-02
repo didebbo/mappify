@@ -13,16 +13,16 @@ import kotlinx.coroutines.tasks.await
 class FirebaseDataProvider {
     private val auth: FirebaseAuth = Firebase.auth
     private val _currentUser: MutableLiveData<FirebaseUser?> = MutableLiveData(auth.currentUser)
-    private val currentUser: LiveData<FirebaseUser?> = _currentUser
 
     fun getUser(): LiveData<FirebaseUser?> {
-        return currentUser
+        return _currentUser
     }
 
     suspend fun createUserWithEmailAndPassword(userAuth: UserAuth): Result<FirebaseUser?> {
         return try {
-            userAuth.exception()?.let { return Result.failure(it) }
+            userAuth.createUserException()?.let { return Result.failure(it) }
             val user = auth.createUserWithEmailAndPassword(userAuth.email, userAuth.password).await().user
+            _currentUser.postValue(user)
             Result.success(user)
         } catch (e: Exception) {
             Result.failure(e)
@@ -31,8 +31,9 @@ class FirebaseDataProvider {
 
     suspend  fun signInWithEmailAndPassword(userAuth: UserAuth): Result<FirebaseUser?> {
         return try {
-            userAuth.exception()?.let { return Result.failure(it) }
+            userAuth.signInsException()?.let { return Result.failure(it) }
             val user = auth.signInWithEmailAndPassword(userAuth.email,userAuth.password).await().user
+            _currentUser.postValue(user)
             Result.success(user)
         } catch (e: Exception) {
             Result.failure(e)
