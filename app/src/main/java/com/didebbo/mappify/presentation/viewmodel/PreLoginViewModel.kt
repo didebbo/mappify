@@ -1,6 +1,8 @@
 package com.didebbo.mappify.presentation.viewmodel
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.didebbo.mappify.data.model.UserAuth
@@ -17,7 +19,8 @@ class PreLoginViewModel @Inject constructor(
     private val loginRepository: LoginRepository
 ): ViewModel() {
 
-    private var userAuth: UserAuth? = null
+    private val _signInResult: MutableLiveData<Result<FirebaseUser>> = MutableLiveData()
+    val signInResult: LiveData<Result<FirebaseUser>>  = _signInResult
 
     fun getUser(): FirebaseUser? {
         return loginRepository.getUser()
@@ -28,10 +31,9 @@ class PreLoginViewModel @Inject constructor(
             loginRepository.createUserWithEmailAndPassword(userAuth)
     }
 
-    suspend fun signInWithEmailAndPassword(userAuth: UserAuth): Result<Boolean> {
-        return withContext(Dispatchers.IO) {
-            if(userAuth.isUserAuthValid()) loginRepository.signInWithEmailAndPassword(userAuth)
-            else Result.failure(Exception("Invalid Credentials"))
+    suspend fun signInWithEmailAndPassword(userAuth: UserAuth) {
+        viewModelScope.launch(Dispatchers.IO) {
+            _signInResult.postValue(loginRepository.signInWithEmailAndPassword(userAuth))
         }
     }
 }

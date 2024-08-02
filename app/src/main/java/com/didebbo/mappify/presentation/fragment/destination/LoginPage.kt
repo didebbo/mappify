@@ -1,6 +1,5 @@
 package com.didebbo.mappify.presentation.fragment.destination
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,7 +8,6 @@ import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import com.didebbo.mappify.data.model.UserAuth
 import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentPage
-import com.didebbo.mappify.presentation.view.activity.PostLoginActivity
 import com.didebbo.mappify.presentation.view.activity.PreLoginActivity
 import com.didebbo.mappify.presentation.viewmodel.PreLoginViewModel
 import com.github.didebbo.mappify.R
@@ -34,6 +32,15 @@ class LoginPage: BaseFragmentPage<PreLoginViewModel>(PreLoginViewModel::class.ja
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.signInResult.observe(viewLifecycleOwner) { result ->
+            result.exceptionOrNull()?.let {
+                Snackbar.make(loginPageLayoutBinding.root,it.localizedMessage,Snackbar.LENGTH_SHORT).show()
+            }
+            result.getOrNull()?.let {
+                preLoginActivity?.navigateToPostLogin()
+            }
+        }
+
         loginPageLayoutBinding.createNewAccountButton.setOnClickListener {
             navController?.navigate(resId = R.id.navigate_from_loginPage_to_registerPage)
         }
@@ -45,23 +52,15 @@ class LoginPage: BaseFragmentPage<PreLoginViewModel>(PreLoginViewModel::class.ja
                 password = loginPageLayoutBinding.passwordTextField.text.toString()
             )
 
+            parentActivity?.hideSystemKeyboard()
+
             lifecycleScope.launch {
-                viewModel.signInWithEmailAndPassword(userAuth).let { result ->
-                    result.exceptionOrNull()?.let {
-                        Snackbar.make(loginPageLayoutBinding.root,it.localizedMessage,Snackbar.LENGTH_SHORT).show()
-                    }
-                    result.getOrNull()?.let { success ->
-                        if(success)
-                            preLoginActivity?.navigateToPostLogin()
-                        else
-                            Snackbar.make(loginPageLayoutBinding.root,"User Not Found",Snackbar.LENGTH_SHORT).show()
-                    }
-                }
+                viewModel.signInWithEmailAndPassword(userAuth)
             }
         }
 
         loginPageLayoutBinding.signOutButton.setOnClickListener {
-
+            TODO()
         }
     }
 }

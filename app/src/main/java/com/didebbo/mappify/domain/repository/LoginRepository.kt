@@ -1,5 +1,6 @@
 package com.didebbo.mappify.domain.repository
 
+import androidx.lifecycle.LiveData
 import com.didebbo.mappify.data.model.UserAuth
 import com.didebbo.mappify.data.provider.FirebaseDataProvider
 import com.google.firebase.auth.FirebaseUser
@@ -22,7 +23,7 @@ class LoginRepository @Inject constructor(
         firebaseDataProvider.createUserWithEmailAndPassword(userAuth)
     }
 
-    suspend fun signInWithEmailAndPassword(userAuth: UserAuth): Result<Boolean> {
+    suspend fun signInWithEmailAndPassword(userAuth: UserAuth): Result<FirebaseUser> {
         return firebaseDataProvider.signInWithEmailAndPassword(userAuth)
     }
 }

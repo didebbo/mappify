@@ -1,7 +1,10 @@
 package com.didebbo.mappify.presentation.baseclass.activity
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
@@ -58,5 +61,12 @@ abstract class BaseActivity<VM: ViewModel>(): AppCompatActivity() {
 
     fun navigateToActivity(intent: Intent) {
         startActivity(intent)
+    }
+
+    fun hideSystemKeyboard() {
+        currentFocus?.let {
+            val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(it.windowToken, 0)
+        }
     }
 }
