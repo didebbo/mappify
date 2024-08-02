@@ -1,7 +1,7 @@
 [versions]
 agp = "8.3.2"
 firebaseAuth = "23.0.0"
-firebaseBom = "33.1.2"
+firebaseFirestore = "25.0.0"
 hiltAndroid = "2.51.1"
 kotlin = "1.9.20"
 coreKtx = "1.13.1"
@@ -24,7 +24,7 @@ androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-view
 androidx-navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
 androidx-navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigationFragmentKtx" }
 firebase-auth = { module = "com.google.firebase:firebase-auth", version.ref = "firebaseAuth" }
-firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-firestore = { module = "com.google.firebase:firebase-firestore", version.ref = "firebaseFirestore" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroid" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
