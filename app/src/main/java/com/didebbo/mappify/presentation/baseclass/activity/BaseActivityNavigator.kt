@@ -3,7 +3,6 @@ package com.didebbo.mappify.presentation.baseclass.activity
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
@@ -11,11 +10,11 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
-import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentPage
+import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentDestination
 import com.github.didebbo.mappify.R
 import com.github.didebbo.mappify.databinding.BaseActivityLayoutBinding
 
-abstract class BaseActivity<VM: ViewModel>(): AppCompatActivity() {
+abstract class BaseActivityNavigator<VM: ViewModel>(): AppCompatActivity() {
 
     private lateinit var baseActivityLayoutBinding: BaseActivityLayoutBinding
     private lateinit var baseNavHostFragment: NavHostFragment
@@ -38,7 +37,7 @@ abstract class BaseActivity<VM: ViewModel>(): AppCompatActivity() {
 
     @Suppress("UNCHECKED_CAST")
     override fun onSupportNavigateUp(): Boolean {
-        val currentFragment = baseNavHostFragment.childFragmentManager.primaryNavigationFragment as? BaseFragmentPage<VM>
+        val currentFragment = baseNavHostFragment.childFragmentManager.primaryNavigationFragment as? BaseFragmentDestination<VM>
         currentFragment?.let {
             if(it.onSupportNavigateUp() == false)
                 return navController.navigateUp()

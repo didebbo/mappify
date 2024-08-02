@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import com.didebbo.mappify.data.model.UserAuth
-import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentPage
+import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentDestination
 import com.didebbo.mappify.presentation.view.activity.PreLoginActivity
 import com.didebbo.mappify.presentation.viewmodel.PreLoginViewModel
 import com.github.didebbo.mappify.R
@@ -14,7 +14,7 @@ import com.github.didebbo.mappify.databinding.LoginPageLayoutBinding
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 
-class LoginPage: BaseFragmentPage<PreLoginViewModel>(PreLoginViewModel::class.java) {
+class LoginPage: BaseFragmentDestination<PreLoginViewModel>(PreLoginViewModel::class.java) {
 
     private lateinit var loginPageLayoutBinding: LoginPageLayoutBinding
     private val preLoginActivity: PreLoginActivity? by lazy { parentActivity as? PreLoginActivity }

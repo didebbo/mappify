@@ -7,7 +7,7 @@ import com.google.firebase.auth.FirebaseUser
 import javax.inject.Inject
 
 
-class LoginRepository @Inject constructor(
+class PreLoginRepository @Inject constructor(
  private val firebaseDataProvider: FirebaseDataProvider
 ) {
 
