@@ -11,19 +11,19 @@ class LoginRepository @Inject constructor(
  private val firebaseDataProvider: FirebaseDataProvider
 ) {
 
-    fun getUser(): FirebaseUser? {
+    fun getUser(): LiveData<FirebaseUser?> {
         return firebaseDataProvider.getUser()
     }
 
-    fun isSignedIn(): Boolean {
-        return firebaseDataProvider.isSignedIn()
+    suspend fun createUserWithEmailAndPassword(userAuth: UserAuth): Result<FirebaseUser?> {
+        return firebaseDataProvider.createUserWithEmailAndPassword(userAuth)
     }
 
-    fun createUserWithEmailAndPassword(userAuth: UserAuth) {
-        firebaseDataProvider.createUserWithEmailAndPassword(userAuth)
-    }
-
-    suspend fun signInWithEmailAndPassword(userAuth: UserAuth): Result<FirebaseUser> {
+    suspend fun signInWithEmailAndPassword(userAuth: UserAuth): Result<FirebaseUser?> {
         return firebaseDataProvider.signInWithEmailAndPassword(userAuth)
+    }
+
+    fun signOut() {
+        firebaseDataProvider.signOut()
     }
 }

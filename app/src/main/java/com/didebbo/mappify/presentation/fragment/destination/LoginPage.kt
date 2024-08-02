@@ -1,7 +1,6 @@
 package com.didebbo.mappify.presentation.fragment.destination
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,9 +31,15 @@ class LoginPage: BaseFragmentPage<PreLoginViewModel>(PreLoginViewModel::class.ja
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.getUser().observe(viewLifecycleOwner) {
+            loginPageLayoutBinding.userEmailTextField.text = it?.email
+            loginPageLayoutBinding.userEmailTextField.visibility= if(it != null) View.VISIBLE else View.GONE
+            loginPageLayoutBinding.emailTextField.visibility= if(it == null) View.VISIBLE else View.GONE
+        }
+
         viewModel.signInResult.observe(viewLifecycleOwner) { result ->
             result.exceptionOrNull()?.let {
-                Snackbar.make(loginPageLayoutBinding.root,it.localizedMessage,Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(loginPageLayoutBinding.root, it.localizedMessage ?: "Undefined Error",Snackbar.LENGTH_SHORT).show()
             }
             result.getOrNull()?.let {
                 preLoginActivity?.navigateToPostLogin()
@@ -48,7 +53,7 @@ class LoginPage: BaseFragmentPage<PreLoginViewModel>(PreLoginViewModel::class.ja
         loginPageLayoutBinding.signInButton.setOnClickListener {
 
             val userAuth = UserAuth(
-                email = loginPageLayoutBinding.emailTextField.text.toString(),
+                email = viewModel.getUser().value?.email ?: loginPageLayoutBinding.emailTextField.text.toString(),
                 password = loginPageLayoutBinding.passwordTextField.text.toString()
             )
 
@@ -60,7 +65,7 @@ class LoginPage: BaseFragmentPage<PreLoginViewModel>(PreLoginViewModel::class.ja
         }
 
         loginPageLayoutBinding.signOutButton.setOnClickListener {
-            TODO()
+            viewModel.signOut()
         }
     }
 }

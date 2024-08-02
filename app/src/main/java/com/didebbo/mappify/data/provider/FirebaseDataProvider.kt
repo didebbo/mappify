@@ -1,5 +1,7 @@
 package com.didebbo.mappify.data.provider
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.didebbo.mappify.data.model.UserAuth
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -10,31 +12,33 @@ import kotlinx.coroutines.tasks.await
 
 class FirebaseDataProvider {
     private val auth: FirebaseAuth = Firebase.auth
-    private val currentUser = auth.currentUser
+    private val _currentUser: MutableLiveData<FirebaseUser?> = MutableLiveData(auth.currentUser)
+    private val currentUser: LiveData<FirebaseUser?> = _currentUser
 
-    init {
-        auth.signOut()
-    }
-
-    fun isSignedIn(): Boolean {
-        return currentUser != null
-    }
-
-    fun getUser(): FirebaseUser? {
+    fun getUser(): LiveData<FirebaseUser?> {
         return currentUser
     }
 
-    fun createUserWithEmailAndPassword(userAuth: UserAuth) {
-        auth.createUserWithEmailAndPassword(userAuth.email, userAuth.password)
-    }
-
-    suspend  fun signInWithEmailAndPassword(userAuth: UserAuth): Result<FirebaseUser> {
-        return  try {
-            val user = auth.signInWithEmailAndPassword(userAuth.email,userAuth.password).await().user
-            if(user != null) Result.success(user)
-            else Result.failure(Exception("User not Found"))
+    suspend fun createUserWithEmailAndPassword(userAuth: UserAuth): Result<FirebaseUser?> {
+        return try {
+            val user = auth.createUserWithEmailAndPassword(userAuth.email, userAuth.password).await().user
+            Result.success(user)
         } catch (e: Exception) {
             Result.failure(e)
         }
+    }
+
+    suspend  fun signInWithEmailAndPassword(userAuth: UserAuth): Result<FirebaseUser?> {
+        return try {
+            val user = auth.signInWithEmailAndPassword(userAuth.email,userAuth.password).await().user
+            Result.success(user)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    fun signOut() {
+        auth.signOut()
+        _currentUser.postValue(auth.currentUser)
     }
 }

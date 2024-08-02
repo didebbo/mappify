@@ -19,21 +19,27 @@ class PreLoginViewModel @Inject constructor(
     private val loginRepository: LoginRepository
 ): ViewModel() {
 
-    private val _signInResult: MutableLiveData<Result<FirebaseUser>> = MutableLiveData()
-    val signInResult: LiveData<Result<FirebaseUser>>  = _signInResult
+    private val _signInResult: MutableLiveData<Result<FirebaseUser?>> = MutableLiveData()
+    val signInResult: LiveData<Result<FirebaseUser?>>  = _signInResult
 
-    fun getUser(): FirebaseUser? {
+    fun getUser(): LiveData<FirebaseUser?> {
         return loginRepository.getUser()
     }
 
-    fun createUserWithEmailAndPassword(userAuth: UserAuth) {
+    suspend fun createUserWithEmailAndPassword(userAuth: UserAuth) {
         if(userAuth.isUserAuthValid())
-            loginRepository.createUserWithEmailAndPassword(userAuth)
+            viewModelScope.launch(Dispatchers.IO) {
+                _signInResult.postValue(loginRepository.createUserWithEmailAndPassword(userAuth))
+            }
     }
 
     suspend fun signInWithEmailAndPassword(userAuth: UserAuth) {
         viewModelScope.launch(Dispatchers.IO) {
             _signInResult.postValue(loginRepository.signInWithEmailAndPassword(userAuth))
         }
+    }
+
+    fun signOut() {
+        loginRepository.signOut()
     }
 }

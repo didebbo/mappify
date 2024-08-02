@@ -27,16 +27,5 @@ class RegisterPage: BaseFragmentPage<PreLoginViewModel>(PreLoginViewModel::class
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        registerPageLayoutBinding.emailRegisterButton.setOnClickListener {
-            val userAuth = UserAuth(
-                email = registerPageLayoutBinding.emailTextField.text.toString(),
-                password = registerPageLayoutBinding.passwordTextField.text.toString()
-            )
-            if(!userAuth.isUserAuthValid()) {
-                Snackbar.make(registerPageLayoutBinding.root,"Invalid User",Snackbar.LENGTH_SHORT).show()
-            }
-            viewModel.createUserWithEmailAndPassword(userAuth)
-        }
     }
 }
