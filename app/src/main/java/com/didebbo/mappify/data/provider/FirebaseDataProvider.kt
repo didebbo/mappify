@@ -21,6 +21,7 @@ class FirebaseDataProvider {
 
     suspend fun createUserWithEmailAndPassword(userAuth: UserAuth): Result<FirebaseUser?> {
         return try {
+            userAuth.exception()?.let { return Result.failure(it) }
             val user = auth.createUserWithEmailAndPassword(userAuth.email, userAuth.password).await().user
             Result.success(user)
         } catch (e: Exception) {
@@ -30,6 +31,7 @@ class FirebaseDataProvider {
 
     suspend  fun signInWithEmailAndPassword(userAuth: UserAuth): Result<FirebaseUser?> {
         return try {
+            userAuth.exception()?.let { return Result.failure(it) }
             val user = auth.signInWithEmailAndPassword(userAuth.email,userAuth.password).await().user
             Result.success(user)
         } catch (e: Exception) {

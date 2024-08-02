@@ -37,15 +37,6 @@ class LoginPage: BaseFragmentPage<PreLoginViewModel>(PreLoginViewModel::class.ja
             loginPageLayoutBinding.emailTextField.visibility= if(it == null) View.VISIBLE else View.GONE
         }
 
-        viewModel.signInResult.observe(viewLifecycleOwner) { result ->
-            result.exceptionOrNull()?.let {
-                Snackbar.make(loginPageLayoutBinding.root, it.localizedMessage ?: "Undefined Error",Snackbar.LENGTH_SHORT).show()
-            }
-            result.getOrNull()?.let {
-                preLoginActivity?.navigateToPostLogin()
-            }
-        }
-
         loginPageLayoutBinding.createNewAccountButton.setOnClickListener {
             navController?.navigate(resId = R.id.navigate_from_loginPage_to_registerPage)
         }
@@ -60,7 +51,14 @@ class LoginPage: BaseFragmentPage<PreLoginViewModel>(PreLoginViewModel::class.ja
             parentActivity?.hideSystemKeyboard()
 
             lifecycleScope.launch {
-                viewModel.signInWithEmailAndPassword(userAuth)
+                viewModel.signInWithEmailAndPassword(userAuth).let { result ->
+                    result.exceptionOrNull()?.let {
+                        Snackbar.make(loginPageLayoutBinding.root, it.localizedMessage ?: "Undefined Error",Snackbar.LENGTH_SHORT).show()
+                    }
+                    result.getOrNull()?.let {
+                        preLoginActivity?.navigateToPostLogin()
+                    }
+                }
             }
         }
 
