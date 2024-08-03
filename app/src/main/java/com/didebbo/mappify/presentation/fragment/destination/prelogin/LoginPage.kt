@@ -68,8 +68,8 @@ class LoginPage: BaseFragmentDestination<PreLoginViewModel>(PreLoginViewModel::c
         }
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onStop() {
+        super.onStop()
         loginPageLayoutBinding.emailTextField.setText("")
         loginPageLayoutBinding.passwordTextField.setText("")
     }
