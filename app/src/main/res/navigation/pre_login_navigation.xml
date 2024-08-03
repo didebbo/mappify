@@ -5,13 +5,13 @@
     app:startDestination="@id/login_page_navigation_fragment"
     android:id="@+id/pre_login_navigation">
 
-    <fragment android:name="com.didebbo.mappify.presentation.fragment.destination.prelogin.LoginPage"
+    <fragment android:name="com.didebbo.mappify.presentation.view.fragment.destination.prelogin.LoginPage"
         android:id="@+id/login_page_navigation_fragment"
         android:label="Login"
         tools:layout="@layout/login_page_layout">
     </fragment>
 
-    <fragment android:name="com.didebbo.mappify.presentation.fragment.destination.prelogin.RegisterPage"
+    <fragment android:name="com.didebbo.mappify.presentation.view.fragment.destination.prelogin.RegisterPage"
         android:id="@+id/register_page_navigation_fragment"
         android:label="Register"
         tools:layout="@layout/register_page_layout">

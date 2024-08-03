@@ -48,6 +48,8 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
 
+    // Osmdroid
+    implementation(libs.osmdroid.android)
 
     // FireBase
     implementation(libs.firebase.auth)
