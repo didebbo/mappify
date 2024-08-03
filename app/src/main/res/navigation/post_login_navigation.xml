@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:startDestination="@id/map_view_page_navigation_fragment"
+    android:id="@+id/post_login_navigation">
+
+    <fragment android:name="com.didebbo.mappify.presentation.fragment.destination.postlogin.MapViewPage"
+        android:id="@+id/map_view_page_navigation_fragment"
+        android:label="Map"
+        tools:layout="@layout/map_view_layout">
+    </fragment>
+
+</navigation>

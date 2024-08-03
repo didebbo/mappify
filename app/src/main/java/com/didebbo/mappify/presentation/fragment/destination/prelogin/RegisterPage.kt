@@ -1,4 +1,4 @@
-package com.didebbo.mappify.presentation.fragment.destination
+package com.didebbo.mappify.presentation.fragment.destination.prelogin
 
 import android.os.Bundle
 import android.view.LayoutInflater

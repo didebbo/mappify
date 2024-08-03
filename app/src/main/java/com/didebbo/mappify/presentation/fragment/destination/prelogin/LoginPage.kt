@@ -1,4 +1,4 @@
-package com.didebbo.mappify.presentation.fragment.destination
+package com.didebbo.mappify.presentation.fragment.destination.prelogin
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -32,8 +32,8 @@ class LoginPage: BaseFragmentDestination<PreLoginViewModel>(PreLoginViewModel::c
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.getUser().observe(viewLifecycleOwner) {
-            loginPageLayoutBinding.userEmailTextField.text = it?.email
-            loginPageLayoutBinding.userEmailTextField.visibility = if(it != null) View.VISIBLE else View.GONE
+            loginPageLayoutBinding.userEmailTextView.text = it?.email
+            loginPageLayoutBinding.userEmailTextView.visibility = if(it != null) View.VISIBLE else View.GONE
             loginPageLayoutBinding.emailTextField.visibility = if(it == null) View.VISIBLE else View.GONE
             loginPageLayoutBinding.createNewAccountButton.visibility = if(it == null) View.VISIBLE else View.GONE
         }
@@ -66,5 +66,11 @@ class LoginPage: BaseFragmentDestination<PreLoginViewModel>(PreLoginViewModel::c
         loginPageLayoutBinding.signOutButton.setOnClickListener {
             viewModel.signOut()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loginPageLayoutBinding.emailTextField.setText("")
+        loginPageLayoutBinding.passwordTextField.setText("")
     }
 }

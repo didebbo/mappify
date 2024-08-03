@@ -1,7 +1,23 @@
 package com.didebbo.mappify.presentation.view.activity
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
+import android.os.Bundle
+import androidx.activity.viewModels
+import androidx.lifecycle.ViewModel
+import com.didebbo.mappify.presentation.baseclass.activity.BaseActivityNavigator
+import com.didebbo.mappify.presentation.viewmodel.PostLoginViewModel
+import com.github.didebbo.mappify.R
 
-class PostLoginActivity: AppCompatActivity() {
+class PostLoginActivity: BaseActivityNavigator<PostLoginViewModel>() {
 
+    override val viewModel: PostLoginViewModel by viewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        configureSystemNavigation(R.navigation.post_login_navigation)
+    }
+
+    fun navigateToPreLogin() {
+        finish()
+    }
 }
