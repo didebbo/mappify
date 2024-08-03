@@ -91,11 +91,11 @@ abstract class BaseActivityNavigator<VM: ViewModel>(): AppCompatActivity() {
     }
 
     fun configureSystemNavigation(
-        navigationResId: Int? = null,
+        navigationResId: Int,
         bottomMenuResId: Int? = null,
         topLevelDestinations: Set<Int>? = null
     ) {
-        navigationResId?.let { setUpNavControllerGraph(it) }
+        setUpNavControllerGraph(navigationResId)
         bottomMenuResId?.let { setupBottomBarWithMenu(it) }
         setupActionBarConfiguration(topLevelDestinations)
     }
