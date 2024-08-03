@@ -39,7 +39,7 @@ class LoginPage: BaseFragmentDestination<PreLoginViewModel>(PreLoginViewModel::c
         }
 
         loginPageLayoutBinding.createNewAccountButton.setOnClickListener {
-            navController?.navigate(resId = R.id.navigate_from_loginPage_to_registerPage)
+            navController?.navigate(resId = R.id.register_page_navigation_fragment)
         }
 
         loginPageLayoutBinding.signInButton.setOnClickListener {

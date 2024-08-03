@@ -16,7 +16,7 @@ class PreLoginActivity: BaseActivityNavigator<PreLoginViewModel>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setupActionBarWithNavGraph(R.navigation.pre_login_navigation)
+        configureSystemNavigation(R.navigation.pre_login_navigation)
     }
     fun navigateToPostLogin() {
         navigateToActivity(Intent(this,PostLoginActivity::class.java))

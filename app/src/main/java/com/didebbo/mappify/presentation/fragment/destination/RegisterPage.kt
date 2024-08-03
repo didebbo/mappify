@@ -23,6 +23,7 @@ class RegisterPage: BaseFragmentDestination<PreLoginViewModel>(PreLoginViewModel
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        // parentActivity?.hideBackButton()
         registerPageLayoutBinding = RegisterPageLayoutBinding.inflate(inflater,container,false)
         return registerPageLayoutBinding.root
     }

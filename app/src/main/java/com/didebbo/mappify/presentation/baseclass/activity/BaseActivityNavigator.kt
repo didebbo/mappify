@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
@@ -27,6 +28,10 @@ abstract class BaseActivityNavigator<VM: ViewModel>(): AppCompatActivity() {
 
     val navController: NavController by lazy {
         baseNavHostFragment.navController
+    }
+
+    private val actionBar: ActionBar? by lazy {
+        supportActionBar
     }
 
     val bottomNavigationView: BottomNavigationView by lazy {
@@ -54,25 +59,45 @@ abstract class BaseActivityNavigator<VM: ViewModel>(): AppCompatActivity() {
         return false
     }
 
-    fun setupActionBarWithNavGraph(navigationId: Int) {
+    private fun setUpNavControllerGraph(navigationId: Int) {
         try {
             navController.setGraph(navigationId)
-            val appBarConfiguration = AppBarConfiguration(navController.graph)
+        } catch(e: Exception) {
+            e.localizedMessage?.let { Log.e("setupActionBarWithNavGraph", it) }
+        }
+    }
+
+    private fun setupActionBarConfiguration(topLevelDestinations: Set<Int>?) {
+        try {
+            var appBarConfiguration = AppBarConfiguration(navController.graph)
+            topLevelDestinations?.let { topLevelDestinations ->
+                appBarConfiguration = AppBarConfiguration(topLevelDestinations)
+            }
             setupActionBarWithNavController(navController,appBarConfiguration)
         } catch(e: Exception) {
             e.localizedMessage?.let { Log.e("setupActionBarWithNavGraph", it) }
         }
     }
 
-    fun setupBottomBarWithMenu(bottomMenu: Int) {
+    private fun setupBottomBarWithMenu(bottomMenuId: Int) {
         try {
             bottomNavigationView.menu.clear()
-            bottomNavigationView.inflateMenu(bottomMenu)
+            bottomNavigationView.inflateMenu(bottomMenuId)
             bottomNavigationView.setupWithNavController(navController)
             bottomNavigationView.visibility = View.VISIBLE
         } catch (e: Exception) {
             e.localizedMessage?.let { localizedMessage -> Log.e("setupActionBarWithNavGraph", localizedMessage) }
         }
+    }
+
+    fun configureSystemNavigation(
+        navigationResId: Int? = null,
+        bottomMenuResId: Int? = null,
+        topLevelDestinations: Set<Int>? = null
+    ) {
+        navigationResId?.let { setUpNavControllerGraph(it) }
+        bottomMenuResId?.let { setupBottomBarWithMenu(it) }
+        setupActionBarConfiguration(topLevelDestinations)
     }
 
     fun navigateToDestination(resId: Int) {
@@ -91,5 +116,9 @@ abstract class BaseActivityNavigator<VM: ViewModel>(): AppCompatActivity() {
             val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodManager.hideSoftInputFromWindow(it.windowToken, 0)
         }
+    }
+
+    fun hideBackButton() {
+        actionBar?.setDisplayHomeAsUpEnabled(false)
     }
 }
