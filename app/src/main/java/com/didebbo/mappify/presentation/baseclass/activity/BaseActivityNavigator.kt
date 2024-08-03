@@ -68,6 +68,7 @@ abstract class BaseActivityNavigator<VM: ViewModel>(): AppCompatActivity() {
         try {
             bottomNavigationView.menu.clear()
             bottomNavigationView.inflateMenu(bottomMenu)
+            bottomNavigationView.setupWithNavController(navController)
             bottomNavigationView.visibility = View.VISIBLE
         } catch (e: Exception) {
             e.localizedMessage?.let { localizedMessage -> Log.e("setupActionBarWithNavGraph", localizedMessage) }
