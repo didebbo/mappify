@@ -48,8 +48,6 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
 
-    // Google Maps
-    implementation(libs.play.services.maps)
 
     // FireBase
     implementation(libs.firebase.auth)
