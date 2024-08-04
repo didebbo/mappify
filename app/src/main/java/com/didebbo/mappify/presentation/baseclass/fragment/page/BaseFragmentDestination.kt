@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import com.didebbo.mappify.presentation.baseclass.activity.BaseActivityNavigator
+import dagger.hilt.android.AndroidEntryPoint
 
 abstract class BaseFragmentDestination<VM: ViewModel>(private val viewModelClass: Class<VM>): Fragment() {
 

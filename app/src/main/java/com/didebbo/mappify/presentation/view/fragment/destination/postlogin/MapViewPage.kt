@@ -5,22 +5,38 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageView
 import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentDestination
 import com.didebbo.mappify.presentation.view.activity.PostLoginActivity
 import com.didebbo.mappify.presentation.viewmodel.PostLoginViewModel
 import com.github.didebbo.mappify.databinding.MapViewLayoutBinding
+import dagger.hilt.android.AndroidEntryPoint
+import org.osmdroid.api.IMapController
 import org.osmdroid.config.Configuration
-import org.osmdroid.events.MapEventsReceiver
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
-import org.osmdroid.views.overlay.MapEventsOverlay
-import org.osmdroid.views.overlay.Marker
 
+@AndroidEntryPoint
 class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewModel::class.java) {
 
     private lateinit var mapViewLayoutBinding: MapViewLayoutBinding
     private val postLoginActivity: PostLoginActivity? by lazy { parentActivity as? PostLoginActivity }
-    private lateinit var mapView: MapView
+
+    private val mapView: MapView by lazy {
+        mapViewLayoutBinding.mapView
+    }
+    private val mapController: IMapController by lazy {
+        mapView.controller
+    }
+
+    private val addLocationIndicator: ImageView by lazy {
+        mapViewLayoutBinding.addLocationIndicator
+    }
+
+    private val addLocationButton: Button by lazy {
+        mapViewLayoutBinding.addLocationButton
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,6 +50,7 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         configuredMapView()
+        configureOverlay()
     }
 
     override fun onResume() {
@@ -48,13 +65,24 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
 
     private fun configuredMapView() {
         parentActivity?.let { parentActivity ->
-            mapView = mapViewLayoutBinding.mapView
             Configuration.getInstance().load(parentActivity.applicationContext, parentActivity.getPreferences(
                 MODE_PRIVATE))
             val startPoint = GeoPoint(41.902865550106036, 12.481451481672554)
-            val mapController = mapView.controller
             mapController.setZoom(15.0)
             mapController.setCenter(startPoint)
+        }
+    }
+
+    private fun configureOverlay() {
+        viewModel.editingMode.observe(viewLifecycleOwner) { editingMode ->
+            val visibility = if(editingMode) View.VISIBLE else View.GONE
+            val buttonText = if(editingMode) "Cancel" else "Add Location"
+            addLocationIndicator.visibility = visibility
+            addLocationButton.text = buttonText
+        }
+
+        addLocationButton.setOnClickListener {
+            viewModel.setEditingMode()
         }
     }
 }

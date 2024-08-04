@@ -7,7 +7,9 @@ import androidx.lifecycle.ViewModel
 import com.didebbo.mappify.presentation.baseclass.activity.BaseActivityNavigator
 import com.didebbo.mappify.presentation.viewmodel.PostLoginViewModel
 import com.github.didebbo.mappify.R
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class PostLoginActivity: BaseActivityNavigator<PostLoginViewModel>() {
 
     override val viewModel: PostLoginViewModel by viewModels()

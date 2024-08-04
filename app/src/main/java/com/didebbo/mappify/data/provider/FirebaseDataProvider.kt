@@ -56,6 +56,24 @@ class FirebaseDataProvider {
         _currentUser.postValue(auth.currentUser)
     }
 
+    suspend fun getUserDocument(id: String): Result<UserDocument> {
+        return try {
+            val document = userCollection.whereEqualTo("id",id).get().await().documents.first().reference as UserDocument
+            Result.success(document)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun getMarkerDocument(id: String): Result<MarkerDocument> {
+        return try {
+            val document = markerCollection.whereEqualTo("id",id).get().await().documents.first().reference as MarkerDocument
+            Result.success(document)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
     suspend fun addMarkerPoint(markerDocument: MarkerDocument): Result<Unit> {
         return try {
             markerCollection.add(markerDocument).await()

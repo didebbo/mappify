@@ -5,4 +5,5 @@
     <color name="blue">#FF0000FF</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="opacity">#44000000</color>
 </resources>
