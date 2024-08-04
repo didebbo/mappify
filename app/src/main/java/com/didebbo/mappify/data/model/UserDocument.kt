@@ -11,7 +11,7 @@ data class UserDocument(
     val id: String = UUID.randomUUID().toString()
     val avatarName: String = "${name.first().uppercase()}${surname.first().uppercase()}"
     var description: String? = null
-    val markerPosts: MutableList<MarkerPost> = mutableListOf()
+    val markerDocuments: MutableList<MarkerDocument> = mutableListOf()
 
     private fun hasValidName(): Boolean {
         return  name.isNotEmpty()
@@ -34,12 +34,12 @@ data class UserDocument(
         description = newDescription
     }
 
-    fun addMarkerPost(newMarkerPost: MarkerPost) {
-        markerPosts.add(newMarkerPost)
+    fun addMarkerPost(newMarkerDocument: MarkerDocument) {
+        markerDocuments.add(newMarkerDocument)
     }
 
-    fun deleteMarkerPost(oldMarkerPost: MarkerPost) {
-        markerPosts.remove(oldMarkerPost)
+    fun deleteMarkerPost(oldMarkerDocument: MarkerDocument) {
+        markerDocuments.remove(oldMarkerDocument)
     }
 }
 

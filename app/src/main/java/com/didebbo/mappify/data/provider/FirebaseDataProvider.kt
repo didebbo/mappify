@@ -1,7 +1,9 @@
 package com.didebbo.mappify.data.provider
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.didebbo.mappify.data.model.MarkerDocument
 import com.didebbo.mappify.data.model.UserAuth
 import com.didebbo.mappify.data.model.UserDocument
 import com.google.firebase.Firebase
@@ -16,6 +18,7 @@ class FirebaseDataProvider {
     private val auth: FirebaseAuth = Firebase.auth
     private val fireStore = Firebase.firestore
     private val userCollection = fireStore.collection("users")
+    private val markerCollection = fireStore.collection("markerPoints")
 
     private val _currentUser: MutableLiveData<FirebaseUser?> = MutableLiveData(auth.currentUser)
 
@@ -29,7 +32,7 @@ class FirebaseDataProvider {
             val firebaseUser = auth.createUserWithEmailAndPassword(userAuth.email, userAuth.password).await().user
             val userDocument = UserDocument(userAuth.name ?: "", userAuth.surname ?: "", userAuth.email)
             userDocument.exception()?.let { return  Result.failure(it)}
-            userCollection.add(userDocument)
+            userCollection.add(userDocument).await()
             _currentUser.postValue(auth.currentUser)
             Result.success(firebaseUser)
         } catch (e: Exception) {
@@ -51,5 +54,25 @@ class FirebaseDataProvider {
     fun signOut() {
         auth.signOut()
         _currentUser.postValue(auth.currentUser)
+    }
+
+    suspend fun addMarkerPoint(markerDocument: MarkerDocument): Result<Unit> {
+        return try {
+            markerCollection.add(markerDocument).await()
+            updateUserDocument(markerDocument.owner)
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    private suspend fun updateUserDocument(user: UserDocument): Result<Unit> {
+        return try {
+            val document = userCollection.whereEqualTo("id", user.id).get().await().documents.first().reference
+            document.set(user).await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 }

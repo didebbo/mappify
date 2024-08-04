@@ -48,7 +48,7 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
 
-    // Osmdroid
+    // Osmdroid + Device Location
     implementation(libs.osmdroid.android)
 
     // FireBase
