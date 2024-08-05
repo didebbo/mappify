@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import androidx.lifecycle.lifecycleScope
+import com.didebbo.mappify.data.model.MarkerPostDocument
 import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentDestination
 import com.didebbo.mappify.presentation.view.activity.PostLoginActivity
 import com.didebbo.mappify.presentation.viewmodel.PostLoginViewModel
@@ -93,7 +94,7 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
         addLocationIndicator.setOnClickListener{
             lifecycleScope.launch{
                 val mapCenter = mapView.mapCenter
-                val centerPoint = GeoPoint(mapCenter.latitude,mapCenter.longitude)
+                val centerPoint =  MarkerPostDocument.GeoPoint(mapCenter.latitude,mapCenter.longitude)
                 viewModel.addMarkerPostDocument(centerPoint).let { result ->
                     result.exceptionOrNull()?.let {
                         Snackbar.make(mapViewLayoutBinding.root,it.localizedMessage,Snackbar.LENGTH_SHORT).show()
