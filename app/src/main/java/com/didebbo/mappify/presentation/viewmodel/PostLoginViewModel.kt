@@ -24,9 +24,9 @@ class PostLoginViewModel @Inject constructor(
         }
     }
 
-    suspend fun addMarkerPostDocument(geoPoint: MarkerPostDocument.GeoPoint): Result<MarkerPostDocument> {
+    suspend fun addMarkerPostDocument(markerPostDocument: MarkerPostDocument): Result<MarkerPostDocument> {
         return withContext(Dispatchers.IO) {
-            postLoginRepository.addMarkerPostDocument(geoPoint)
+            postLoginRepository.addMarkerPostDocument(markerPostDocument)
         }
     }
 }

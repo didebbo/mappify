@@ -26,14 +26,14 @@ class PostLoginRepository @Inject constructor(
         return firebaseDataProvider.getMarkerPostDocument(id)
     }
 
-    suspend fun addMarkerPostDocument(position: MarkerPostDocument.GeoPoint): Result<MarkerPostDocument> {
+    suspend fun addMarkerPostDocument(markerPostDocument: MarkerPostDocument): Result<MarkerPostDocument> {
         val userDocumentResult = getOwnerUserDocument()
         userDocumentResult.exceptionOrNull()?.let {
             return Result.failure(it)
         }
         userDocumentResult.getOrNull()?.let { userDocument ->
-            val markerPostDocument = MarkerPostDocument(position = position, ownerId = userDocument.id)
-            val markerPostResult = firebaseDataProvider.addMarkerPostDocument(markerPostDocument)
+            val newMarkerPostDocument = markerPostDocument.copy(ownerId = userDocument.id)
+            val markerPostResult = firebaseDataProvider.addMarkerPostDocument(newMarkerPostDocument)
             markerPostResult.exceptionOrNull()?.let {
                 return Result.failure(it)
             }
