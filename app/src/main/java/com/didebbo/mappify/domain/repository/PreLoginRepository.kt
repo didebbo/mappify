@@ -12,14 +12,14 @@ class PreLoginRepository @Inject constructor(
 ) {
 
     fun getUser(): LiveData<FirebaseUser?> {
-        return firebaseDataProvider.getUser()
+        return firebaseDataProvider.getUserAuth()
     }
 
-    suspend fun createUserWithEmailAndPassword(userAuth: UserAuth): Result<FirebaseUser?> {
+    suspend fun createUserWithEmailAndPassword(userAuth: UserAuth): Result<Unit> {
         return firebaseDataProvider.createUserWithEmailAndPassword(userAuth)
     }
 
-    suspend fun signInWithEmailAndPassword(userAuth: UserAuth): Result<FirebaseUser?> {
+    suspend fun signInWithEmailAndPassword(userAuth: UserAuth): Result<Unit> {
         return firebaseDataProvider.signInWithEmailAndPassword(userAuth)
     }
 

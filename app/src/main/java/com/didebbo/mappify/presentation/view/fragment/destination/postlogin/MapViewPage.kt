@@ -2,20 +2,25 @@ package com.didebbo.mappify.presentation.view.fragment.destination.postlogin
 
 import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import androidx.lifecycle.lifecycleScope
 import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentDestination
 import com.didebbo.mappify.presentation.view.activity.PostLoginActivity
 import com.didebbo.mappify.presentation.viewmodel.PostLoginViewModel
 import com.github.didebbo.mappify.databinding.MapViewLayoutBinding
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import org.osmdroid.api.IMapController
 import org.osmdroid.config.Configuration
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
+import org.osmdroid.views.overlay.Marker
 
 @AndroidEntryPoint
 class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewModel::class.java) {
@@ -83,6 +88,27 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
 
         addLocationButton.setOnClickListener {
             viewModel.setEditingMode()
+        }
+
+        addLocationIndicator.setOnClickListener{
+            lifecycleScope.launch{
+                val mapCenter = mapView.mapCenter
+                val centerPoint = GeoPoint(mapCenter.latitude,mapCenter.longitude)
+                viewModel.setMarkerPoint(centerPoint).let { result ->
+                    result.exceptionOrNull()?.let {
+                        Snackbar.make(mapViewLayoutBinding.root,it.localizedMessage,Snackbar.LENGTH_SHORT).show()
+                        Log.i("gn", it.localizedMessage)
+                    }
+                    result.getOrNull()?.let {
+                        val marker = Marker(mapView)
+                        marker.position = GeoPoint(it.position.latitude,it.position.longitude)
+                        marker.title = it.title
+                        marker.subDescription = it.description
+                        mapView.overlays.add(marker)
+                        viewModel.setEditingMode()
+                    }
+                }
+            }
         }
     }
 }

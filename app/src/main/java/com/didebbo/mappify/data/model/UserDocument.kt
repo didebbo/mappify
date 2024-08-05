@@ -1,18 +1,16 @@
 package com.didebbo.mappify.data.model
 
 import java.util.UUID
-
 data class UserDocument(
-    val name: String,
-    val surname: String,
-    val email: String
+    val id: String = UUID.randomUUID().toString(),
+    val name: String = "Undefined Name",
+    val surname: String = "Undefined Surname",
+    val email: String = "Undefined Email",
+    val description: String = "",
+    val markerPostsIds: List<String> = listOf()
 ) {
 
-    val id: String = UUID.randomUUID().toString()
-    val avatarName: String = "${name.first().uppercase()}${surname.first().uppercase()}"
-    var description: String? = null
-    val markerDocuments: MutableList<MarkerDocument> = mutableListOf()
-
+    fun getAvatarName(): String = "${name.first().uppercase()}${surname.first().uppercase()}"
     private fun hasValidName(): Boolean {
         return  name.isNotEmpty()
     }
@@ -30,16 +28,4 @@ data class UserDocument(
         if(!hasValidEmail())  return Exception("Invalid Email")
         return null
     }
-    fun updateDescription(newDescription: String) {
-        description = newDescription
-    }
-
-    fun addMarkerPost(newMarkerDocument: MarkerDocument) {
-        markerDocuments.add(newMarkerDocument)
-    }
-
-    fun deleteMarkerPost(oldMarkerDocument: MarkerDocument) {
-        markerDocuments.remove(oldMarkerDocument)
-    }
 }
-

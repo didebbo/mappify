@@ -47,6 +47,7 @@ class RegisterPage: BaseFragmentDestination<PreLoginViewModel>(PreLoginViewModel
                 viewModel.createUserWithEmailAndPassword(userAuth).let { result ->
                     result.exceptionOrNull()?.let {
                         Snackbar.make(registerPageLayoutBinding.root, it.localizedMessage ?: "Undefined Error",Snackbar.LENGTH_SHORT).show()
+                        return@launch
                     }
                     result.getOrNull()?.let {
                         navController?.popBackStack()

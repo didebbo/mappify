@@ -17,11 +17,11 @@ class PreLoginViewModel @Inject constructor(
         return preLoginRepository.getUser()
     }
 
-    suspend fun createUserWithEmailAndPassword(userAuth: UserAuth): Result<FirebaseUser?> {
+    suspend fun createUserWithEmailAndPassword(userAuth: UserAuth): Result<Unit?> {
         return preLoginRepository.createUserWithEmailAndPassword(userAuth)
     }
 
-    suspend fun signInWithEmailAndPassword(userAuth: UserAuth): Result<FirebaseUser?> {
+    suspend fun signInWithEmailAndPassword(userAuth: UserAuth): Result<Unit?> {
         return preLoginRepository.signInWithEmailAndPassword(userAuth)
     }
 
