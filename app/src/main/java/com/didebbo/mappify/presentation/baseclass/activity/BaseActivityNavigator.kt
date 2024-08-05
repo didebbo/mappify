@@ -6,6 +6,9 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.Button
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
@@ -36,6 +39,33 @@ abstract class BaseActivityNavigator<VM: ViewModel>(): AppCompatActivity() {
         baseActivityLayoutBinding.bottomNavigationView
     }
 
+    private val modalView: View by lazy {
+        baseActivityLayoutBinding.modalView
+    }
+
+    private val loaderView: ProgressBar by lazy {
+        baseActivityLayoutBinding.loaderView
+    }
+
+    private val alertView: View by lazy {
+        baseActivityLayoutBinding.alertView
+    }
+
+    private val alertTextView: TextView by lazy {
+        baseActivityLayoutBinding.alertTextView
+    }
+
+    private val alertConfirmButton: Button by lazy {
+        baseActivityLayoutBinding.alertConfirmButton
+    }
+
+    private val alertDeleteButton: Button by lazy {
+        baseActivityLayoutBinding.alertDeleteButton
+    }
+
+    private var alertConfirmAction: (()->Unit)? = null
+    private var alertDeleteAction: (()->Unit)? = null
+
     abstract val viewModel: VM
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,6 +75,21 @@ abstract class BaseActivityNavigator<VM: ViewModel>(): AppCompatActivity() {
         baseNavHostFragment = supportFragmentManager.findFragmentById(R.id.base_nav_host_fragment) as NavHostFragment
         bottomNavigationView.visibility = View.GONE
         setContentView(baseActivityLayoutBinding.root)
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        hideModalView()
+
+        alertConfirmButton.setOnClickListener {
+            alertConfirmAction?.invoke()
+            hideModalView()
+        }
+        alertDeleteButton.setOnClickListener {
+            alertDeleteAction?.invoke()
+            hideModalView()
+        }
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -86,6 +131,32 @@ abstract class BaseActivityNavigator<VM: ViewModel>(): AppCompatActivity() {
         } catch (e: Exception) {
             e.localizedMessage?.let { localizedMessage -> Log.e("setupActionBarWithNavGraph", localizedMessage) }
         }
+    }
+
+    private fun hideModalView() {
+        loaderView.visibility = View.GONE
+        alertView.visibility = View.GONE
+        modalView.visibility = View.GONE
+    }
+
+    fun showLoader(visible: Boolean) {
+        loaderView.visibility = View.VISIBLE
+        modalView.visibility = View.VISIBLE
+        if(!visible) hideModalView()
+    }
+
+    fun showAlertView(
+        message: String,
+        confirmAction: (()->Unit)?,
+        deleteAction: (()->Unit)?
+        ) {
+        alertTextView.text = message
+        alertConfirmAction = confirmAction
+        alertDeleteAction = deleteAction
+
+        alertView.visibility = View.VISIBLE
+        alertDeleteButton.visibility = if(deleteAction != null) View.VISIBLE else View.GONE
+        modalView.visibility = View.VISIBLE
     }
 
     fun configureSystemNavigation(
