@@ -13,7 +13,7 @@ import com.didebbo.mappify.data.model.MarkerPostDocument
 import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentDestination
 import com.didebbo.mappify.presentation.view.activity.PostLoginActivity
 import com.didebbo.mappify.presentation.viewmodel.PostLoginViewModel
-import com.github.didebbo.mappify.databinding.MapViewLayoutBinding
+import com.didebbo.mappify.databinding.MapViewLayoutBinding
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch

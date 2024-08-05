@@ -6,7 +6,7 @@ import androidx.activity.viewModels
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.didebbo.mappify.presentation.baseclass.activity.BaseActivityNavigator
 import com.didebbo.mappify.presentation.viewmodel.PreLoginViewModel
-import com.github.didebbo.mappify.R
+import com.didebbo.mappify.R
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

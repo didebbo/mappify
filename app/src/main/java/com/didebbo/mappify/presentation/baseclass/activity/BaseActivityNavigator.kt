@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.ActionBar
@@ -15,11 +14,10 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.didebbo.mappify.databinding.BaseActivityLayoutBinding
 import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentDestination
-import com.github.didebbo.mappify.R
-import com.github.didebbo.mappify.databinding.BaseActivityLayoutBinding
+import com.didebbo.mappify.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import java.lang.Exception
 
 abstract class BaseActivityNavigator<VM: ViewModel>(): AppCompatActivity() {
 
@@ -70,8 +68,8 @@ abstract class BaseActivityNavigator<VM: ViewModel>(): AppCompatActivity() {
     private fun setupActionBarConfiguration(topLevelDestinations: Set<Int>?) {
         try {
             var appBarConfiguration = AppBarConfiguration(navController.graph)
-            topLevelDestinations?.let { topLevelDestinations ->
-                appBarConfiguration = AppBarConfiguration(topLevelDestinations)
+            topLevelDestinations?.let {
+                appBarConfiguration = AppBarConfiguration(it)
             }
             setupActionBarWithNavController(navController,appBarConfiguration)
         } catch(e: Exception) {

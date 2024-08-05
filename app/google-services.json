@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:1070004597211:android:68a0976a8bf183563337fe",
         "android_client_info": {
-          "package_name": "com.github.didebbo.mappify"
+          "package_name": "com.didebbo.mappify"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "1070004597211-apr3v3brbq8ai641l5ldhfjvt41bij1j.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.github.didebbo.mappify",
+            "package_name": "com.didebbo.mappify",
             "certificate_hash": "564f113785fa903124417726835888d7d27a8a31"
           }
         },

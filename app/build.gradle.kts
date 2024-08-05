@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "com.github.didebbo.mappify"
+    namespace = "com.didebbo.mappify"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.github.didebbo.mappify"
+        applicationId = "com.didebbo.mappify"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

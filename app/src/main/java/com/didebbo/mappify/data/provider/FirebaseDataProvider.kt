@@ -10,7 +10,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
-import com.google.firebase.firestore.toObject
 import kotlinx.coroutines.tasks.await
 
 
@@ -101,8 +100,8 @@ class FirebaseDataProvider {
             val reference = markerPostCollection.document()
             val data = markerPostDocument.copy(id = reference.id)
             reference.set(data).await()
-            val markerPostDocument = reference.get().await().toObject(MarkerPostDocument::class.java)
-            markerPostDocument?.let { Result.success(it) } ?:
+            val addedMarkerPostDocument = reference.get().await().toObject(MarkerPostDocument::class.java)
+            addedMarkerPostDocument?.let { Result.success(it) } ?:
             Result.failure(Exception("addMarkerPostDocument() MarkerPostDocument not found"))
         } catch (e: Exception) {
             Result.failure(e)

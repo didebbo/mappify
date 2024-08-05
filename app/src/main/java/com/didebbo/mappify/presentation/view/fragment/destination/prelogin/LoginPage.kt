@@ -9,8 +9,8 @@ import com.didebbo.mappify.data.model.UserAuth
 import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentDestination
 import com.didebbo.mappify.presentation.view.activity.PreLoginActivity
 import com.didebbo.mappify.presentation.viewmodel.PreLoginViewModel
-import com.github.didebbo.mappify.R
-import com.github.didebbo.mappify.databinding.LoginPageLayoutBinding
+import com.didebbo.mappify.R
+import com.didebbo.mappify.databinding.LoginPageLayoutBinding
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 

@@ -8,7 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import com.didebbo.mappify.data.model.UserAuth
 import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentDestination
 import com.didebbo.mappify.presentation.viewmodel.PreLoginViewModel
-import com.github.didebbo.mappify.databinding.RegisterPageLayoutBinding
+import com.didebbo.mappify.databinding.RegisterPageLayoutBinding
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
