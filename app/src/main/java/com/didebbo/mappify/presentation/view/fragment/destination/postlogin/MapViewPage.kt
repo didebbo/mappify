@@ -105,22 +105,28 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
         }
 
         addLocationIndicator.setOnClickListener{
-            lifecycleScope.launch{
-                val mapCenter = mapView.mapCenter
-                val centerPoint =  MarkerPostDocument.GeoPoint(mapCenter.latitude,mapCenter.longitude)
-                val markerPointDocument = MarkerPostDocument(position = centerPoint)
-                viewModel.addMarkerPostDocument(markerPointDocument).let { markerPostResult ->
-                    markerPostResult.exceptionOrNull()?.let {
-                        val errorMessage = it.localizedMessage ?: "Undefined Error"
-                        Snackbar.make(mapViewLayoutBinding.root, errorMessage,Snackbar.LENGTH_SHORT).show()
-                        Log.i("gn", errorMessage)
+            val mapCenter = mapView.mapCenter
+            val centerPoint =  MarkerPostDocument.GeoPoint(mapCenter.latitude,mapCenter.longitude)
+            val markerPointDocument = MarkerPostDocument(position = centerPoint)
+            parentActivity?.showAlertView(
+                "Aggiungere il MarkerPoint alla seguente posizione?\n\nlatitude: ${centerPoint.latitude}\nlongitude: ${centerPoint.longitude}",
+                confirmAction = {
+                    lifecycleScope.launch{
+                        viewModel.addMarkerPostDocument(markerPointDocument).let { markerPostResult ->
+                            markerPostResult.exceptionOrNull()?.let {
+                                val errorMessage = it.localizedMessage ?: "Undefined Error"
+                                Snackbar.make(mapViewLayoutBinding.root, errorMessage,Snackbar.LENGTH_SHORT).show()
+                                Log.i("gn", errorMessage)
+                            }
+                            markerPostResult.getOrNull()?.let {
+                                viewModel.fetchMarkerPostDocuments()
+                                viewModel.setEditingMode()
+                            }
+                        }
                     }
-                    markerPostResult.getOrNull()?.let {
-                        viewModel.fetchMarkerPostDocuments()
-                        viewModel.setEditingMode()
-                    }
-                }
-            }
+                },
+                deleteAction = {}
+            )
         }
     }
 }

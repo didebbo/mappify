@@ -147,8 +147,8 @@ abstract class BaseActivityNavigator<VM: ViewModel>(): AppCompatActivity() {
 
     fun showAlertView(
         message: String,
-        confirmAction: (()->Unit)?,
-        deleteAction: (()->Unit)?
+        confirmAction: (()->Unit)? = null,
+        deleteAction: (()->Unit)? = null
         ) {
         alertTextView.text = message
         alertConfirmAction = confirmAction
