@@ -62,6 +62,9 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
     override fun onResume() {
         super.onResume()
         mapView.onResume()
+        lifecycleScope.launch {
+            viewModel.fetchMarkerPostDocuments()
+        }
     }
 
     override fun onPause() {
@@ -87,6 +90,16 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
             addLocationButton.text = buttonText
         }
 
+        viewModel.markerPostDocuments.observe(viewLifecycleOwner) { markerPostDocuments ->
+            markerPostDocuments.forEach{
+                val marker = Marker(mapView)
+                marker.position = GeoPoint(it.position.latitude,it.position.longitude)
+                marker.title = it.title
+                marker.subDescription = it.description
+                mapView.overlays.add(marker)
+            }
+        }
+
         addLocationButton.setOnClickListener {
             viewModel.setEditingMode()
         }
@@ -96,17 +109,14 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
                 val mapCenter = mapView.mapCenter
                 val centerPoint =  MarkerPostDocument.GeoPoint(mapCenter.latitude,mapCenter.longitude)
                 val markerPointDocument = MarkerPostDocument(position = centerPoint)
-                viewModel.addMarkerPostDocument(markerPointDocument).let { result ->
-                    result.exceptionOrNull()?.let {
-                        Snackbar.make(mapViewLayoutBinding.root,it.localizedMessage,Snackbar.LENGTH_SHORT).show()
-                        Log.i("gn", it.localizedMessage)
+                viewModel.addMarkerPostDocument(markerPointDocument).let { markerPostResult ->
+                    markerPostResult.exceptionOrNull()?.let {
+                        val errorMessage = it.localizedMessage ?: "Undefined Error"
+                        Snackbar.make(mapViewLayoutBinding.root, errorMessage,Snackbar.LENGTH_SHORT).show()
+                        Log.i("gn", errorMessage)
                     }
-                    result.getOrNull()?.let {
-                        val marker = Marker(mapView)
-                        marker.position = GeoPoint(it.position.latitude,it.position.longitude)
-                        marker.title = it.title
-                        marker.subDescription = it.description
-                        mapView.overlays.add(marker)
+                    markerPostResult.getOrNull()?.let {
+                        viewModel.fetchMarkerPostDocuments()
                         viewModel.setEditingMode()
                     }
                 }

@@ -18,12 +18,21 @@ class FirebaseDataProvider {
     private val auth: FirebaseAuth = Firebase.auth
     private val fireStore = Firebase.firestore
     private val userCollection = fireStore.collection("users")
-    private val markerPosCollection = fireStore.collection("markerPosts")
+    private val markerPostCollection = fireStore.collection("markerPosts")
 
     private val _currentUser: MutableLiveData<FirebaseUser?> = MutableLiveData(auth.currentUser)
 
     fun getUserAuth(): LiveData<FirebaseUser?> {
         return _currentUser
+    }
+
+    suspend fun getMarkerPostDocuments(): Result<List<MarkerPostDocument>> {
+        return try {
+            val markerPostDocuments = markerPostCollection.get().await().documents.mapNotNull { it.toObject(MarkerPostDocument::class.java) }
+            Result.success(markerPostDocuments)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 
     suspend fun createUserWithEmailAndPassword(userAuth: UserAuth): Result<Unit> {
@@ -79,7 +88,7 @@ class FirebaseDataProvider {
 
     suspend fun getMarkerPostDocument(id: String): Result<MarkerPostDocument> {
         return try {
-            val document = markerPosCollection.document(id).get().await().toObject(MarkerPostDocument::class.java)
+            val document = markerPostCollection.document(id).get().await().toObject(MarkerPostDocument::class.java)
             document?.let { Result.success(it) } ?:
             Result.failure(Exception("getMarkerPostDocument() MarkerDocument not found"))
         } catch (e: Exception) {
@@ -89,7 +98,7 @@ class FirebaseDataProvider {
 
     suspend fun addMarkerPostDocument(markerPostDocument: MarkerPostDocument): Result<MarkerPostDocument> {
         return try {
-            val reference = markerPosCollection.document()
+            val reference = markerPostCollection.document()
             val data = markerPostDocument.copy(id = reference.id)
             reference.set(data).await()
             val markerPostDocument = reference.get().await().toObject(MarkerPostDocument::class.java)

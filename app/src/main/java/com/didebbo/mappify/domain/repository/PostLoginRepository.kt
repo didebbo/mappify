@@ -22,6 +22,10 @@ class PostLoginRepository @Inject constructor(
         return firebaseDataProvider.getUserDocument(id)
     }
 
+    suspend fun getMarkerPostDocuments(): Result<List<MarkerPostDocument>> {
+        return firebaseDataProvider.getMarkerPostDocuments()
+    }
+
     suspend fun getMarkerDocument(id: String): Result<MarkerPostDocument> {
         return firebaseDataProvider.getMarkerPostDocument(id)
     }

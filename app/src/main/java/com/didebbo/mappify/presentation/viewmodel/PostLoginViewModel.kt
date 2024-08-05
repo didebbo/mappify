@@ -15,12 +15,33 @@ import javax.inject.Inject
 class PostLoginViewModel @Inject constructor(
     private val postLoginRepository: PostLoginRepository
 ): ViewModel() {
+
     private val _editingMode: MutableLiveData<Boolean> = MutableLiveData(false)
     val editingMode: LiveData<Boolean> get() = _editingMode
+
+    private val _markerPostDocuments: MutableLiveData<List<MarkerPostDocument>> = MutableLiveData(
+        listOf()
+    )
+    val markerPostDocuments: LiveData<List<MarkerPostDocument>> get() = _markerPostDocuments
+
 
     fun setEditingMode() {
         editingMode.value?.let { editingMode ->
             _editingMode.postValue(!editingMode)
+        }
+    }
+
+    suspend fun fetchMarkerPostDocuments(): Result<Unit> {
+        return withContext(Dispatchers.IO) {
+            val markerPostDocumentsResult = postLoginRepository.getMarkerPostDocuments()
+            markerPostDocumentsResult.exceptionOrNull()?.let {
+                return@withContext Result.failure(it)
+            }
+            markerPostDocumentsResult.getOrNull()?.let {
+                _markerPostDocuments.postValue(it)
+                return@withContext Result.success(Unit)
+            }
+            return@withContext Result.failure(Exception("fetchMarkerPostDocuments() markerPostDocuments Not Found"))
         }
     }
 
