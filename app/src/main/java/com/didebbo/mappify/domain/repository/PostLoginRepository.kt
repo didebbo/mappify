@@ -49,8 +49,9 @@ class PostLoginRepository @Inject constructor(
                     return Result.success(markerPostDocument)
                 }
             }
+            return Result.failure(Exception("addMarkerPostDocument() markerPostDocument Not Found"))
         }
-        return Result.failure(Exception("addMarkerPostDocument Undefined Error"))
+        return Result.failure(Exception("addMarkerPostDocument() userDocument Not Found"))
     }
 
     suspend fun updateUserDocument(userDocument: UserDocument): Result<Unit> {

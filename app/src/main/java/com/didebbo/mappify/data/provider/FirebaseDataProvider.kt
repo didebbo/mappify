@@ -107,7 +107,7 @@ class FirebaseDataProvider {
                 it.set(userDocument).await()
                 Result.success(Unit)
             } ?:
-            Result.failure(Exception("updateUserDocument() MarkerDocument not found"))
+            Result.failure(Exception("updateUserDocument() UserDocument not found"))
         } catch (e: Exception) {
             Result.failure(e)
         }
