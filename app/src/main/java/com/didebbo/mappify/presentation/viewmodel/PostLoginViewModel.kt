@@ -24,32 +24,9 @@ class PostLoginViewModel @Inject constructor(
         }
     }
 
-    suspend fun setMarkerPoint(geoPoint: GeoPoint): Result<MarkerPostDocument> {
+    suspend fun addMarkerPostDocument(geoPoint: GeoPoint): Result<MarkerPostDocument> {
         return withContext(Dispatchers.IO) {
-            val userDocumentResult = postLoginRepository.getOwnerUserDocument()
-            userDocumentResult.exceptionOrNull()?.let {
-                return@withContext Result.failure(it)
-            }
-            userDocumentResult.getOrNull()?.let { userDocument ->
-                val markerPostDocument = MarkerPostDocument(position = MarkerPostDocument.GeoPoint(geoPoint.latitude,geoPoint.longitude), ownerId = userDocument.id)
-                val markerPostDocumentResult = postLoginRepository.addMarkerPostDocument(markerPostDocument)
-                markerPostDocumentResult.exceptionOrNull()?.let {
-                    return@withContext Result.failure(it)
-                }
-                markerPostDocumentResult.getOrNull()?.let { markerDocument ->
-                    val markerPostsIds = userDocument.markerPostsIds.toMutableList()
-                    markerPostsIds.add(markerDocument.id)
-                    val updatedUserDocument = userDocument.copy(markerPostsIds = markerPostsIds)
-                    val updatedUserDocumentResult = postLoginRepository.updateUserDocument(updatedUserDocument)
-                    updatedUserDocumentResult.exceptionOrNull()?.let {
-                        return@withContext Result.failure(it)
-                    }
-                    updatedUserDocumentResult.getOrNull()?.let {
-                        return@withContext Result.success(markerDocument)
-                    }
-                }
-            }
-            Result.failure(Exception("1 UserDocument not found"))
+            postLoginRepository.addMarkerPostDocument(MarkerPostDocument.GeoPoint.fromOSMDroidGeoPoint(geoPoint))
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.didebbo.mappify.data.model
 
+import org.osmdroid.util.GeoPoint
 import java.util.UUID
 
 data class MarkerPostDocument(
@@ -12,6 +13,15 @@ data class MarkerPostDocument(
     data class GeoPoint(
         val latitude: Double = 0.0,
         val longitude: Double = 0.0,
-    )
+    ) {
+        companion object {
+            fun fromOSMDroidGeoPoint(geoPoint: org.osmdroid.util.GeoPoint): GeoPoint {
+                return GeoPoint(
+                    geoPoint.latitude,
+                    geoPoint.longitude
+                )
+            }
+        }
+    }
 }
 

@@ -94,7 +94,7 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
             lifecycleScope.launch{
                 val mapCenter = mapView.mapCenter
                 val centerPoint = GeoPoint(mapCenter.latitude,mapCenter.longitude)
-                viewModel.setMarkerPoint(centerPoint).let { result ->
+                viewModel.addMarkerPostDocument(centerPoint).let { result ->
                     result.exceptionOrNull()?.let {
                         Snackbar.make(mapViewLayoutBinding.root,it.localizedMessage,Snackbar.LENGTH_SHORT).show()
                         Log.i("gn", it.localizedMessage)
