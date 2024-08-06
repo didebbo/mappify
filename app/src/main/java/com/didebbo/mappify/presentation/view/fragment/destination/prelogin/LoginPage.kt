@@ -51,7 +51,7 @@ class LoginPage: BaseFragmentDestination<PreLoginViewModel>(PreLoginViewModel::c
 
             parentActivity?.hideSystemKeyboard()
 
-            lifecycleScope.launch {
+            parentActivity?.loaderCoroutineScope {
                 viewModel.signInWithEmailAndPassword(userAuth).let { result ->
                     result.exceptionOrNull()?.let {
                         val message = it.localizedMessage ?: "Undefined Error"

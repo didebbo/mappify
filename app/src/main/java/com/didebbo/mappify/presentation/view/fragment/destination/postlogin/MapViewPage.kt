@@ -2,25 +2,20 @@ package com.didebbo.mappify.presentation.view.fragment.destination.postlogin
 
 import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
-import androidx.lifecycle.lifecycleScope
 import com.didebbo.mappify.R
 import com.didebbo.mappify.data.model.MarkerPostDocument
-import com.didebbo.mappify.data.model.UserDocument
+import com.didebbo.mappify.databinding.MapViewLayoutBinding
 import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentDestination
 import com.didebbo.mappify.presentation.view.activity.PostLoginActivity
-import com.didebbo.mappify.presentation.viewmodel.PostLoginViewModel
-import com.didebbo.mappify.databinding.MapViewLayoutBinding
 import com.didebbo.mappify.presentation.view.component.MarkerPostInfoWindow
 import com.didebbo.mappify.presentation.view.component.MarkerPostInfoWindowFactory
-import com.google.android.material.snackbar.Snackbar
+import com.didebbo.mappify.presentation.viewmodel.PostLoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import org.osmdroid.api.IMapController
 import org.osmdroid.config.Configuration
 import org.osmdroid.util.GeoPoint
@@ -40,8 +35,6 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
     private val mapView: MapView by lazy {
         mapViewLayoutBinding.mapView
     }
-
-    private lateinit var markerPostInfo: MarkerPostInfoWindow
 
     private val mapController: IMapController by lazy {
         mapView.controller
@@ -74,7 +67,7 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
         super.onResume()
         mapView.onResume()
         viewModel.setEditingMode(false)
-        lifecycleScope.launch {
+        parentActivity?.loaderCoroutineScope {
             viewModel.fetchMarkerPostDocuments().onFailure {
                 parentActivity?.showAlertView(it.localizedMessage ?: "Undefined Error")
             }
@@ -93,11 +86,6 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
             val startPoint = GeoPoint(41.902865550106036, 12.481451481672554)
             mapController.setZoom(15.0)
             mapController.setCenter(startPoint)
-
-            mapView.setOnTouchListener { _, _ ->
-                if(markerPostInfo.isOpen) markerPostInfo.close()
-                false
-            }
         }
     }
 
@@ -135,7 +123,8 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
     }
 
     private fun generateMarkerPostInfoWindow(markerPostDocument: MarkerPostDocument): MarkerPostInfoWindow {
-        markerPostInfo = markerPostInfoWindowFactory.create(
+        return markerPostInfoWindowFactory.create(
+            this,
             mapView,
             MarkerPostInfoWindow.ViewData(
                 ownerId = markerPostDocument.ownerId,
@@ -144,6 +133,5 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
                 position = markerPostDocument.position
             )
         )
-        return markerPostInfo
     }
 }

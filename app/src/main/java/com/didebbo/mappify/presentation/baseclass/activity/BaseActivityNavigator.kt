@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -21,6 +22,7 @@ import com.didebbo.mappify.databinding.BaseActivityLayoutBinding
 import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentDestination
 import com.didebbo.mappify.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.coroutines.launch
 
 abstract class BaseActivityNavigator<VM: ViewModel>(): AppCompatActivity() {
 
@@ -139,7 +141,7 @@ abstract class BaseActivityNavigator<VM: ViewModel>(): AppCompatActivity() {
         modalView.visibility = View.GONE
     }
 
-    fun showLoader(visible: Boolean) {
+    private fun showLoader(visible: Boolean) {
         loaderView.visibility = View.VISIBLE
         modalView.visibility = View.VISIBLE
         if(!visible) hideModalView()
@@ -189,5 +191,13 @@ abstract class BaseActivityNavigator<VM: ViewModel>(): AppCompatActivity() {
 
     fun showBackButton(showHomeAsUp: Boolean) {
         actionBar?.setDisplayHomeAsUpEnabled(showHomeAsUp)
+    }
+
+    fun loaderCoroutineScope(task: suspend ()->Unit) {
+        showLoader(true)
+        lifecycleScope.launch {
+            task.invoke()
+            showLoader(false)
+        }
     }
 }

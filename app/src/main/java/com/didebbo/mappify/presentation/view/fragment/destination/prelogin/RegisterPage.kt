@@ -42,13 +42,12 @@ class RegisterPage: BaseFragmentDestination<PreLoginViewModel>(PreLoginViewModel
                 password = registerPageLayoutBinding.passwordTextField.text.toString()
             )
 
-            lifecycleScope.launch {
-
+            parentActivity?.loaderCoroutineScope {
                 viewModel.createUserWithEmailAndPassword(userAuth).let { result ->
                     result.exceptionOrNull()?.let {
                         val message = it.localizedMessage ?: "Undefined Error"
                         parentActivity?.showAlertView(message)
-                        return@launch
+                        return@loaderCoroutineScope
                     }
                     result.getOrNull()?.let {
                         navController?.popBackStack()

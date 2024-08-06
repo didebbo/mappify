@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.didebbo.mappify.data.model.MarkerPostDocument
+import com.didebbo.mappify.data.model.UserDocument
 import com.didebbo.mappify.domain.repository.PostLoginRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -41,6 +42,12 @@ class PostLoginViewModel @Inject constructor(
                 return@withContext Result.success(it)
             }
             return@withContext Result.failure(Exception("fetchMarkerPostDocuments() markerPostDocuments Not Found"))
+        }
+    }
+
+    suspend fun getUserDocument(id: String): Result<UserDocument> {
+        return withContext(Dispatchers.IO) {
+            postLoginRepository.getUserDocument(id)
         }
     }
 }

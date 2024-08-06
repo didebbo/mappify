@@ -31,7 +31,7 @@ class NewMarkerPointPage: BaseFragmentDestination<AddNewMarkerPointViewModel>(Ad
         binding.latitudeEditText.setText(viewModel.getCoordinates().latitude.toString())
         binding.longitudeEditText.setText(viewModel.getCoordinates().longitude.toString())
         binding.saveButton.setOnClickListener {
-            lifecycleScope.launch {
+            parentActivity?.loaderCoroutineScope {
                 val addNewMarkerPostResult = viewModel.addNewMarkerPost(
                     MarkerPostDocument(
                         title = binding.titleEditText.text.toString(),
