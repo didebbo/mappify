@@ -12,8 +12,8 @@ import com.didebbo.mappify.data.model.MarkerPostDocument
 import com.didebbo.mappify.databinding.MapViewLayoutBinding
 import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentDestination
 import com.didebbo.mappify.presentation.view.activity.PostLoginActivity
-import com.didebbo.mappify.presentation.view.component.MarkerPostInfoWindow
-import com.didebbo.mappify.presentation.view.component.MarkerPostInfoWindowFactory
+import com.didebbo.mappify.presentation.view.component.markerpost.infowindow.MarkerPostInfoWindow
+import com.didebbo.mappify.presentation.view.component.markerpost.infowindow.MarkerPostInfoWindowFactory
 import com.didebbo.mappify.presentation.viewmodel.PostLoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import org.osmdroid.api.IMapController

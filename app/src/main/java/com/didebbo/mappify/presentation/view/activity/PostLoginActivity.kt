@@ -14,7 +14,10 @@ class PostLoginActivity: BaseActivityNavigator<PostLoginViewModel>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        configureSystemNavigation(R.navigation.post_login_navigation)
+        configureSystemNavigation(
+            R.navigation.post_login_navigation,
+            R.menu.post_login_bottom_menu
+        )
     }
 
     fun navigateToPreLogin() {
