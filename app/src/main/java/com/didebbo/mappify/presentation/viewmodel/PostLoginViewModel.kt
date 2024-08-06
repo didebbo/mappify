@@ -24,9 +24,9 @@ class PostLoginViewModel @Inject constructor(
     val markerPostDocuments: LiveData<List<MarkerPostDocument>> get() = _markerPostDocuments
 
 
-    fun setEditingMode() {
+    fun setEditingMode(value: Boolean? = null) {
         editingMode.value?.let { editingMode ->
-            _editingMode.postValue(!editingMode)
+            _editingMode.postValue(value ?: !editingMode)
         }
     }
 

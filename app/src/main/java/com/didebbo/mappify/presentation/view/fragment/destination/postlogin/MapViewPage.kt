@@ -63,6 +63,7 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
     override fun onResume() {
         super.onResume()
         mapView.onResume()
+        viewModel.setEditingMode(false)
         lifecycleScope.launch {
             viewModel.fetchMarkerPostDocuments().onFailure {
                 parentActivity?.showAlertView(it.localizedMessage ?: "Undefined Error")

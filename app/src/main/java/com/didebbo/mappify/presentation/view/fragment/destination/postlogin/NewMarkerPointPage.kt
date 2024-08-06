@@ -24,7 +24,13 @@ class NewMarkerPointPage: BaseFragmentDestination<AddNewMarkerPointViewModel>(Ad
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        parentActivity?.showBackButton(true)
         binding.latitudeEditText.setText(viewModel.getCoordinates().latitude.toString())
         binding.longitudeEditText.setText(viewModel.getCoordinates().longitude.toString())
+    }
+
+    override fun onSupportNavigateUp(): Boolean? {
+        parentActivity?.finish()
+        return true
     }
 }

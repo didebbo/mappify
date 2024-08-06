@@ -187,7 +187,7 @@ abstract class BaseActivityNavigator<VM: ViewModel>(): AppCompatActivity() {
         }
     }
 
-    fun hideBackButton() {
-        actionBar?.setDisplayHomeAsUpEnabled(false)
+    fun showBackButton(showHomeAsUp: Boolean) {
+        actionBar?.setDisplayHomeAsUpEnabled(showHomeAsUp)
     }
 }
