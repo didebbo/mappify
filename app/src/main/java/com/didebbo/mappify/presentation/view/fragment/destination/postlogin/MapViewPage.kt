@@ -15,6 +15,7 @@ import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentDest
 import com.didebbo.mappify.presentation.view.activity.PostLoginActivity
 import com.didebbo.mappify.presentation.viewmodel.PostLoginViewModel
 import com.didebbo.mappify.databinding.MapViewLayoutBinding
+import com.didebbo.mappify.presentation.view.component.MarkerPostInfoWindow
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -33,6 +34,9 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
     private val mapView: MapView by lazy {
         mapViewLayoutBinding.mapView
     }
+
+    private lateinit var markerPostInfo: MarkerPostInfoWindow
+
     private val mapController: IMapController by lazy {
         mapView.controller
     }
@@ -83,6 +87,11 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
             val startPoint = GeoPoint(41.902865550106036, 12.481451481672554)
             mapController.setZoom(15.0)
             mapController.setCenter(startPoint)
+
+            mapView.setOnTouchListener { _, _ ->
+                if(markerPostInfo.isOpen) markerPostInfo.close()
+                false
+            }
         }
     }
 
@@ -96,10 +105,10 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
 
         viewModel.markerPostDocuments.observe(viewLifecycleOwner) { markerPostDocuments ->
             markerPostDocuments.forEach{
-                val marker = Marker(mapView)
-                marker.position = GeoPoint(it.position.latitude,it.position.longitude)
-                marker.title = it.title
-                marker.subDescription = it.description
+                val marker = Marker(mapView).apply {
+                    position = GeoPoint(it.position.latitude,it.position.longitude)
+                    infoWindow = generateMarkerPostInfoWindow(it)
+                }
                 mapView.overlays.add(marker)
             }
         }
@@ -117,5 +126,19 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
             }
             navController?.navigate(R.id.new_marker_point_navigation_activity,bundle)
         }
+    }
+
+    private fun generateMarkerPostInfoWindow(markerPostDocument: MarkerPostDocument): MarkerPostInfoWindow {
+        markerPostInfo = MarkerPostInfoWindow(
+            mapView,
+            MarkerPostInfoWindow.ViewData(
+                userName = "Undefined Name",
+                avatarName = "UN",
+                title = markerPostDocument.title,
+                description = markerPostDocument.description,
+                position = markerPostDocument.position
+            )
+        )
+        return markerPostInfo
     }
 }
