@@ -11,4 +11,9 @@
         tools:layout="@layout/map_view_layout">
     </fragment>
 
+    <activity android:name="com.didebbo.mappify.presentation.view.activity.NewMarkerPointActivity"
+        android:id="@+id/new_marker_point_navigation_activity"
+        tools:layout="@layout/add_marker_point_layout">
+    </activity>
+
 </navigation>

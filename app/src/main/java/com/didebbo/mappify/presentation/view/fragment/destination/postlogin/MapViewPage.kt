@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import androidx.lifecycle.lifecycleScope
+import com.didebbo.mappify.R
 import com.didebbo.mappify.data.model.MarkerPostDocument
 import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentDestination
 import com.didebbo.mappify.presentation.view.activity.PostLoginActivity
@@ -63,7 +64,9 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
         super.onResume()
         mapView.onResume()
         lifecycleScope.launch {
-            viewModel.fetchMarkerPostDocuments()
+            viewModel.fetchMarkerPostDocuments().onFailure {
+                parentActivity?.showAlertView(it.localizedMessage ?: "Undefined Error")
+            }
         }
     }
 
@@ -106,27 +109,12 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
 
         addLocationIndicator.setOnClickListener{
             val mapCenter = mapView.mapCenter
-            val centerPoint =  MarkerPostDocument.GeoPoint(mapCenter.latitude,mapCenter.longitude)
-            val markerPointDocument = MarkerPostDocument(position = centerPoint)
-            parentActivity?.showAlertView(
-                "Aggiungere il MarkerPoint alla seguente posizione?\n\nlatitude: ${centerPoint.latitude}\nlongitude: ${centerPoint.longitude}",
-                confirmAction = {
-                    lifecycleScope.launch{
-                        viewModel.addMarkerPostDocument(markerPointDocument).let { markerPostResult ->
-                            markerPostResult.exceptionOrNull()?.let {
-                                val errorMessage = it.localizedMessage ?: "Undefined Error"
-                                Snackbar.make(mapViewLayoutBinding.root, errorMessage,Snackbar.LENGTH_SHORT).show()
-                                Log.i("gn", errorMessage)
-                            }
-                            markerPostResult.getOrNull()?.let {
-                                viewModel.fetchMarkerPostDocuments()
-                                viewModel.setEditingMode()
-                            }
-                        }
-                    }
-                },
-                deleteAction = {}
-            )
+            val  centerPoint =  MarkerPostDocument.GeoPoint(mapCenter.latitude,mapCenter.longitude)
+            val bundle = Bundle().apply {
+                putDouble("latitude", centerPoint.latitude)
+                putDouble("longitude",centerPoint.longitude)
+            }
+            navController?.navigate(R.id.new_marker_point_navigation_activity,bundle)
         }
     }
 }

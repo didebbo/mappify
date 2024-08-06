@@ -57,7 +57,7 @@ class LoginPage: BaseFragmentDestination<PreLoginViewModel>(PreLoginViewModel::c
                         Snackbar.make(loginPageLayoutBinding.root, it.localizedMessage ?: "Undefined Error",Snackbar.LENGTH_SHORT).show()
                     }
                     result.getOrNull()?.let {
-                        preLoginActivity?.navigateToPostLogin()
+                        navController?.navigate(R.id.post_login_activity)
                     }
                 }
             }

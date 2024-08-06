@@ -8,7 +8,6 @@ import com.didebbo.mappify.domain.repository.PostLoginRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.osmdroid.util.GeoPoint
 import javax.inject.Inject
 
 @HiltViewModel
@@ -31,7 +30,7 @@ class PostLoginViewModel @Inject constructor(
         }
     }
 
-    suspend fun fetchMarkerPostDocuments(): Result<Unit> {
+    suspend fun fetchMarkerPostDocuments(): Result<List<MarkerPostDocument>> {
         return withContext(Dispatchers.IO) {
             val markerPostDocumentsResult = postLoginRepository.getMarkerPostDocuments()
             markerPostDocumentsResult.exceptionOrNull()?.let {
@@ -39,7 +38,7 @@ class PostLoginViewModel @Inject constructor(
             }
             markerPostDocumentsResult.getOrNull()?.let {
                 _markerPostDocuments.postValue(it)
-                return@withContext Result.success(Unit)
+                return@withContext Result.success(it)
             }
             return@withContext Result.failure(Exception("fetchMarkerPostDocuments() markerPostDocuments Not Found"))
         }
