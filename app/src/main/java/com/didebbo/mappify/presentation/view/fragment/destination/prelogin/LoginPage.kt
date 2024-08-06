@@ -54,7 +54,8 @@ class LoginPage: BaseFragmentDestination<PreLoginViewModel>(PreLoginViewModel::c
             lifecycleScope.launch {
                 viewModel.signInWithEmailAndPassword(userAuth).let { result ->
                     result.exceptionOrNull()?.let {
-                        Snackbar.make(loginPageLayoutBinding.root, it.localizedMessage ?: "Undefined Error",Snackbar.LENGTH_SHORT).show()
+                        val message = it.localizedMessage ?: "Undefined Error"
+                        parentActivity?.showAlertView(message)
                     }
                     result.getOrNull()?.let {
                         navController?.navigate(R.id.post_login_activity)

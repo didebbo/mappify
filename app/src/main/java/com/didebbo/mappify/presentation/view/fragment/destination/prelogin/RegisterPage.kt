@@ -46,7 +46,8 @@ class RegisterPage: BaseFragmentDestination<PreLoginViewModel>(PreLoginViewModel
 
                 viewModel.createUserWithEmailAndPassword(userAuth).let { result ->
                     result.exceptionOrNull()?.let {
-                        Snackbar.make(registerPageLayoutBinding.root, it.localizedMessage ?: "Undefined Error",Snackbar.LENGTH_SHORT).show()
+                        val message = it.localizedMessage ?: "Undefined Error"
+                        parentActivity?.showAlertView(message)
                         return@launch
                     }
                     result.getOrNull()?.let {
