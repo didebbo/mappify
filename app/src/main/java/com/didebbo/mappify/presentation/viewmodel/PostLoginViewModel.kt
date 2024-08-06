@@ -32,7 +32,7 @@ class PostLoginViewModel @Inject constructor(
 
     suspend fun fetchMarkerPostDocuments(): Result<List<MarkerPostDocument>> {
         return withContext(Dispatchers.IO) {
-            val markerPostDocumentsResult = postLoginRepository.getMarkerPostDocuments()
+            val markerPostDocumentsResult = postLoginRepository.fetchMarkerPostDocuments()
             markerPostDocumentsResult.exceptionOrNull()?.let {
                 return@withContext Result.failure(it)
             }
@@ -41,12 +41,6 @@ class PostLoginViewModel @Inject constructor(
                 return@withContext Result.success(it)
             }
             return@withContext Result.failure(Exception("fetchMarkerPostDocuments() markerPostDocuments Not Found"))
-        }
-    }
-
-    suspend fun addMarkerPostDocument(markerPostDocument: MarkerPostDocument): Result<MarkerPostDocument> {
-        return withContext(Dispatchers.IO) {
-            postLoginRepository.addMarkerPostDocument(markerPostDocument)
         }
     }
 }

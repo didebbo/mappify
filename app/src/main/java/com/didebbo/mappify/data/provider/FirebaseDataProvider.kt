@@ -25,7 +25,7 @@ class FirebaseDataProvider {
         return _currentUser
     }
 
-    suspend fun getMarkerPostDocuments(): Result<List<MarkerPostDocument>> {
+    suspend fun fetchMarkerPostDocuments(): Result<List<MarkerPostDocument>> {
         return try {
             val markerPostDocuments = markerPostCollection.get().await().documents.mapNotNull { it.toObject(MarkerPostDocument::class.java) }
             Result.success(markerPostDocuments)
