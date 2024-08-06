@@ -1,6 +1,7 @@
 package com.didebbo.mappify.presentation.view.component
 
 import android.view.LayoutInflater
+import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import com.didebbo.mappify.R
@@ -64,6 +65,7 @@ class MarkerPostInfoWindow(parent: Fragment, mapView: MapView, private val data:
                 binding.postTitleText.text = data.title
                 binding.postDescriptionText.text = data.description
                 binding.coordinateText.text = "${String.format("%.4f",data.position.latitude)},${String.format("%.4f",data.position.longitude)}"
+                binding.root.visibility = View.VISIBLE
             }
         }
     }

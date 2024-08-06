@@ -11,6 +11,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
@@ -142,9 +143,10 @@ abstract class BaseActivityNavigator<VM: ViewModel>(): AppCompatActivity() {
     }
 
     private fun showLoader(visible: Boolean) {
-        loaderView.visibility = View.VISIBLE
-        modalView.visibility = View.VISIBLE
-        if(!visible) hideModalView()
+        val alertViewVisibility = alertView.isVisible
+        Log.i("gn", "alertTextView is visible: $alertViewVisibility")
+        loaderView.visibility = if(visible) View.VISIBLE else View.GONE
+        modalView.visibility = if(alertViewVisibility) View.VISIBLE else if(visible) View.VISIBLE else View.GONE
     }
 
     fun showAlertView(
