@@ -11,11 +11,13 @@ import android.widget.ImageView
 import androidx.lifecycle.lifecycleScope
 import com.didebbo.mappify.R
 import com.didebbo.mappify.data.model.MarkerPostDocument
+import com.didebbo.mappify.data.model.UserDocument
 import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentDestination
 import com.didebbo.mappify.presentation.view.activity.PostLoginActivity
 import com.didebbo.mappify.presentation.viewmodel.PostLoginViewModel
 import com.didebbo.mappify.databinding.MapViewLayoutBinding
 import com.didebbo.mappify.presentation.view.component.MarkerPostInfoWindow
+import com.didebbo.mappify.presentation.view.component.MarkerPostInfoWindowFactory
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -24,9 +26,13 @@ import org.osmdroid.config.Configuration
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewModel::class.java) {
+
+    @Inject
+    lateinit var markerPostInfoWindowFactory: MarkerPostInfoWindowFactory
 
     private lateinit var mapViewLayoutBinding: MapViewLayoutBinding
     private val postLoginActivity: PostLoginActivity? by lazy { parentActivity as? PostLoginActivity }
@@ -129,11 +135,10 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
     }
 
     private fun generateMarkerPostInfoWindow(markerPostDocument: MarkerPostDocument): MarkerPostInfoWindow {
-        markerPostInfo = MarkerPostInfoWindow(
+        markerPostInfo = markerPostInfoWindowFactory.create(
             mapView,
             MarkerPostInfoWindow.ViewData(
-                userName = "Undefined Name",
-                avatarName = "UN",
+                ownerId = markerPostDocument.ownerId,
                 title = markerPostDocument.title,
                 description = markerPostDocument.description,
                 position = markerPostDocument.position

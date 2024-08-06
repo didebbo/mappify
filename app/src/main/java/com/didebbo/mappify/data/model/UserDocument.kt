@@ -11,6 +11,7 @@ data class UserDocument(
 ) {
 
     fun getAvatarName(): String = "${name.first().uppercase()}${surname.first().uppercase()}"
+    fun getFullName(): String = "$name $surname"
     private fun hasValidName(): Boolean {
         return  name.isNotEmpty()
     }

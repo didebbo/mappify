@@ -13,6 +13,9 @@ class MarkerPostRepository @Inject constructor(
     private suspend fun getOwnerUserDocument(): Result<UserDocument> {
         return firebaseDataProvider.getOwnerUserDocument()
     }
+    suspend fun getUserDocument(id: String): Result<UserDocument> {
+        return firebaseDataProvider.getUserDocument(id)
+    }
 
     suspend fun addMarkerPostDocument(markerPostDocument: MarkerPostDocument): Result<MarkerPostDocument> {
 
