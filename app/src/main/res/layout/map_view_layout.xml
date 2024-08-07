@@ -11,22 +11,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-    <com.google.android.material.textfield.TextInputLayout
+    <Spinner
+        android:layout_margin="10dp"
+        android:id="@+id/city_selection_spinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        style="@style/MapViewExposedDropdownMenu"
-
-        android:hint="CITY">
-        <AutoCompleteTextView
-            android:background="@drawable/drop_down_shape"
-            android:id="@+id/select_city_drop_down"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:inputType="none">
-        </AutoCompleteTextView>
-    </com.google.android.material.textfield.TextInputLayout>
+        android:background="@color/white"
+        >
+    </Spinner>
 
     <ImageView
         android:id="@+id/add_location_indicator"

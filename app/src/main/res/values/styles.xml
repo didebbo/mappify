@@ -1,11 +1,3 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="MapViewExposedDropdownMenu" parent="Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu">
-        <item name="hintTextAppearance">@style/MapViewExposedDropdownMenuHintTextAppearance</item>
-    </style>
-
-    <!-- Stile personalizzato per l'aspetto dell'hint -->
-    <style name="MapViewExposedDropdownMenuHintTextAppearance" parent="TextAppearance.MaterialComponents.Caption">
-        <item name="android:textSize">8sp</item>
-    </style>
 </resources>

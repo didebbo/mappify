@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.Spinner
 import androidx.lifecycle.lifecycleScope
 import com.didebbo.mappify.R
 import com.didebbo.mappify.data.model.MarkerPostDocument
@@ -47,8 +48,8 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
     private lateinit var addLocationIndicator: ImageView
     private lateinit var addLocationButton: Button
 
-    private lateinit var selectCityDropDown: AutoCompleteTextView
-    private  lateinit var selectCityDropDownAdapter: ArrayAdapter<Position>
+    private lateinit var citySelectionSpinner: Spinner
+    private  lateinit var citySelectionSpinnerAdapter: ArrayAdapter<Position>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,7 +61,7 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
         mapController = mapView.controller
         addLocationIndicator = binding.addLocationIndicator
         addLocationButton = binding.addLocationButton
-        selectCityDropDown = binding.selectCityDropDown
+        citySelectionSpinner = binding.citySelectionSpinner
         return  binding.root
     }
 
@@ -100,19 +101,25 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
 
     private fun configureOverlay() {
         context?.let { it ->
-            selectCityDropDownAdapter = ArrayAdapter(it,R.layout.exposed_dropdown_item,viewModel.allCityPositions)
-            selectCityDropDown.setAdapter(selectCityDropDownAdapter)
-            selectCityDropDown.setText(viewModel.currentPosition.name,false)
-            selectCityDropDown.setOnItemClickListener{ _,_,position,_ ->
-                val item = selectCityDropDownAdapter.getItem(position)
-                item?.let {
-                    viewModel.currentPosition = it
-                    mapController.setCenter(it.geoPoint)
+            citySelectionSpinnerAdapter = ArrayAdapter(it,R.layout.exposed_dropdown_item,viewModel.allCityPositions)
+            citySelectionSpinner.adapter = citySelectionSpinnerAdapter
+            citySelectionSpinner.onItemSelectedListener = object :AdapterView.OnItemSelectedListener{
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    val item = citySelectionSpinnerAdapter.getItem(position)
+                    item?.let {
+                        viewModel.currentPosition = it
+                        mapController.setCenter(it.geoPoint)
+                    }
                 }
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
         }
 
-        // viewModel.currentPosition.geoPoint = mapView.mapCenter
         mapView.addMapListener(object : MapListener {
             override fun onScroll(event: ScrollEvent?): Boolean {
                 viewModel.currentPosition.geoPoint = mapView.mapCenter
