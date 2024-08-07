@@ -85,9 +85,8 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
         parentActivity?.let { parentActivity ->
             Configuration.getInstance().load(parentActivity.applicationContext, parentActivity.getPreferences(
                 MODE_PRIVATE))
-            val startPoint = GeoPoint(41.902865550106036, 12.481451481672554)
             mapController.setZoom(15.0)
-            mapController.setCenter(startPoint)
+            mapController.setCenter(viewModel.currentMapCenter)
         }
     }
 

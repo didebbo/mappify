@@ -26,7 +26,7 @@ class PostLoginViewModel @Inject constructor(
     )
     val markerPostDocuments: LiveData<List<MarkerPostDocument>> get() = _markerPostDocuments
 
-    lateinit var currentMapCenter: IGeoPoint
+    var currentMapCenter: IGeoPoint = GeoPoint(41.902865550106036, 12.481451481672554)
 
 
     fun setEditingMode(value: Boolean? = null) {
