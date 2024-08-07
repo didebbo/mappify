@@ -57,6 +57,7 @@
             android:textStyle="bold"
             tools:text="Marker Posts: 20">
         </TextView>
+        <!-- TO REPLACE WITH RECYCLER VIEW
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -79,6 +80,14 @@
                 tools:text="New Marker Post">
             </TextView>
         </LinearLayout>
+        -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:itemCount="5"
+            tools:listitem="@layout/menu_page_item_layout"
+            android:layout_weight="1">
+        </androidx.recyclerview.widget.RecyclerView>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
