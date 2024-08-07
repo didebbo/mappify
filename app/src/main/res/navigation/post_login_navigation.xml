@@ -11,6 +11,12 @@
         tools:layout="@layout/map_view_layout">
     </fragment>
 
+    <fragment android:name="com.didebbo.mappify.presentation.view.fragment.destination.postlogin.MenuPage"
+        android:id="@+id/menu_page_navigation_fragment"
+        android:label="Menu"
+        tools:layout="@layout/menu_page_layout">
+    </fragment>
+
     <activity android:name="com.didebbo.mappify.presentation.view.activity.NewMarkerPointActivity"
         android:id="@+id/new_marker_point_navigation_activity"
         tools:layout="@layout/add_marker_point_layout">
