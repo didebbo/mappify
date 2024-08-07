@@ -26,6 +26,7 @@ class PostLoginViewModel @Inject constructor(
     val markerPostDocuments: LiveData<List<MarkerPostDocument>> get() = _markerPostDocuments
 
     var currentPosition: Position = Position.ROME
+    val allCityPositions: List<Position> = Position.entries
 
 
     fun setEditingMode(value: Boolean? = null) {

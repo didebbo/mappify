@@ -32,18 +32,20 @@ class MenuPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewModel::
             title = "Add New Marker Point",
             action = {
                 val mapCenter = viewModel.currentPosition.geoPoint
-                val  centerPoint =  MarkerPostDocument.GeoPoint(mapCenter.latitude,mapCenter.longitude)
-                val bundle = Bundle().apply {
-                    putDouble("latitude", centerPoint.latitude)
-                    putDouble("longitude",centerPoint.longitude)
+                mapCenter?.let {
+                    val  centerPoint =  MarkerPostDocument.GeoPoint(mapCenter.latitude,mapCenter.longitude)
+                    val bundle = Bundle().apply {
+                        putDouble("latitude", centerPoint.latitude)
+                        putDouble("longitude",centerPoint.longitude)
+                    }
+                    val intent = Intent(this.context,NewMarkerPointActivity::class.java).apply {
+                        putExtras(bundle)
+                    }
+                    postLoginActivity?.navigateToIntentWithDismissDestination(
+                        intent,
+                        R.id.map_view_page_navigation_fragment
+                    )
                 }
-                val intent = Intent(this.context,NewMarkerPointActivity::class.java).apply {
-                    putExtras(bundle)
-                }
-                postLoginActivity?.navigateToIntentWithDismissDestination(
-                    intent,
-                    R.id.map_view_page_navigation_fragment
-                )
             }
         )
     )

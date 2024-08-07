@@ -2,14 +2,19 @@ package com.didebbo.mappify.presentation.view.fragment.destination.postlogin
 
 import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.ImageView
 import androidx.lifecycle.lifecycleScope
 import com.didebbo.mappify.R
 import com.didebbo.mappify.data.model.MarkerPostDocument
+import com.didebbo.mappify.data.model.Position
 import com.didebbo.mappify.databinding.MapViewLayoutBinding
 import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentDestination
 import com.didebbo.mappify.presentation.view.component.markerpost.infowindow.MarkerPostInfoWindow
@@ -42,6 +47,9 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
     private lateinit var addLocationIndicator: ImageView
     private lateinit var addLocationButton: Button
 
+    private lateinit var selectCityDropDown: AutoCompleteTextView
+    private  lateinit var selectCityDropDownAdapter: ArrayAdapter<Position>
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -52,6 +60,7 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
         mapController = mapView.controller
         addLocationIndicator = binding.addLocationIndicator
         addLocationButton = binding.addLocationButton
+        selectCityDropDown = binding.selectCityDropDown
         return  binding.root
     }
 
@@ -90,8 +99,20 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
     }
 
     private fun configureOverlay() {
+        context?.let { it ->
+            selectCityDropDownAdapter = ArrayAdapter(it,R.layout.exposed_dropdown_item,viewModel.allCityPositions)
+            selectCityDropDown.setAdapter(selectCityDropDownAdapter)
+            selectCityDropDown.setText(viewModel.currentPosition.name,false)
+            selectCityDropDown.setOnItemClickListener{ _,_,position,_ ->
+                val item = selectCityDropDownAdapter.getItem(position)
+                item?.let {
+                    viewModel.currentPosition = it
+                    mapController.setCenter(it.geoPoint)
+                }
+            }
+        }
 
-        viewModel.currentPosition.geoPoint = mapView.mapCenter
+        // viewModel.currentPosition.geoPoint = mapView.mapCenter
         mapView.addMapListener(object : MapListener {
             override fun onScroll(event: ScrollEvent?): Boolean {
                 viewModel.currentPosition.geoPoint = mapView.mapCenter
@@ -126,12 +147,14 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
 
         addLocationIndicator.setOnClickListener{
             val mapCenter = viewModel.currentPosition.geoPoint
-            val  centerPoint =  MarkerPostDocument.GeoPoint(mapCenter.latitude,mapCenter.longitude)
-            val bundle = Bundle().apply {
-                putDouble("latitude", centerPoint.latitude)
-                putDouble("longitude",centerPoint.longitude)
+            mapCenter?.let {
+                val  centerPoint =  MarkerPostDocument.GeoPoint(mapCenter.latitude,mapCenter.longitude)
+                val bundle = Bundle().apply {
+                    putDouble("latitude", centerPoint.latitude)
+                    putDouble("longitude",centerPoint.longitude)
+                }
+                navController?.navigate(R.id.new_marker_point_navigation_activity,bundle)
             }
-            navController?.navigate(R.id.new_marker_point_navigation_activity,bundle)
         }
     }
 

@@ -1,5 +1,6 @@
 package com.didebbo.mappify.data.model
 
+import android.util.Log
 import org.osmdroid.api.IGeoPoint
 import org.osmdroid.util.GeoPoint
 enum class Position(var geoPoint: IGeoPoint) {
