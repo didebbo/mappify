@@ -16,7 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class PostLoginActivity: BaseActivityNavigator<PostLoginViewModel>() {
 
     override val viewModel: PostLoginViewModel by viewModels()
-    lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
+    private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
     private var onDismissDestination: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {

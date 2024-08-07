@@ -49,6 +49,8 @@ class NewMarkerPointPage: BaseFragmentDestination<AddNewMarkerPointViewModel>(Ad
                     parentActivity?.showAlertView(it.localizedMessage ?: "Undefined Error")
                 }
                 addNewMarkerPostResult.getOrNull()?.let {
+                    val resultIntent = Intent()
+                    parentActivity?.setResult(Activity.RESULT_OK, resultIntent)
                     onSupportNavigateUp()
                 }
             }
@@ -62,8 +64,6 @@ class NewMarkerPointPage: BaseFragmentDestination<AddNewMarkerPointViewModel>(Ad
     }
 
     override fun onSupportNavigateUp(): Boolean? {
-        val resultIntent = Intent()
-        parentActivity?.setResult(Activity.RESULT_OK, resultIntent)
         parentActivity?.finish()
         return true
     }
