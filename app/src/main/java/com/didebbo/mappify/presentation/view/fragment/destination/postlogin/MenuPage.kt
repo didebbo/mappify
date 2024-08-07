@@ -12,6 +12,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.didebbo.mappify.R
+import com.didebbo.mappify.data.model.MarkerPostDocument
 import com.didebbo.mappify.databinding.MenuPageLayoutBinding
 import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentDestination
 import com.didebbo.mappify.presentation.view.activity.NewMarkerPointActivity
@@ -33,7 +34,15 @@ class MenuPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewModel::
         MenuPageAdapter.ItemViewData(
             title = "Add New Marker Point",
             action = {
-                val intent = Intent(this.context,NewMarkerPointActivity::class.java)
+                val mapCenter = viewModel.currentMapCenter
+                val  centerPoint =  MarkerPostDocument.GeoPoint(mapCenter.latitude,mapCenter.longitude)
+                val bundle = Bundle().apply {
+                    putDouble("latitude", centerPoint.latitude)
+                    putDouble("longitude",centerPoint.longitude)
+                }
+                val intent = Intent(this.context,NewMarkerPointActivity::class.java).apply {
+                    putExtras(bundle)
+                }
                 postLoginActivity?.navigateToIntentWithDismissDestination(
                     intent,
                     R.id.map_view_page_navigation_fragment

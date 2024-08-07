@@ -21,6 +21,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.osmdroid.api.IMapController
 import org.osmdroid.config.Configuration
+import org.osmdroid.events.MapListener
+import org.osmdroid.events.ScrollEvent
+import org.osmdroid.events.ZoomEvent
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
@@ -89,6 +92,19 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
     }
 
     private fun configureOverlay() {
+
+        viewModel.currentMapCenter = mapView.mapCenter
+        mapView.addMapListener(object : MapListener {
+            override fun onScroll(event: ScrollEvent?): Boolean {
+                viewModel.currentMapCenter = mapView.mapCenter
+                return true
+            }
+            override fun onZoom(event: ZoomEvent?): Boolean {
+                viewModel.currentMapCenter = mapView.mapCenter
+                return true
+            }
+        })
+
         viewModel.editingMode.observe(viewLifecycleOwner) { editingMode ->
             val visibility = if(editingMode) View.VISIBLE else View.GONE
             val buttonText = if(editingMode) "Cancel" else "Add Location"
@@ -111,7 +127,7 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
         }
 
         addLocationIndicator.setOnClickListener{
-            val mapCenter = mapView.mapCenter
+            val mapCenter = viewModel.currentMapCenter
             val  centerPoint =  MarkerPostDocument.GeoPoint(mapCenter.latitude,mapCenter.longitude)
             val bundle = Bundle().apply {
                 putDouble("latitude", centerPoint.latitude)

@@ -9,6 +9,8 @@ import com.didebbo.mappify.domain.repository.PostLoginRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.osmdroid.api.IGeoPoint
+import org.osmdroid.util.GeoPoint
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,6 +25,8 @@ class PostLoginViewModel @Inject constructor(
         listOf()
     )
     val markerPostDocuments: LiveData<List<MarkerPostDocument>> get() = _markerPostDocuments
+
+    lateinit var currentMapCenter: IGeoPoint
 
 
     fun setEditingMode(value: Boolean? = null) {
