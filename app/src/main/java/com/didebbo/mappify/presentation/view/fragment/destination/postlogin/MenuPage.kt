@@ -6,11 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import com.didebbo.mappify.databinding.MenuPageLayoutBinding
 import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentDestination
+import com.didebbo.mappify.presentation.view.activity.PostLoginActivity
 import com.didebbo.mappify.presentation.viewmodel.PostLoginViewModel
 
 class MenuPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewModel::class.java) {
 
     private var binding: MenuPageLayoutBinding? = null
+    private val postLoginActivity: PostLoginActivity? by lazy { parentActivity as? PostLoginActivity }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,12 +27,7 @@ class MenuPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewModel::
         super.onViewCreated(view, savedInstanceState)
 
         binding?.logOutItemMenu?.setOnClickListener{
-            onSupportNavigateUp()
+            postLoginActivity?.navigateToPreLogin()
         }
-    }
-
-    override fun onSupportNavigateUp(): Boolean? {
-        parentActivity?.finish()
-        return true
     }
 }

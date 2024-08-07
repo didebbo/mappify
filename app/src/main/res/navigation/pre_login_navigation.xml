@@ -17,10 +17,4 @@
         tools:layout="@layout/register_page_layout">
     </fragment>
 
-    <activity android:name="com.didebbo.mappify.presentation.view.activity.PostLoginActivity"
-        android:id="@+id/post_login_activity"
-        tools:layout="@layout/map_view_layout">
-    </activity>
-
-
 </navigation>

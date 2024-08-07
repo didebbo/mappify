@@ -16,7 +16,11 @@ class PostLoginActivity: BaseActivityNavigator<PostLoginViewModel>() {
         super.onCreate(savedInstanceState)
         configureSystemNavigation(
             R.navigation.post_login_navigation,
-            R.menu.post_login_bottom_menu
+            R.menu.post_login_bottom_menu,
+            setOf(
+                R.id.map_view_page_navigation_fragment,
+                R.id.menu_page_navigation_fragment
+            )
         )
     }
 

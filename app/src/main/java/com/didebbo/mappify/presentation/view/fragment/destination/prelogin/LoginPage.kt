@@ -4,19 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.lifecycleScope
 import com.didebbo.mappify.data.model.UserAuth
 import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentDestination
 import com.didebbo.mappify.presentation.view.activity.PreLoginActivity
 import com.didebbo.mappify.presentation.viewmodel.PreLoginViewModel
 import com.didebbo.mappify.R
 import com.didebbo.mappify.databinding.LoginPageLayoutBinding
-import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.launch
 
 class LoginPage: BaseFragmentDestination<PreLoginViewModel>(PreLoginViewModel::class.java) {
 
-    private lateinit var loginPageLayoutBinding: LoginPageLayoutBinding
+    private lateinit var binding: LoginPageLayoutBinding
     private val preLoginActivity: PreLoginActivity? by lazy { parentActivity as? PreLoginActivity }
 
     override fun onCreateView(
@@ -24,29 +21,29 @@ class LoginPage: BaseFragmentDestination<PreLoginViewModel>(PreLoginViewModel::c
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        loginPageLayoutBinding = LoginPageLayoutBinding.inflate(inflater,container,false)
-        return loginPageLayoutBinding.root
+        binding = LoginPageLayoutBinding.inflate(inflater,container,false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.getUser().observe(viewLifecycleOwner) {
-            loginPageLayoutBinding.userEmailTextView.text = it?.email
-            loginPageLayoutBinding.userEmailTextView.visibility = if(it != null) View.VISIBLE else View.GONE
-            loginPageLayoutBinding.emailTextField.visibility = if(it == null) View.VISIBLE else View.GONE
-            loginPageLayoutBinding.createNewAccountButton.visibility = if(it == null) View.VISIBLE else View.GONE
+            binding.userEmailTextView.text = it?.email
+            binding.userEmailTextView.visibility = if(it != null) View.VISIBLE else View.GONE
+            binding.emailTextField.visibility = if(it == null) View.VISIBLE else View.GONE
+            binding.createNewAccountButton.visibility = if(it == null) View.VISIBLE else View.GONE
         }
 
-        loginPageLayoutBinding.createNewAccountButton.setOnClickListener {
+        binding.createNewAccountButton.setOnClickListener {
             navController?.navigate(resId = R.id.register_page_navigation_fragment)
         }
 
-        loginPageLayoutBinding.signInButton.setOnClickListener {
+        binding.signInButton.setOnClickListener {
 
             val userAuth = UserAuth(
-                email = viewModel.getUser().value?.email ?: loginPageLayoutBinding.emailTextField.text.toString(),
-                password = loginPageLayoutBinding.passwordTextField.text.toString()
+                email = viewModel.getUser().value?.email ?: binding.emailTextField.text.toString(),
+                password = binding.passwordTextField.text.toString()
             )
 
             parentActivity?.hideSystemKeyboard()
@@ -58,20 +55,20 @@ class LoginPage: BaseFragmentDestination<PreLoginViewModel>(PreLoginViewModel::c
                         parentActivity?.showAlertView(message)
                     }
                     result.getOrNull()?.let {
-                        navController?.navigate(R.id.post_login_activity)
+                        preLoginActivity?.navigateToPostLogin()
                     }
                 }
             }
         }
 
-        loginPageLayoutBinding.signOutButton.setOnClickListener {
+        binding.signOutButton.setOnClickListener {
             viewModel.signOut()
         }
     }
 
     override fun onStop() {
         super.onStop()
-        loginPageLayoutBinding.emailTextField.setText("")
-        loginPageLayoutBinding.passwordTextField.setText("")
+        binding.emailTextField.setText("")
+        binding.passwordTextField.setText("")
     }
 }

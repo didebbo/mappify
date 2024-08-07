@@ -29,32 +29,25 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
     @Inject
     lateinit var markerPostInfoWindowFactory: MarkerPostInfoWindowFactory
 
-    private lateinit var mapViewLayoutBinding: MapViewLayoutBinding
-    private val postLoginActivity: PostLoginActivity? by lazy { parentActivity as? PostLoginActivity }
+    private lateinit var binding: MapViewLayoutBinding
 
-    private val mapView: MapView by lazy {
-        mapViewLayoutBinding.mapView
-    }
+    private lateinit var mapView: MapView
+    private lateinit var mapController: IMapController
 
-    private val mapController: IMapController by lazy {
-        mapView.controller
-    }
-
-    private val addLocationIndicator: ImageView by lazy {
-        mapViewLayoutBinding.addLocationIndicator
-    }
-
-    private val addLocationButton: Button by lazy {
-        mapViewLayoutBinding.addLocationButton
-    }
+    private lateinit var addLocationIndicator: ImageView
+    private lateinit var addLocationButton: Button
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        mapViewLayoutBinding = MapViewLayoutBinding.inflate(inflater,container,false)
-        return  mapViewLayoutBinding.root
+        binding = MapViewLayoutBinding.inflate(inflater,container,false)
+        mapView = binding.mapView
+        mapController = mapView.controller
+        addLocationIndicator = binding.addLocationIndicator
+        addLocationButton = binding.addLocationButton
+        return  binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -66,7 +59,6 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
     override fun onResume() {
         super.onResume()
         mapView.onResume()
-        viewModel.setEditingMode(false)
         parentActivity?.loaderCoroutineScope {
             viewModel.fetchMarkerPostDocuments().onFailure {
                 parentActivity?.showAlertView(it.localizedMessage ?: "Undefined Error")
@@ -77,6 +69,7 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
     override fun onPause() {
         super.onPause()
         mapView.onPause()
+        viewModel.setEditingMode(false)
     }
 
     private fun configuredMapView() {
