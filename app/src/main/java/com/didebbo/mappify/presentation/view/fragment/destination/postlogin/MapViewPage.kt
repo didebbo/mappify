@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import androidx.lifecycle.lifecycleScope
 import com.didebbo.mappify.R
 import com.didebbo.mappify.data.model.MarkerPostDocument
 import com.didebbo.mappify.databinding.MapViewLayoutBinding
@@ -16,6 +17,8 @@ import com.didebbo.mappify.presentation.view.component.markerpost.infowindow.Mar
 import com.didebbo.mappify.presentation.view.component.markerpost.infowindow.MarkerPostInfoWindowFactory
 import com.didebbo.mappify.presentation.viewmodel.PostLoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.osmdroid.api.IMapController
 import org.osmdroid.config.Configuration
 import org.osmdroid.util.GeoPoint
@@ -59,7 +62,7 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
     override fun onResume() {
         super.onResume()
         mapView.onResume()
-        parentActivity?.loaderCoroutineScope {
+        lifecycleScope.launch {
             viewModel.fetchMarkerPostDocuments().onFailure {
                 parentActivity?.showAlertView(it.localizedMessage ?: "Undefined Error")
             }
@@ -69,7 +72,10 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
     override fun onPause() {
         super.onPause()
         mapView.onPause()
-        viewModel.setEditingMode(false)
+        lifecycleScope.launch{
+            delay(1000)
+            viewModel.setEditingMode(false)
+        }
     }
 
     private fun configuredMapView() {

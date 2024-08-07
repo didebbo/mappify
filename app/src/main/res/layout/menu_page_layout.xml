@@ -57,31 +57,8 @@
             android:textStyle="bold"
             android:text="Marker Posts: 20">
         </TextView>
-        <!-- TO REPLACE WITH RECYCLER VIEW
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:showDividers="middle"
-            android:divider="@drawable/vertical_divider_10dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="21sp"
-                android:textStyle="bold"
-                tools:text="User Detail">
-            </TextView>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="21sp"
-                android:textStyle="bold"
-                tools:text="New Marker Post">
-            </TextView>
-        </LinearLayout>
-        -->
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/menu_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:itemCount="5"

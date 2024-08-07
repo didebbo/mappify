@@ -4,11 +4,13 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.lifecycleScope
 import com.didebbo.mappify.R
 import com.didebbo.mappify.data.model.MarkerPostDocument
 import com.didebbo.mappify.databinding.MarkerPostLayoutBinding
 import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentDestination
 import com.didebbo.mappify.presentation.viewmodel.PostLoginViewModel
+import kotlinx.coroutines.launch
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.infowindow.InfoWindow
 
@@ -35,7 +37,7 @@ class MarkerPostInfoWindow(parent: Fragment, mapView: MapView, private val data:
             close()
         }
 
-        parentDestination?.parentActivity?.loaderCoroutineScope {
+        parentDestination?.lifecycleScope?.launch {
             val userDocumentResult = postLoginViewModel?.getUserDocument(data.ownerId)
             userDocumentResult?.exceptionOrNull()?.let {
                 parentDestination.parentActivity?.showAlertView(it.localizedMessage ?: "Undefined Error")
