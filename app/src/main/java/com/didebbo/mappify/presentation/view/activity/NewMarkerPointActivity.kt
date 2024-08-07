@@ -1,6 +1,7 @@
 package com.didebbo.mappify.presentation.view.activity
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import com.didebbo.mappify.R
 import com.didebbo.mappify.data.model.MarkerPostDocument
@@ -17,9 +18,8 @@ class NewMarkerPointActivity: BaseActivityNavigator<AddNewMarkerPointViewModel>(
         super.onCreate(savedInstanceState)
         configureSystemNavigation(R.navigation.new_marker_point_navigation)
 
-        val latitude = intent?.extras?.getDouble("latitude") ?: 0.0
-        val longitude = intent?.extras?.getDouble("longitude") ?: 0.0
-
-        viewModel.updateCoordinates(MarkerPostDocument.GeoPoint(latitude,longitude))
+        val latitude = intent?.extras?.getDouble("latitude")
+        val longitude = intent?.extras?.getDouble("longitude")
+        viewModel.setupCoordinates(latitude,longitude)
     }
 }

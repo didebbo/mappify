@@ -1,5 +1,7 @@
 package com.didebbo.mappify.presentation.view.fragment.destination.postlogin
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -28,6 +30,7 @@ class NewMarkerPointPage: BaseFragmentDestination<AddNewMarkerPointViewModel>(Ad
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         parentActivity?.showBackButton(true)
+
         binding.latitudeEditText.setText(viewModel.getCoordinates().latitude.toString())
         binding.longitudeEditText.setText(viewModel.getCoordinates().longitude.toString())
         binding.saveButton.setOnClickListener {
@@ -52,7 +55,15 @@ class NewMarkerPointPage: BaseFragmentDestination<AddNewMarkerPointViewModel>(Ad
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        binding.latitudeEditText.isEnabled = viewModel.editCoordinates
+        binding.longitudeEditText.isEnabled = viewModel.editCoordinates
+    }
+
     override fun onSupportNavigateUp(): Boolean? {
+        val resultIntent = Intent()
+        parentActivity?.setResult(Activity.RESULT_OK, resultIntent)
         parentActivity?.finish()
         return true
     }
