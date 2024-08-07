@@ -12,7 +12,6 @@ import com.didebbo.mappify.R
 import com.didebbo.mappify.data.model.MarkerPostDocument
 import com.didebbo.mappify.databinding.MapViewLayoutBinding
 import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentDestination
-import com.didebbo.mappify.presentation.view.activity.PostLoginActivity
 import com.didebbo.mappify.presentation.view.component.markerpost.infowindow.MarkerPostInfoWindow
 import com.didebbo.mappify.presentation.view.component.markerpost.infowindow.MarkerPostInfoWindowFactory
 import com.didebbo.mappify.presentation.viewmodel.PostLoginViewModel
@@ -86,20 +85,20 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
             Configuration.getInstance().load(parentActivity.applicationContext, parentActivity.getPreferences(
                 MODE_PRIVATE))
             mapController.setZoom(15.0)
-            mapController.setCenter(viewModel.currentMapCenter)
+            mapController.setCenter(viewModel.pointerPosition.geoPoint)
         }
     }
 
     private fun configureOverlay() {
 
-        viewModel.currentMapCenter = mapView.mapCenter
+        viewModel.pointerPosition.geoPoint = mapView.mapCenter
         mapView.addMapListener(object : MapListener {
             override fun onScroll(event: ScrollEvent?): Boolean {
-                viewModel.currentMapCenter = mapView.mapCenter
+                viewModel.pointerPosition.geoPoint = mapView.mapCenter
                 return true
             }
             override fun onZoom(event: ZoomEvent?): Boolean {
-                viewModel.currentMapCenter = mapView.mapCenter
+                viewModel.pointerPosition.geoPoint = mapView.mapCenter
                 return true
             }
         })
@@ -126,7 +125,7 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
         }
 
         addLocationIndicator.setOnClickListener{
-            val mapCenter = viewModel.currentMapCenter
+            val mapCenter = viewModel.pointerPosition.geoPoint
             val  centerPoint =  MarkerPostDocument.GeoPoint(mapCenter.latitude,mapCenter.longitude)
             val bundle = Bundle().apply {
                 putDouble("latitude", centerPoint.latitude)
