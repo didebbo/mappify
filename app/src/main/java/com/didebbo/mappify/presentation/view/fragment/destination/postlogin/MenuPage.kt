@@ -1,14 +1,11 @@
 package com.didebbo.mappify.presentation.view.fragment.destination.postlogin
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.didebbo.mappify.R
@@ -34,7 +31,7 @@ class MenuPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewModel::
         MenuPageAdapter.ItemViewData(
             title = "Add New Marker Point",
             action = {
-                val mapCenter = viewModel.pointerPosition.geoPoint
+                val mapCenter = viewModel.currentPosition.geoPoint
                 val  centerPoint =  MarkerPostDocument.GeoPoint(mapCenter.latitude,mapCenter.longitude)
                 val bundle = Bundle().apply {
                     putDouble("latitude", centerPoint.latitude)

@@ -85,20 +85,20 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
             Configuration.getInstance().load(parentActivity.applicationContext, parentActivity.getPreferences(
                 MODE_PRIVATE))
             mapController.setZoom(15.0)
-            mapController.setCenter(viewModel.pointerPosition.geoPoint)
+            mapController.setCenter(viewModel.currentPosition.geoPoint)
         }
     }
 
     private fun configureOverlay() {
 
-        viewModel.pointerPosition.geoPoint = mapView.mapCenter
+        viewModel.currentPosition.geoPoint = mapView.mapCenter
         mapView.addMapListener(object : MapListener {
             override fun onScroll(event: ScrollEvent?): Boolean {
-                viewModel.pointerPosition.geoPoint = mapView.mapCenter
+                viewModel.currentPosition.geoPoint = mapView.mapCenter
                 return true
             }
             override fun onZoom(event: ZoomEvent?): Boolean {
-                viewModel.pointerPosition.geoPoint = mapView.mapCenter
+                viewModel.currentPosition.geoPoint = mapView.mapCenter
                 return true
             }
         })
@@ -125,7 +125,7 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
         }
 
         addLocationIndicator.setOnClickListener{
-            val mapCenter = viewModel.pointerPosition.geoPoint
+            val mapCenter = viewModel.currentPosition.geoPoint
             val  centerPoint =  MarkerPostDocument.GeoPoint(mapCenter.latitude,mapCenter.longitude)
             val bundle = Bundle().apply {
                 putDouble("latitude", centerPoint.latitude)
