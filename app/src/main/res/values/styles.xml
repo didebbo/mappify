@@ -1,3 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <style name="MapViewSpinnerStyle" parent="Widget.AppCompat.Spinner">
+        <item name="android:background">@drawable/drop_down_shape</item>
+        <item name="android:popupBackground">@drawable/drop_down_shape</item>
+    </style>
 </resources>

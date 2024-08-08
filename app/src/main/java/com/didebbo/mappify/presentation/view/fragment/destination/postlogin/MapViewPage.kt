@@ -103,6 +103,7 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
         context?.let { it ->
             citySelectionSpinnerAdapter = ArrayAdapter(it,R.layout.exposed_dropdown_item,viewModel.allCityPositions)
             citySelectionSpinner.adapter = citySelectionSpinnerAdapter
+            citySelectionSpinnerAdapter
             citySelectionSpinner.onItemSelectedListener = object :AdapterView.OnItemSelectedListener{
                 override fun onItemSelected(
                     parent: AdapterView<*>?,
