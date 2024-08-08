@@ -5,9 +5,11 @@
     android:layout_height="wrap_content">
     <TextView
         android:id="@+id/menu_item"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="21sp"
+        android:textSize="14sp"
         android:textStyle="bold"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/menu_item_shape"
         tools:text="Item"/>
 </RelativeLayout>

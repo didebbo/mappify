@@ -39,7 +39,7 @@
                     android:id="@+id/user_name_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="28sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     tools:text="Name Surname">
                 </TextView>
@@ -47,7 +47,7 @@
                     android:id="@+id/user_email_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="21sp"
+                    android:textSize="14sp"
                     tools:text="email@email.dom">
                 </TextView>
             </LinearLayout>
@@ -56,8 +56,7 @@
             android:id="@+id/post_counter_textVIew"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:textSize="12sp"
             tools:text="Marker Posts: 20">
         </TextView>
         <androidx.recyclerview.widget.RecyclerView
@@ -74,10 +73,11 @@
             android:orientation="vertical">
             <TextView
                 android:id="@+id/log_out_item_menu"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="21sp"
+                android:textSize="14sp"
                 android:textStyle="bold"
+                android:background="@drawable/menu_item_shape"
                 android:text="Log Out">
             </TextView>
         </LinearLayout>
