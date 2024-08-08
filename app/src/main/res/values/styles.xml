@@ -4,4 +4,9 @@
         <item name="android:background">@drawable/drop_down_shape</item>
         <item name="android:popupBackground">@drawable/drop_down_shape</item>
     </style>
+    <style name="MapViewButtonStyle" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/drop_down_shape</item>
+        <item name="android:paddingTop">0dp</item>
+        <item name="android:paddingBottom">0dp</item>
+    </style>
 </resources>

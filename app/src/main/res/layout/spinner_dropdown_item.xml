@@ -3,11 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:textSize="12sp"
+    android:textSize="14sp"
     android:textStyle="bold"
     android:padding="10dp"
     android:gravity="center"
     android:textColor="@color/white"
-    tools:background="@color/black"
+    tools:background="@color/colorPrimary"
     android:text="Item">
 </TextView>

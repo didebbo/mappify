@@ -9,16 +9,8 @@
         android:id="@+id/map_view"
         android:clickable="true"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
-    <Spinner
-        android:layout_margin="10dp"
-        android:id="@+id/city_selection_spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        style="@style/MapViewSpinnerStyle">
-    </Spinner>
+        android:layout_height="match_parent">
+    </org.osmdroid.views.MapView>
 
     <ImageView
         android:id="@+id/add_location_indicator"
@@ -26,15 +18,30 @@
         android:layout_height="32dp"
         android:layout_centerInParent="true"
         android:src="@drawable/direct_hit"
-        android:clickable="true"
-        />
-    <Button
-        android:id="@+id/add_location_button"
-        android:layout_width="wrap_content"
+        android:clickable="true">
+    </ImageView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add Location"
-        android:layout_margin="10dp"
-        android:layout_alignParentEnd="true"
-        />
+        android:divider="@drawable/vertical_divider_10dp"
+        android:gravity="end"
+        android:showDividers="middle"
+        android:orientation="vertical"
+        android:padding="10dp">
+        <Button
+            android:id="@+id/add_location_button"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="Add Position"
+            style="@style/MapViewButtonStyle">
+        </Button>
+        <Spinner
+            android:id="@+id/city_selection_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:gravity="center">
+        </Spinner>
+    </LinearLayout>
 
 </RelativeLayout>

@@ -2,13 +2,11 @@ package com.didebbo.mappify.presentation.view.fragment.destination.postlogin
 
 import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Spinner
@@ -101,7 +99,7 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
 
     private fun configureOverlay() {
         context?.let { it ->
-            citySelectionSpinnerAdapter = ArrayAdapter(it,R.layout.exposed_dropdown_item,viewModel.allCityPositions)
+            citySelectionSpinnerAdapter = ArrayAdapter(it,R.layout.spinner_dropdown_item,viewModel.allCityPositions)
             citySelectionSpinner.adapter = citySelectionSpinnerAdapter
             citySelectionSpinnerAdapter
             citySelectionSpinner.onItemSelectedListener = object :AdapterView.OnItemSelectedListener{
