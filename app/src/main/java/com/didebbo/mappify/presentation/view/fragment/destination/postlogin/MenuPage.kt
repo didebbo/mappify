@@ -2,20 +2,25 @@ package com.didebbo.mappify.presentation.view.fragment.destination.postlogin
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.didebbo.mappify.R
 import com.didebbo.mappify.data.model.MarkerPostDocument
+import com.didebbo.mappify.data.model.UserDocument
 import com.didebbo.mappify.databinding.MenuPageLayoutBinding
 import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentDestination
 import com.didebbo.mappify.presentation.view.activity.NewMarkerPointActivity
 import com.didebbo.mappify.presentation.view.activity.PostLoginActivity
 import com.didebbo.mappify.presentation.view.component.menu.recyclerview.MenuPageAdapter
 import com.didebbo.mappify.presentation.viewmodel.PostLoginViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
 class MenuPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewModel::class.java) {
 
     private val postLoginActivity: PostLoginActivity? by lazy { parentActivity as? PostLoginActivity }
@@ -63,7 +68,7 @@ class MenuPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewModel::
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Log.i("gn","parentActivity: $parentActivity")
+        fetchUserDocument()
 
         recyclerView.layoutManager = LinearLayoutManager(context).apply { orientation = LinearLayoutManager.VERTICAL }
         recyclerView.adapter = MenuPageAdapter(menuItemsData)
@@ -72,5 +77,29 @@ class MenuPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewModel::
         binding.logOutItemMenu.setOnClickListener{
             postLoginActivity?.navigateToPreLogin()
         }
+    }
+
+    private fun fetchUserDocument() {
+        var userDocument: UserDocument? = null
+        viewModel.userDocument?.let {
+            bindUser(it)
+            return
+        }
+        parentActivity?.loaderCoroutineScope {
+            val userDocumentResult = viewModel.getOwnerUserDocument()
+            userDocumentResult.exceptionOrNull()?.let {
+                parentActivity?.showAlertView(it.localizedMessage ?: "")
+            }
+            userDocumentResult.getOrNull()?.let {
+                bindUser(it)
+            }
+        }
+    }
+
+    private fun bindUser(data: UserDocument) {
+        binding.avatarNameTextView.text = data.getAvatarName()
+        binding.userNameTextView.text = data.getFullName()
+        binding.userEmailTextView.text = data.email
+        binding.postCounterTextVIew.text = "Marker Posts: ${data.markerPostsIds.size}"
     }
 }

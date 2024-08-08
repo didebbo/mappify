@@ -25,6 +25,7 @@ class PostLoginViewModel @Inject constructor(
     )
     val markerPostDocuments: LiveData<List<MarkerPostDocument>> get() = _markerPostDocuments
 
+    var userDocument: UserDocument? = null
     val allCityPositions: List<Position> = Position.entries
     var currentPosition: Position = allCityPositions.first()
 
@@ -46,6 +47,14 @@ class PostLoginViewModel @Inject constructor(
                 return@withContext Result.success(it)
             }
             return@withContext Result.failure(Exception("fetchMarkerPostDocuments() markerPostDocuments Not Found"))
+        }
+    }
+
+    suspend fun getOwnerUserDocument(): Result<UserDocument> {
+        return withContext(Dispatchers.IO) {
+            val userDocumentResult = postLoginRepository.getOwnerUserDocument()
+            userDocumentResult.getOrNull()?.let { uD -> userDocument = uD }
+            userDocumentResult
         }
     }
 

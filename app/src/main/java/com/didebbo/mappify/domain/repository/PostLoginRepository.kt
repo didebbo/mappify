@@ -13,6 +13,10 @@ class PostLoginRepository @Inject constructor(
         return firebaseDataProvider.fetchMarkerPostDocuments()
     }
 
+    suspend fun getOwnerUserDocument(): Result<UserDocument> {
+        return firebaseDataProvider.getOwnerUserDocument()
+    }
+
     suspend fun getUserDocument(id: String): Result<UserDocument> {
         return firebaseDataProvider.getUserDocument(id)
     }

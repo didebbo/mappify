@@ -18,7 +18,7 @@
             android:divider="@drawable/horizontal_divider_20dp"
             android:orientation="horizontal">
             <TextView
-                android:id="@+id/avatar_icon_text"
+                android:id="@+id/avatar_name_text_view"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:textColor="@color/white"
@@ -27,7 +27,7 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 android:layout_gravity="center"
-                android:text="NS">
+                tools:text="NS">
             </TextView>
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -36,26 +36,29 @@
 
                 android:orientation="vertical">
                 <TextView
+                    android:id="@+id/user_name_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="28sp"
                     android:textStyle="bold"
-                    android:text="Name Surname">
+                    tools:text="Name Surname">
                 </TextView>
                 <TextView
+                    android:id="@+id/user_email_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="21sp"
-                    android:text="email@email.dom">
+                    tools:text="email@email.dom">
                 </TextView>
             </LinearLayout>
         </LinearLayout>
         <TextView
+            android:id="@+id/post_counter_textVIew"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:text="Marker Posts: 20">
+            tools:text="Marker Posts: 20">
         </TextView>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/menu_recycler_view"
