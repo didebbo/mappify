@@ -31,8 +31,11 @@ class NewMarkerPointPage: BaseFragmentDestination<AddNewMarkerPointViewModel>(Ad
         super.onViewCreated(view, savedInstanceState)
         parentActivity?.showBackButton(true)
 
-        binding.latitudeEditText.setText(viewModel.getCoordinates().latitude.toString())
-        binding.longitudeEditText.setText(viewModel.getCoordinates().longitude.toString())
+        val latitude = String.format("%.4f",viewModel.getCoordinates().latitude)
+        val longitude = String.format("%.4f",viewModel.getCoordinates().longitude)
+
+        binding.latitudeEditText.setText(latitude)
+        binding.longitudeEditText.setText(longitude)
         binding.saveButton.setOnClickListener {
             parentActivity?.loaderCoroutineScope {
                 val addNewMarkerPostResult = viewModel.addNewMarkerPost(
