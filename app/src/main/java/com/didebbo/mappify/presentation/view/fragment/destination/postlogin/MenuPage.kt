@@ -37,7 +37,7 @@ class MenuPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewModel::
         MenuPageAdapter.ItemViewData(
             title = "Add New Marker Point",
             action = {
-                val mapCenter = viewModel.currentPosition.geoPoint
+                val mapCenter = viewModel.currentGeoPoint
                 mapCenter.let {
                     val  centerPoint =  MarkerPostDocument.GeoPoint(mapCenter.latitude,mapCenter.longitude)
                     val bundle = Bundle().apply {

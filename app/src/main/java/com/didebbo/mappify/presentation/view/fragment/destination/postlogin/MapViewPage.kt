@@ -2,6 +2,7 @@ package com.didebbo.mappify.presentation.view.fragment.destination.postlogin
 
 import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -65,9 +66,9 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        bundleNavigateTo()
         configuredMapView()
         configureOverlay()
-        bundleNavigateTo()
     }
 
     override fun onResume() {
@@ -92,7 +93,8 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
     private fun bundleNavigateTo() {
         arguments?.let {
          it.getSerializable("navigateTo",MarkerPostDocument.GeoPoint::class.java)?.let { geoPoint ->
-             mapController.setCenter(GeoPoint(geoPoint.latitude,geoPoint.longitude))
+             Log.i("gn","$geoPoint")
+             viewModel.currentGeoPoint = GeoPoint(geoPoint.latitude,geoPoint.longitude)
          }
         }
     }
@@ -102,7 +104,7 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
             Configuration.getInstance().load(parentActivity.applicationContext, parentActivity.getPreferences(
                 MODE_PRIVATE))
             mapController.setZoom(15.0)
-            mapController.setCenter(viewModel.currentPosition.geoPoint)
+            mapController.setCenter(viewModel.currentGeoPoint)
         }
     }
 
@@ -110,7 +112,7 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
         context?.let { it ->
             citySelectionSpinnerAdapter = ArrayAdapter(it,R.layout.spinner_dropdown_item,viewModel.allCityPositions)
             citySelectionSpinner.adapter = citySelectionSpinnerAdapter
-            citySelectionSpinnerAdapter
+            var firstInit = true
             citySelectionSpinner.onItemSelectedListener = object :AdapterView.OnItemSelectedListener{
                 override fun onItemSelected(
                     parent: AdapterView<*>?,
@@ -118,6 +120,10 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
                     position: Int,
                     id: Long
                 ) {
+                    if(firstInit) {
+                        firstInit = false
+                        return
+                    }
                     val item = citySelectionSpinnerAdapter.getItem(position)
                     item?.let {
                         viewModel.currentPosition = it
@@ -130,11 +136,11 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
 
         mapView.addMapListener(object : MapListener {
             override fun onScroll(event: ScrollEvent?): Boolean {
-                viewModel.currentPosition.geoPoint = mapView.mapCenter
+                viewModel.currentGeoPoint = mapView.mapCenter
                 return true
             }
             override fun onZoom(event: ZoomEvent?): Boolean {
-                viewModel.currentPosition.geoPoint = mapView.mapCenter
+                viewModel.currentGeoPoint = mapView.mapCenter
                 return true
             }
         })
@@ -161,15 +167,13 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
         }
 
         addLocationIndicator.setOnClickListener{
-            val mapCenter = viewModel.currentPosition.geoPoint
-            mapCenter?.let {
-                val  centerPoint =  MarkerPostDocument.GeoPoint(mapCenter.latitude,mapCenter.longitude)
-                val bundle = Bundle().apply {
-                    putDouble("latitude", centerPoint.latitude)
-                    putDouble("longitude",centerPoint.longitude)
-                }
-                navController?.navigate(R.id.new_marker_point_navigation_activity,bundle)
+            val mapCenter = viewModel.currentGeoPoint
+            val  centerPoint =  MarkerPostDocument.GeoPoint(mapCenter.latitude,mapCenter.longitude)
+            val bundle = Bundle().apply {
+                putDouble("latitude", centerPoint.latitude)
+                putDouble("longitude",centerPoint.longitude)
             }
+            navController?.navigate(R.id.new_marker_point_navigation_activity,bundle)
         }
     }
 

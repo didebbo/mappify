@@ -1,5 +1,6 @@
 package com.didebbo.mappify.data.model
 
+import org.osmdroid.api.IGeoPoint
 import org.osmdroid.util.GeoPoint
 import java.io.Serializable
 import java.util.UUID
@@ -14,7 +15,16 @@ data class MarkerPostDocument(
     data class GeoPoint(
         val latitude: Double = 0.0,
         val longitude: Double = 0.0,
-    ): Serializable
+    ): Serializable {
+        companion object {
+            fun fromIGeoPoint(geoPoint: IGeoPoint): GeoPoint {
+                return GeoPoint(
+                    geoPoint.latitude,
+                    geoPoint.longitude
+                )
+            }
+        }
+    }
 
     private fun hasValidTitle(): Boolean {
         return title.isNotEmpty()

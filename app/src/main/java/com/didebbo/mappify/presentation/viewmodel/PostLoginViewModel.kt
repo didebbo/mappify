@@ -10,6 +10,7 @@ import com.didebbo.mappify.domain.repository.PostLoginRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.osmdroid.api.IGeoPoint
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,6 +29,7 @@ class PostLoginViewModel @Inject constructor(
     var ownerUserDocument: UserDocument? = null
     val allCityPositions: List<Position> = Position.entries
     var currentPosition: Position = allCityPositions.first()
+    var currentGeoPoint: IGeoPoint = currentPosition.geoPoint
 
 
     fun setEditingMode(value: Boolean? = null) {
