@@ -97,12 +97,11 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
 
     private fun bundleNavigateTo() {
         arguments?.let {
-         it.getSerializable("navigateTo",MarkerPostDocument.GeoPoint::class.java)?.let { geoPoint ->
-             Log.i("gn","$geoPoint")
-             val customPosition = Position("CUSTOM",GeoPoint(geoPoint.latitude,geoPoint.longitude))
+         it.getSerializable("navigateTo",Position::class.java)?.let { customPosition ->
+             Log.i("gn","$customPosition")
              viewModel.currentPosition = customPosition
              viewModel.currentGeoPoint = customPosition.geoPoint
-             val getCustomItem = citySelectionSpinnerAdapter.data.firstOrNull() { item -> item.name == customPosition.name }
+             val getCustomItem = citySelectionSpinnerAdapter.data.firstOrNull() { item -> item.id == customPosition.id }
              getCustomItem?.let { item -> citySelectionSpinnerAdapter.data.remove(item) }
              citySelectionSpinnerAdapter.data.add(0,customPosition)
              val position = citySelectionSpinnerAdapter.data.indexOf(customPosition)

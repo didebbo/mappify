@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.didebbo.mappify.R
 import com.didebbo.mappify.data.model.MarkerPostDocument
+import com.didebbo.mappify.data.model.Position
 import com.didebbo.mappify.databinding.MarkerPostsListLayoutBinding
 import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentDestination
 import com.didebbo.mappify.presentation.view.component.markerpost.recyclerview.adapter.MarkerPostAdapter
@@ -54,7 +55,8 @@ class MarkerPostsListPage: BaseFragmentDestination<PostLoginViewModel>(PostLogin
             MarkerPostAdapter.ViewHolder.Data.fromMarkerDocument(it).copy(
                 onCLick = {
                     val bundle = Bundle().apply {
-                        putSerializable("navigateTo",it.position)
+                        val position = Position("CUSTOM", it.title.uppercase(), it.position.toIGeoPoint())
+                        putSerializable("navigateTo",position)
                     }
                     parentActivity?.navController?.navigate(R.id.map_view_page_navigation_fragment,bundle)
                 }

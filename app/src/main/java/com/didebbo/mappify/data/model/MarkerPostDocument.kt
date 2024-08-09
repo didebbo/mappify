@@ -16,13 +16,8 @@ data class MarkerPostDocument(
         val latitude: Double = 0.0,
         val longitude: Double = 0.0,
     ): Serializable {
-        companion object {
-            fun fromIGeoPoint(geoPoint: IGeoPoint): GeoPoint {
-                return GeoPoint(
-                    geoPoint.latitude,
-                    geoPoint.longitude
-                )
-            }
+        fun toIGeoPoint(): org.osmdroid.util.GeoPoint {
+            return org.osmdroid.util.GeoPoint(latitude,longitude)
         }
     }
 
