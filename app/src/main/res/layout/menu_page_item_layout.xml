@@ -10,6 +10,6 @@
         android:textSize="14sp"
         android:textStyle="bold"
         android:layout_marginBottom="20dp"
-        android:background="@drawable/menu_item_shape"
+        android:background="@drawable/underline_text_shape"
         tools:text="Item"/>
 </RelativeLayout>

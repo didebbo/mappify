@@ -1,5 +1,6 @@
 package com.didebbo.mappify.presentation.view.component.markerpost.infowindow
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -10,6 +11,7 @@ import com.didebbo.mappify.data.model.MarkerPostDocument
 import com.didebbo.mappify.databinding.MarkerPostLayoutBinding
 import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentDestination
 import com.didebbo.mappify.presentation.viewmodel.PostLoginViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.infowindow.InfoWindow
@@ -38,18 +40,28 @@ class MarkerPostInfoWindow(parent: Fragment, mapView: MapView, private val data:
         }
 
         parentDestination?.lifecycleScope?.launch {
-            val userDocumentResult = postLoginViewModel?.getUserDocument(data.ownerId)
-            userDocumentResult?.exceptionOrNull()?.let {
-                parentDestination.parentActivity?.showAlertView(it.localizedMessage ?: "Undefined Error")
-                close()
-            }
-            userDocumentResult?.getOrNull()?.let { userDocument ->
-                binding.avatarIconText.text = userDocument.getAvatarName()
-                binding.userNameText.text = userDocument.getFullName()
-                binding.postTitleText.text = data.title
-                binding.postDescriptionText.text = data.description
-                binding.coordinateText.text = "${String.format("%.4f",data.position.latitude)},${String.format("%.4f",data.position.longitude)}"
-                binding.root.visibility = View.VISIBLE
+            postLoginViewModel?.getUserDocument(data.ownerId)?.let { userDocumentResult ->
+                userDocumentResult.exceptionOrNull()?.let {
+                    parentDestination.parentActivity?.showAlertView(it.localizedMessage ?: "Undefined Error")
+                    close()
+                }
+                userDocumentResult.getOrNull()?.let { userDocument ->
+                    binding.avatarIconText.text = userDocument.getAvatarName()
+                    binding.userNameText.text = userDocument.getFullName()
+                    binding.postTitleText.text = data.title
+                    binding.postDescriptionText.text = data.description
+                    binding.coordinateText.text = "${String.format("%.4f",data.position.latitude)},${String.format("%.4f",data.position.longitude)}"
+                    binding.root.visibility = View.VISIBLE
+
+                    binding.userNameText.setOnClickListener {
+                        val bundle = Bundle().apply { putString("userId", userDocument.id) }
+                        parentDestination.navController?.navigate(R.id.user_detail_activity_navigation,bundle)
+                        parentDestination.lifecycleScope.launch {
+                            delay(1000)
+                            close()
+                        }
+                    }
+                }
             }
         }
     }

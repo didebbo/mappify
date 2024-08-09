@@ -22,4 +22,8 @@
         tools:layout="@layout/add_marker_point_layout">
     </activity>
 
+    <activity android:name="com.didebbo.mappify.presentation.view.activity.UserDetailActivity"
+        android:id="@+id/user_detail_activity_navigation">
+    </activity>
+
 </navigation>

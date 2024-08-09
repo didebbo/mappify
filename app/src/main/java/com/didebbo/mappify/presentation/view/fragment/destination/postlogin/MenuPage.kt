@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.didebbo.mappify.R
@@ -15,12 +14,8 @@ import com.didebbo.mappify.databinding.MenuPageLayoutBinding
 import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentDestination
 import com.didebbo.mappify.presentation.view.activity.NewMarkerPointActivity
 import com.didebbo.mappify.presentation.view.activity.PostLoginActivity
-import com.didebbo.mappify.presentation.view.activity.UserDetailActivity
 import com.didebbo.mappify.presentation.view.component.menu.recyclerview.MenuPageAdapter
 import com.didebbo.mappify.presentation.viewmodel.PostLoginViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class MenuPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewModel::class.java) {
 
@@ -33,10 +28,10 @@ class MenuPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewModel::
         MenuPageAdapter.ItemViewData(
             title = "User Details",
             action = {
-                val intent = Intent(this.context,UserDetailActivity::class.java).apply {
-                    putExtra("userId", viewModel.userDocument?.id)
+                val bundle = Bundle().apply {
+                    putString("userId", viewModel.ownerUserDocument?.id)
                 }
-                startActivity(intent)
+                navController?.navigate(R.id.user_detail_activity_navigation,bundle)
             }
         ),
         MenuPageAdapter.ItemViewData(
@@ -87,7 +82,7 @@ class MenuPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewModel::
 
     private fun fetchUserDocument() {
         var userDocument: UserDocument? = null
-        viewModel.userDocument?.let {
+        viewModel.ownerUserDocument?.let {
             bindUser(it)
             return
         }
