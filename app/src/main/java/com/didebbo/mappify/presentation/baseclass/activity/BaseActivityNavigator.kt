@@ -146,7 +146,6 @@ abstract class BaseActivityNavigator<VM: ViewModel>(): AppCompatActivity() {
 
     private fun showLoader(visible: Boolean) {
         val alertViewVisibility = alertView.isVisible
-        Log.i("gn", "alertTextView is visible: $alertViewVisibility")
         loaderView.visibility = if(visible) View.VISIBLE else View.GONE
         modalView.visibility = if(alertViewVisibility) View.VISIBLE else if(visible) View.VISIBLE else View.GONE
     }

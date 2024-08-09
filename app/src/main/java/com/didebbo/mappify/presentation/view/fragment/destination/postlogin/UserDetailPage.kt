@@ -56,7 +56,6 @@ class UserDetailPage: BaseFragmentDestination<UserDetailViewModel>(UserDetailVie
                     bindUserOwnerDocument(owner, other)
                 }
             }
-
         }
     }
 
@@ -82,34 +81,27 @@ class UserDetailPage: BaseFragmentDestination<UserDetailViewModel>(UserDetailVie
     }
 
     private suspend fun getUserOwnerDocument(): UserDocument? {
-        return withContext(Dispatchers.IO) {
-            delay(1000)
-            val ownerUserDocumentResult = viewModel.fetchOwnerUserDocument()
-            ownerUserDocumentResult.exceptionOrNull()?.let { e ->
-                parentActivity?.showAlertView(e.localizedMessage ?: "UndefinedError")
-            }
-            ownerUserDocumentResult.getOrNull()
+        val ownerUserDocumentResult = viewModel.fetchOwnerUserDocument()
+        ownerUserDocumentResult.exceptionOrNull()?.let { e ->
+            parentActivity?.showAlertView(e.localizedMessage ?: "UndefinedError")
         }
+        return ownerUserDocumentResult.getOrNull()
     }
 
     private suspend fun getUserDocument(): UserDocument? {
-        return withContext(Dispatchers.IO) {
-            val userDocumentResult = viewModel.fetchUserDocument(viewModel.userId)
-            userDocumentResult.exceptionOrNull()?.let { e ->
-                parentActivity?.showAlertView(e.localizedMessage ?: "UndefinedError")
-            }
-            userDocumentResult.getOrNull()
+        val userDocumentResult = viewModel.fetchUserDocument(viewModel.userId)
+        userDocumentResult.exceptionOrNull()?.let { e ->
+            parentActivity?.showAlertView(e.localizedMessage ?: "UndefinedError")
         }
+        return userDocumentResult.getOrNull()
     }
 
     private suspend fun getUserMarkerPost(userId: String): List<MarkerPostDocument>? {
-        return withContext(Dispatchers.IO) {
-            val userMarkerPostsResult = viewModel.fetchUserMarkerPosts(userId)
-            userMarkerPostsResult.exceptionOrNull()?.let {
-                parentActivity?.showAlertView(it.localizedMessage ?: "Undefined Error")
-            }
-            userMarkerPostsResult.getOrNull()
+        val userMarkerPostsResult = viewModel.fetchUserMarkerPosts(userId)
+        userMarkerPostsResult.exceptionOrNull()?.let {
+            parentActivity?.showAlertView(it.localizedMessage ?: "Undefined Error")
         }
+        return userMarkerPostsResult.getOrNull()
     }
 
     private fun bindUserDocument(data: UserDocument) {
