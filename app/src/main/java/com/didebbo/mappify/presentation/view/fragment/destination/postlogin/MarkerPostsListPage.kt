@@ -49,6 +49,13 @@ class MarkerPostsListPage: BaseFragmentDestination<PostLoginViewModel>(PostLogin
     private fun setRecyclerView(data: List<MarkerPostDocument>) {
         val recyclerView = binding.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(this.context).apply { orientation = LinearLayoutManager.VERTICAL }
+        val data = data.map {
+            MarkerPostAdapter.ViewHolder.Data.fromMarkerDocument(it).copy(
+                onCLick = {
+                    parentActivity?.showAlertView(it.title)
+                }
+            )
+        }
         recyclerView.adapter = MarkerPostAdapter(data)
     }
 
