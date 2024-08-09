@@ -1,6 +1,7 @@
 package com.didebbo.mappify.data.model
 
 import org.osmdroid.util.GeoPoint
+import java.io.Serializable
 import java.util.UUID
 
 data class MarkerPostDocument(
@@ -13,7 +14,7 @@ data class MarkerPostDocument(
     data class GeoPoint(
         val latitude: Double = 0.0,
         val longitude: Double = 0.0,
-    )
+    ): Serializable
 
     private fun hasValidTitle(): Boolean {
         return title.isNotEmpty()
