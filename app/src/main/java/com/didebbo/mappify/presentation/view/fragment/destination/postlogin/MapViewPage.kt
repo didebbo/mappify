@@ -67,6 +67,7 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
         super.onViewCreated(view, savedInstanceState)
         configuredMapView()
         configureOverlay()
+        bundleNavigateTo()
     }
 
     override fun onResume() {
@@ -85,6 +86,14 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
         lifecycleScope.launch{
             delay(1000)
             viewModel.setEditingMode(false)
+        }
+    }
+
+    private fun bundleNavigateTo() {
+        arguments?.let {
+         it.getSerializable("navigateTo",MarkerPostDocument.GeoPoint::class.java)?.let { geoPoint ->
+             mapController.setCenter(GeoPoint(geoPoint.latitude,geoPoint.longitude))
+         }
         }
     }
 
