@@ -28,7 +28,7 @@ class PostLoginViewModel @Inject constructor(
     val markerPostDocuments: LiveData<List<MarkerPostDocument>> get() = _markerPostDocuments
 
     var ownerUserDocument: UserDocument? = null
-    var availablePositions: MutableList<Position> = Position.City.entries.map { Position(it.geoPoint) }.toMutableList()
+    var availablePositions: MutableList<Position> = Position.City.entries.map { it.position }.toMutableList()
     var currentPosition: Position = availablePositions.first()
     var currentGeoPoint: IGeoPoint = currentPosition.geoPoint
 

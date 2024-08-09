@@ -114,7 +114,7 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
 
     private fun configureOverlay() {
         context?.let { it ->
-            citySelectionSpinnerAdapter = SpinnerArrayAdapter(it,viewModel.availablePositions.map { SpinnerArrayAdapter.ViewHolder.ItemData(it) })
+            citySelectionSpinnerAdapter = SpinnerArrayAdapter(it,viewModel.availablePositions)
             citySelectionSpinner.adapter = citySelectionSpinnerAdapter
             var firstInit = true
             citySelectionSpinner.onItemSelectedListener = object :AdapterView.OnItemSelectedListener{
@@ -130,8 +130,8 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
                     }
                     val item = citySelectionSpinnerAdapter.getItem(position)
                     item?.let {
-                        viewModel.currentPosition = it.data
-                        mapController.setCenter(it.data.geoPoint)
+                        viewModel.currentPosition = it
+                        mapController.setCenter(it.geoPoint)
                     }
                 }
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -195,17 +195,13 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
     }
 }
 
-class SpinnerArrayAdapter(private val ctx: Context,private val data: List<ViewHolder.ItemData>): BaseAdapter() {
-    class ViewHolder(val binding: SpinnerDropdownItemBinding) {
-        data class ItemData(
-            val data: Position
-        )
-    }
+class SpinnerArrayAdapter(private val ctx: Context,private val data: List<Position>): BaseAdapter() {
+    class ViewHolder(val binding: SpinnerDropdownItemBinding)
     override fun getCount(): Int {
         return data.size
     }
 
-    override fun getItem(position: Int): ViewHolder.ItemData {
+    override fun getItem(position: Int): Position {
         return data[position]
     }
 
@@ -228,7 +224,8 @@ class SpinnerArrayAdapter(private val ctx: Context,private val data: List<ViewHo
             viewHolder = view.tag as ViewHolder
         }
 
-        viewHolder.binding.textView.text = "Item $position"
+        val item = data[position]
+        viewHolder.binding.textView.text = "${item.name}"
         return view
     }
 }
