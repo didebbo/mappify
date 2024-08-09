@@ -5,6 +5,12 @@
     app:startDestination="@id/map_view_page_navigation_fragment"
     android:id="@+id/post_login_navigation">
 
+    <fragment android:name="com.didebbo.mappify.presentation.view.fragment.destination.postlogin.MarkerPostsListPage"
+        android:id="@+id/marker_post_list_page_navigation_fragment"
+        android:label="List"
+        tools:layout="@layout/marker_posts_list_layout">
+    </fragment>
+
     <fragment android:name="com.didebbo.mappify.presentation.view.fragment.destination.postlogin.MapViewPage"
         android:id="@+id/map_view_page_navigation_fragment"
         android:label="Map"

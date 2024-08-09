@@ -24,7 +24,6 @@ import kotlinx.coroutines.withContext
 class UserDetailPage: BaseFragmentDestination<UserDetailViewModel>(UserDetailViewModel::class.java) {
 
     private lateinit var binding: UserDetailLayoutBinding
-    private lateinit var markerPostRecyclerView: RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -130,6 +129,5 @@ class UserDetailPage: BaseFragmentDestination<UserDetailViewModel>(UserDetailVie
         val recyclerView = binding.userMarkerPostRecyclerView
         recyclerView.layoutManager = LinearLayoutManager(this.context).apply { orientation = LinearLayoutManager.VERTICAL }
         recyclerView.adapter = MarkerPostAdapter(data)
-        markerPostRecyclerView = recyclerView
     }
 }
