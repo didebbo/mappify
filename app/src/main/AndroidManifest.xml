@@ -26,6 +26,7 @@
         </activity>
         <activity android:name=".presentation.view.activity.PostLoginActivity"/>
         <activity android:name=".presentation.view.activity.NewMarkerPointActivity"/>
+        <activity android:name=".presentation.view.activity.UserDetailActivity"/>
     </application>
 
 </manifest>

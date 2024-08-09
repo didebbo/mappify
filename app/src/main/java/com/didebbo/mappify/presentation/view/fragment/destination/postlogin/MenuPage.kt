@@ -15,6 +15,7 @@ import com.didebbo.mappify.databinding.MenuPageLayoutBinding
 import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentDestination
 import com.didebbo.mappify.presentation.view.activity.NewMarkerPointActivity
 import com.didebbo.mappify.presentation.view.activity.PostLoginActivity
+import com.didebbo.mappify.presentation.view.activity.UserDetailActivity
 import com.didebbo.mappify.presentation.view.component.menu.recyclerview.MenuPageAdapter
 import com.didebbo.mappify.presentation.viewmodel.PostLoginViewModel
 import kotlinx.coroutines.Dispatchers
@@ -31,13 +32,18 @@ class MenuPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewModel::
     private val menuItemsData: List<MenuPageAdapter.ItemViewData> = listOf(
         MenuPageAdapter.ItemViewData(
             title = "User Details",
-            action = {}
+            action = {
+                val intent = Intent(this.context,UserDetailActivity::class.java).apply {
+                    putExtra("userId", viewModel.userDocument?.id)
+                }
+                startActivity(intent)
+            }
         ),
         MenuPageAdapter.ItemViewData(
             title = "Add New Marker Point",
             action = {
                 val mapCenter = viewModel.currentPosition.geoPoint
-                mapCenter?.let {
+                mapCenter.let {
                     val  centerPoint =  MarkerPostDocument.GeoPoint(mapCenter.latitude,mapCenter.longitude)
                     val bundle = Bundle().apply {
                         putDouble("latitude", centerPoint.latitude)
