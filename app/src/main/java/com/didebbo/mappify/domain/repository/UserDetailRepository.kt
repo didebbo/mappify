@@ -19,4 +19,8 @@ class UserDetailRepository @Inject constructor(
     suspend fun updateOwnerUserDocument(userDocument: UserDocument): Result<UserDocument> {
         return  firebaseDataProvider.updateOwnerUserDocument(userDocument)
     }
+
+    suspend fun getUserMarkerPosts(id: String): Result<List<MarkerPostDocument>> {
+        return firebaseDataProvider.getUserMarkerPosts(id)
+    }
 }

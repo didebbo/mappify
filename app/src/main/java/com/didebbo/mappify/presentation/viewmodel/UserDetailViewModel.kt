@@ -35,7 +35,7 @@ class UserDetailViewModel @Inject constructor(
         }
     }
 
-    fun setEditingMode(value: Boolean? = null) {
+    private fun setEditingMode(value: Boolean? = null) {
         val toggleValue = !(editingMode.value ?: true)
         _editingMode.postValue(value ?: toggleValue)
     }
@@ -50,5 +50,11 @@ class UserDetailViewModel @Inject constructor(
             }
         }
         setEditingMode()
+    }
+
+    suspend fun fetchUserMarkerPosts(id: String): Result<List<MarkerPostDocument>> {
+        return withContext(Dispatchers.IO) {
+            userDetailRepository.getUserMarkerPosts(id)
+        }
     }
 }

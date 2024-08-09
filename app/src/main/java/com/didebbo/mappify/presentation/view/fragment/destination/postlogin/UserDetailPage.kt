@@ -6,17 +6,25 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.didebbo.mappify.data.model.MarkerPostDocument
 import com.didebbo.mappify.data.model.UserDocument
 import com.didebbo.mappify.databinding.AddMarkerPointLayoutBinding
 import com.didebbo.mappify.databinding.UserDetailLayoutBinding
 import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentDestination
+import com.didebbo.mappify.presentation.view.component.markerpost.recyclerview.adapter.MarkerPostAdapter
 import com.didebbo.mappify.presentation.viewmodel.AddNewMarkerPointViewModel
 import com.didebbo.mappify.presentation.viewmodel.UserDetailViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 
 class UserDetailPage: BaseFragmentDestination<UserDetailViewModel>(UserDetailViewModel::class.java) {
 
     private lateinit var binding: UserDetailLayoutBinding
+    private lateinit var markerPostRecyclerView: RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,49 +39,97 @@ class UserDetailPage: BaseFragmentDestination<UserDetailViewModel>(UserDetailVie
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.editingMode.observe(viewLifecycleOwner) { isEditable ->
-            binding.editDescriptionButton.text = if(isEditable) "Done" else "Edit"
-            binding.descriptionEditText.isEnabled = isEditable
-        }
-
-        binding.editDescriptionButton.setOnClickListener {
-            val description = binding.descriptionEditText.text.toString()
-            parentActivity?.loaderCoroutineScope {
-                viewModel.updateOwnerUser(description)
-            }
-        }
+        setObservable()
+        setListener()
 
         parentActivity?.loaderCoroutineScope {
-            val ownerUserDocumentResult = viewModel.fetchOwnerUserDocument()
-            val userDocumentResult = viewModel.fetchUserDocument(viewModel.userId)
-
-            ownerUserDocumentResult.exceptionOrNull()?.let { e ->
-                parentActivity?.showAlertView(e.localizedMessage ?: "UndefinedError")
-            }
-            userDocumentResult.exceptionOrNull()?.let { e ->
-                parentActivity?.showAlertView(e.localizedMessage ?: "UndefinedError")
-            }
+            val userOwnerDocument = getUserOwnerDocument()
+            val userDocument = getUserDocument()
 
 
-            userDocumentResult.getOrNull()?.let { userDocument ->
-                binding.avatarNameTextView.text = userDocument.getAvatarName()
-                binding.userNameTextView.text = userDocument.getFullName()
-                binding.userEmailTextView.text = userDocument.email
-                binding.postCounterTextVIew.text = "Marker Posts: ${userDocument.markerPostsIds.size}"
-                binding.descriptionEditText.setText(userDocument.description)
-
-                binding.editDescriptionButton.visibility = View.GONE
-                ownerUserDocumentResult.getOrNull()?.let { userOwnerDocument ->
-                    viewModel.ownerUserDocument = userDocument
-                    val isOwner = userOwnerDocument.id == userDocument.id
-                    if(isOwner) binding.editDescriptionButton.visibility = View.VISIBLE
+            userDocument?.let { other ->
+                bindUserDocument(other)
+                val userMarkerPosts = getUserMarkerPost(other.id)
+                userMarkerPosts?.let { markerPosts ->
+                    configureMarkerPostRecyclerView(markerPosts)
+                }
+                userOwnerDocument?.let { owner ->
+                    bindUserOwnerDocument(owner, other)
                 }
             }
+
         }
     }
 
     override fun onSupportNavigateUp(): Boolean? {
         parentActivity?.finish()
         return true
+    }
+
+    private fun setObservable() {
+        viewModel.editingMode.observe(viewLifecycleOwner) { isEditable ->
+            binding.editDescriptionButton.text = if(isEditable) "Done" else "Edit"
+            binding.descriptionEditText.isEnabled = isEditable
+        }
+    }
+
+    private fun setListener() {
+        binding.editDescriptionButton.setOnClickListener {
+            val description = binding.descriptionEditText.text.toString()
+            parentActivity?.loaderCoroutineScope {
+                viewModel.updateOwnerUser(description)
+            }
+        }
+    }
+
+    private suspend fun getUserOwnerDocument(): UserDocument? {
+        return withContext(Dispatchers.IO) {
+            delay(1000)
+            val ownerUserDocumentResult = viewModel.fetchOwnerUserDocument()
+            ownerUserDocumentResult.exceptionOrNull()?.let { e ->
+                parentActivity?.showAlertView(e.localizedMessage ?: "UndefinedError")
+            }
+            ownerUserDocumentResult.getOrNull()
+        }
+    }
+
+    private suspend fun getUserDocument(): UserDocument? {
+        return withContext(Dispatchers.IO) {
+            val userDocumentResult = viewModel.fetchUserDocument(viewModel.userId)
+            userDocumentResult.exceptionOrNull()?.let { e ->
+                parentActivity?.showAlertView(e.localizedMessage ?: "UndefinedError")
+            }
+            userDocumentResult.getOrNull()
+        }
+    }
+
+    private suspend fun getUserMarkerPost(userId: String): List<MarkerPostDocument>? {
+        return withContext(Dispatchers.IO) {
+            val userMarkerPostsResult = viewModel.fetchUserMarkerPosts(userId)
+            userMarkerPostsResult.exceptionOrNull()?.let {
+                parentActivity?.showAlertView(it.localizedMessage ?: "Undefined Error")
+            }
+            userMarkerPostsResult.getOrNull()
+        }
+    }
+
+    private fun bindUserDocument(data: UserDocument) {
+        binding.avatarNameTextView.text = data.getAvatarName()
+        binding.userNameTextView.text = data.getFullName()
+        binding.userEmailTextView.text = data.email
+        binding.postCounterTextVIew.text = "Marker Posts: ${data.markerPostsIds.size}"
+        binding.descriptionEditText.setText(data.description)
+    }
+
+    private fun bindUserOwnerDocument(owner: UserDocument, other: UserDocument) {
+        viewModel.ownerUserDocument = owner
+        val isOwner = owner.id == other.id
+        if(isOwner) binding.editDescriptionButton.visibility = View.VISIBLE
+    }
+    private fun configureMarkerPostRecyclerView(data: List<MarkerPostDocument>) {
+        val recyclerView = binding.userMarkerPostRecyclerView
+        recyclerView.layoutManager = LinearLayoutManager(this.context).apply { orientation = LinearLayoutManager.VERTICAL }
+        recyclerView.adapter = MarkerPostAdapter(data)
+        markerPostRecyclerView = recyclerView
     }
 }

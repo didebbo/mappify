@@ -17,7 +17,7 @@ class FirebaseDataProvider {
     private val auth: FirebaseAuth = Firebase.auth
     private val fireStore = Firebase.firestore
     private val userCollection = fireStore.collection("users")
-    private val markerPostCollection = fireStore.collection("markerPosts")
+    private val markerPostCollection = fireStore.collection("marker_posts")
 
     private val _currentUser: MutableLiveData<FirebaseUser?> = MutableLiveData(auth.currentUser)
 
@@ -80,6 +80,15 @@ class FirebaseDataProvider {
             val userDocument = userCollection.document(id).get().await().toObject(UserDocument::class.java)
             userDocument?.let { Result.success(it) } ?:
             Result.failure(Exception("getUserDocument() UserDocument not fount"))
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun getUserMarkerPosts(id: String): Result<List<MarkerPostDocument>> {
+        return try {
+            val documents = markerPostCollection.whereEqualTo("ownerId",id).get().await().toObjects(MarkerPostDocument::class.java)
+            Result.success(documents)
         } catch (e: Exception) {
             Result.failure(e)
         }

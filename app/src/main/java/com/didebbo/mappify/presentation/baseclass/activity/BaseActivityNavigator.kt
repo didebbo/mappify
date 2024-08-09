@@ -19,11 +19,13 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.didebbo.mappify.R
 import com.didebbo.mappify.databinding.BaseActivityLayoutBinding
 import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentDestination
-import com.didebbo.mappify.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 abstract class BaseActivityNavigator<VM: ViewModel>(): AppCompatActivity() {
 
@@ -196,8 +198,8 @@ abstract class BaseActivityNavigator<VM: ViewModel>(): AppCompatActivity() {
     }
 
     fun loaderCoroutineScope(task: suspend ()->Unit) {
-        showLoader(true)
-        lifecycleScope.launch {
+        lifecycleScope.launch(Dispatchers.Main) {
+            showLoader(true)
             task.invoke()
             showLoader(false)
         }
