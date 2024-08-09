@@ -11,6 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.osmdroid.api.IGeoPoint
+import org.osmdroid.util.GeoPoint
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,8 +28,8 @@ class PostLoginViewModel @Inject constructor(
     val markerPostDocuments: LiveData<List<MarkerPostDocument>> get() = _markerPostDocuments
 
     var ownerUserDocument: UserDocument? = null
-    val allCityPositions: List<Position> = Position.entries
-    var currentPosition: Position = allCityPositions.first()
+    var availablePositions: MutableList<Position> = Position.City.entries.map { Position(it.geoPoint) }.toMutableList()
+    var currentPosition: Position = availablePositions.first()
     var currentGeoPoint: IGeoPoint = currentPosition.geoPoint
 
 

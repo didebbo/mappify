@@ -1,5 +1,6 @@
 package com.didebbo.mappify.presentation.view.fragment.destination.postlogin
 
+import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
 import android.util.Log
@@ -8,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.BaseAdapter
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Spinner
@@ -16,6 +18,7 @@ import com.didebbo.mappify.R
 import com.didebbo.mappify.data.model.MarkerPostDocument
 import com.didebbo.mappify.data.model.Position
 import com.didebbo.mappify.databinding.MapViewLayoutBinding
+import com.didebbo.mappify.databinding.SpinnerDropdownItemBinding
 import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentDestination
 import com.didebbo.mappify.presentation.view.component.markerpost.infowindow.MarkerPostInfoWindow
 import com.didebbo.mappify.presentation.view.component.markerpost.infowindow.MarkerPostInfoWindowFactory
@@ -31,6 +34,7 @@ import org.osmdroid.events.ZoomEvent
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
+import java.util.Random
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -48,7 +52,7 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
     private lateinit var addLocationButton: Button
 
     private lateinit var citySelectionSpinner: Spinner
-    private  lateinit var citySelectionSpinnerAdapter: ArrayAdapter<Position>
+    private  lateinit var citySelectionSpinnerAdapter: SpinnerArrayAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -110,7 +114,7 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
 
     private fun configureOverlay() {
         context?.let { it ->
-            citySelectionSpinnerAdapter = ArrayAdapter(it,R.layout.spinner_dropdown_item,viewModel.allCityPositions)
+            citySelectionSpinnerAdapter = SpinnerArrayAdapter(it,viewModel.availablePositions.map { SpinnerArrayAdapter.ViewHolder.ItemData(it) })
             citySelectionSpinner.adapter = citySelectionSpinnerAdapter
             var firstInit = true
             citySelectionSpinner.onItemSelectedListener = object :AdapterView.OnItemSelectedListener{
@@ -126,8 +130,8 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
                     }
                     val item = citySelectionSpinnerAdapter.getItem(position)
                     item?.let {
-                        viewModel.currentPosition = it
-                        mapController.setCenter(it.geoPoint)
+                        viewModel.currentPosition = it.data
+                        mapController.setCenter(it.data.geoPoint)
                     }
                 }
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -188,5 +192,43 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
                 position = markerPostDocument.position
             )
         )
+    }
+}
+
+class SpinnerArrayAdapter(private val ctx: Context,private val data: List<ViewHolder.ItemData>): BaseAdapter() {
+    class ViewHolder(val binding: SpinnerDropdownItemBinding) {
+        data class ItemData(
+            val data: Position
+        )
+    }
+    override fun getCount(): Int {
+        return data.size
+    }
+
+    override fun getItem(position: Int): ViewHolder.ItemData {
+        return data[position]
+    }
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+        val viewHolder: ViewHolder
+        val view: View
+
+        if (convertView == null) {
+            // Se convertView è null, inflatamo una nuova vista e creiamo un nuovo ViewHolder
+            val binding = SpinnerDropdownItemBinding.inflate(LayoutInflater.from(ctx), parent, false)
+            view = binding.root
+            viewHolder = ViewHolder(binding)
+            view.tag = viewHolder
+        } else {
+            view = convertView
+            viewHolder = view.tag as ViewHolder
+        }
+
+        viewHolder.binding.textView.text = "Item $position"
+        return view
     }
 }
