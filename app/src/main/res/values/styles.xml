@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="MapViewSpinnerStyle" parent="Widget.AppCompat.Spinner">
-        <item name="android:background">@drawable/drop_down_shape</item>
-        <item name="android:popupBackground">@drawable/drop_down_shape</item>
+        <item name="android:background">@drawable/round_shape</item>
+        <item name="android:popupBackground">@drawable/round_shape</item>
     </style>
-    <style name="MapViewButtonStyle" parent="Widget.AppCompat.Button">
-        <item name="android:background">@drawable/drop_down_shape</item>
+    <style name="RoundButtonStyle" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/round_shape</item>
         <item name="android:paddingTop">0dp</item>
         <item name="android:paddingBottom">0dp</item>
     </style>

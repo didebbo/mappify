@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -58,12 +59,29 @@
                 </TextView>
             </LinearLayout>
         </LinearLayout>
-        <TextView
-            android:id="@+id/user_description_text"
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/edit_description_button"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="@string/lorem">
-        </TextView>
+            android:layout_gravity="end"
+            tools:text="Edit">
+        </Button>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:hint="Description"
+            android:background="@color/opacity"
+            app:boxStrokeWidth="0dp"
+            app:boxStrokeWidthFocused="0dp">
+            <EditText
+                android:enabled="false"
+                android:id="@+id/description_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine|textCapSentences"
+                android:background="@color/clear">
+            </EditText>
+        </com.google.android.material.textfield.TextInputLayout>
         <androidx.recyclerview.widget.RecyclerView
             android:layout_marginTop="10dp"
             android:id="@+id/user_marker_post_recycler_view"

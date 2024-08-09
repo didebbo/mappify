@@ -108,12 +108,15 @@ class FirebaseDataProvider {
         }
     }
 
-    suspend fun updateUserDocument(userDocument: UserDocument): Result<Unit> {
+    suspend fun updateOwnerUserDocument(data: UserDocument): Result<UserDocument> {
         return try {
             val reference = userCollection.whereEqualTo("email",getUserAuth().value?.email).get().await().documents.firstOrNull()?.reference
             reference?.let {
-                it.set(userDocument).await()
-                Result.success(Unit)
+                it.set(data).await()
+                val ownerUserDocument = it.get().await().toObject(UserDocument::class.java)
+                ownerUserDocument?.let { userDocument ->
+                    Result.success(userDocument)
+                } ?: Result.failure(Exception("updateUserDocument() UserDocument not found"))
             } ?:
             Result.failure(Exception("updateUserDocument() UserDocument not found"))
         } catch (e: Exception) {

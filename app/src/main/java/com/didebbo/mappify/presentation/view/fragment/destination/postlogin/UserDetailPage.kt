@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.didebbo.mappify.data.model.MarkerPostDocument
+import com.didebbo.mappify.data.model.UserDocument
 import com.didebbo.mappify.databinding.AddMarkerPointLayoutBinding
 import com.didebbo.mappify.databinding.UserDetailLayoutBinding
 import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentDestination
@@ -29,17 +30,43 @@ class UserDetailPage: BaseFragmentDestination<UserDetailViewModel>(UserDetailVie
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewModel.editingMode.observe(viewLifecycleOwner) { isEditable ->
+            binding.editDescriptionButton.text = if(isEditable) "Done" else "Edit"
+            binding.descriptionEditText.isEnabled = isEditable
+        }
+
+        binding.editDescriptionButton.setOnClickListener {
+            val description = binding.descriptionEditText.text.toString()
+            parentActivity?.loaderCoroutineScope {
+                viewModel.updateOwnerUser(description)
+            }
+        }
+
         parentActivity?.loaderCoroutineScope {
-            viewModel.fetchUserDocument(viewModel.userId).let {
-                it.exceptionOrNull()?.let { e ->
-                    parentActivity?.showAlertView(e.localizedMessage ?: "UndefinedError")
-                }
-                it.getOrNull()?.let { userDocument ->
-                    binding.avatarNameTextView.text = userDocument.getAvatarName()
-                    binding.userNameTextView.text = userDocument.getFullName()
-                    binding.userEmailTextView.text = userDocument.email
-                    binding.postCounterTextVIew.text = "Marker Posts: ${userDocument.markerPostsIds.size}"
-                    binding.userDescriptionText.text = userDocument.description
+            val ownerUserDocumentResult = viewModel.fetchOwnerUserDocument()
+            val userDocumentResult = viewModel.fetchUserDocument(viewModel.userId)
+
+            ownerUserDocumentResult.exceptionOrNull()?.let { e ->
+                parentActivity?.showAlertView(e.localizedMessage ?: "UndefinedError")
+            }
+            userDocumentResult.exceptionOrNull()?.let { e ->
+                parentActivity?.showAlertView(e.localizedMessage ?: "UndefinedError")
+            }
+
+
+            userDocumentResult.getOrNull()?.let { userDocument ->
+                binding.avatarNameTextView.text = userDocument.getAvatarName()
+                binding.userNameTextView.text = userDocument.getFullName()
+                binding.userEmailTextView.text = userDocument.email
+                binding.postCounterTextVIew.text = "Marker Posts: ${userDocument.markerPostsIds.size}"
+                binding.descriptionEditText.setText(userDocument.description)
+
+                binding.editDescriptionButton.visibility = View.GONE
+                ownerUserDocumentResult.getOrNull()?.let { userOwnerDocument ->
+                    viewModel.ownerUserDocument = userDocument
+                    val isOwner = userOwnerDocument.id == userDocument.id
+                    if(isOwner) binding.editDescriptionButton.visibility = View.VISIBLE
                 }
             }
         }

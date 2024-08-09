@@ -69,7 +69,7 @@ class MenuPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewModel::
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        fetchUserDocument()
+        fetchOwnerUserDocument()
 
         recyclerView.layoutManager = LinearLayoutManager(context).apply { orientation = LinearLayoutManager.VERTICAL }
         recyclerView.adapter = MenuPageAdapter(menuItemsData)
@@ -80,7 +80,7 @@ class MenuPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewModel::
         }
     }
 
-    private fun fetchUserDocument() {
+    private fun fetchOwnerUserDocument() {
         var userDocument: UserDocument? = null
         viewModel.ownerUserDocument?.let {
             bindUser(it)

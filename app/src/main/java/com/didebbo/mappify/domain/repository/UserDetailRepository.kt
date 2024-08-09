@@ -9,7 +9,14 @@ import javax.inject.Inject
 class UserDetailRepository @Inject constructor(
  private val firebaseDataProvider: FirebaseDataProvider
 ) {
+    suspend fun getOwnerUserDocument(): Result<UserDocument> {
+        return firebaseDataProvider.getOwnerUserDocument()
+    }
     suspend fun getUserDocument(id: String): Result<UserDocument> {
         return firebaseDataProvider.getUserDocument(id)
+    }
+
+    suspend fun updateOwnerUserDocument(userDocument: UserDocument): Result<UserDocument> {
+        return  firebaseDataProvider.updateOwnerUserDocument(userDocument)
     }
 }

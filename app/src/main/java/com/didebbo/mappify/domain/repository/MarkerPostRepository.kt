@@ -3,7 +3,6 @@ package com.didebbo.mappify.domain.repository
 import com.didebbo.mappify.data.model.MarkerPostDocument
 import com.didebbo.mappify.data.model.UserDocument
 import com.didebbo.mappify.data.provider.FirebaseDataProvider
-import com.google.firebase.auth.FirebaseUser
 import javax.inject.Inject
 
 
@@ -50,7 +49,7 @@ class MarkerPostRepository @Inject constructor(
         return Result.failure(Exception("addMarkerPostDocument() userDocument Not Found"))
     }
 
-    private suspend fun updateUserDocument(userDocument: UserDocument): Result<Unit> {
-        return firebaseDataProvider.updateUserDocument(userDocument)
+    private suspend fun updateUserDocument(userDocument: UserDocument): Result<UserDocument> {
+        return firebaseDataProvider.updateOwnerUserDocument(userDocument)
     }
 }
