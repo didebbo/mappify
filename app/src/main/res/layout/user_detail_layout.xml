@@ -58,28 +58,20 @@
                 </TextView>
             </LinearLayout>
         </LinearLayout>
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/menu_recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:itemCount="5"
-            tools:listitem="@layout/menu_page_item_layout"
-            android:layout_weight="1">
-        </androidx.recyclerview.widget.RecyclerView>
-        <LinearLayout
+        <TextView
+            android:id="@+id/user_description_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/log_out_item_menu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:background="@drawable/menu_item_shape"
-                android:text="Log Out">
-            </TextView>
-        </LinearLayout>
+            tools:text="@string/lorem">
+        </TextView>
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_marginTop="10dp"
+            android:id="@+id/user_marker_post_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/marker_post_item_layout"
+            tools:itemCount="5"
+            android:layout_weight="1">
+        </androidx.recyclerview.widget.RecyclerView>
     </LinearLayout>
-
 </RelativeLayout>
