@@ -13,6 +13,7 @@ import android.widget.BaseAdapter
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Spinner
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import com.didebbo.mappify.R
 import com.didebbo.mappify.data.model.MarkerPostDocument
@@ -70,9 +71,9 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        bundleNavigateTo()
         configuredMapView()
         configureOverlay()
+        bundleNavigateTo()
     }
 
     override fun onResume() {
@@ -98,7 +99,15 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
         arguments?.let {
          it.getSerializable("navigateTo",MarkerPostDocument.GeoPoint::class.java)?.let { geoPoint ->
              Log.i("gn","$geoPoint")
-             viewModel.currentGeoPoint = GeoPoint(geoPoint.latitude,geoPoint.longitude)
+             val customPosition = Position("CUSTOM",GeoPoint(geoPoint.latitude,geoPoint.longitude))
+             viewModel.currentPosition = customPosition
+             viewModel.currentGeoPoint = customPosition.geoPoint
+             val getCustomItem = citySelectionSpinnerAdapter.data.firstOrNull() { item -> item.name == customPosition.name }
+             getCustomItem?.let { item -> citySelectionSpinnerAdapter.data.remove(item) }
+             citySelectionSpinnerAdapter.data.add(0,customPosition)
+             val position = citySelectionSpinnerAdapter.data.indexOf(customPosition)
+             citySelectionSpinner.setSelection(position)
+             mapController.setCenter(customPosition.geoPoint)
          }
         }
     }
@@ -195,7 +204,7 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
     }
 }
 
-class SpinnerArrayAdapter(private val ctx: Context,private val data: List<Position>): BaseAdapter() {
+class SpinnerArrayAdapter(private val ctx: Context,var data: MutableList<Position>): BaseAdapter() {
     class ViewHolder(val binding: SpinnerDropdownItemBinding)
     override fun getCount(): Int {
         return data.size

@@ -3,8 +3,11 @@ package com.didebbo.mappify.data.model
 import android.util.Log
 import org.osmdroid.api.IGeoPoint
 import org.osmdroid.util.GeoPoint
-class Position(val name: String, val geoPoint: IGeoPoint) {
-    enum class City(val position: Position) {
+import kotlin.random.Random
+
+data class Position(val name: String, val geoPoint: IGeoPoint) {
+
+        enum class City(val position: Position) {
         ROME(Position("ROME", GeoPoint(41.9028, 12.4964))),
         MILAN(Position("MILAN", GeoPoint(45.4642, 9.1900))),
         NAPLES(Position("NAPLES", GeoPoint(40.8518, 14.2681))),
