@@ -4,12 +4,18 @@ import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
+import android.view.View.OnTouchListener
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.RelativeLayout
 import android.widget.Spinner
+import androidx.core.view.isVisible
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import com.didebbo.mappify.R
 import com.didebbo.mappify.data.model.MarkerPostDocument
@@ -44,11 +50,18 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
     private lateinit var mapView: MapView
     private lateinit var mapController: IMapController
 
+    private lateinit var overlayLayout: RelativeLayout
+
     private lateinit var addLocationIndicator: ImageView
     private lateinit var addLocationButton: Button
 
     private lateinit var citySelectionSpinner: Spinner
     private  lateinit var citySelectionSpinnerAdapter: SpinnerArrayAdapter
+
+    val _visibleMarkerPosts: MutableLiveData<MutableList<MarkerPostInfoWindow>>
+    = MutableLiveData(mutableListOf())
+    private val visibleMarkerPosts: LiveData<MutableList<MarkerPostInfoWindow>>
+        get() = _visibleMarkerPosts
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,6 +71,7 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
         binding = MapViewLayoutBinding.inflate(inflater,container,false)
         mapView = binding.mapView
         mapController = mapView.controller
+        overlayLayout = binding.overlayLayout
         addLocationIndicator = binding.addLocationIndicator
         addLocationButton = binding.addLocationButton
         citySelectionSpinner = binding.citySelectionSpinner
@@ -116,6 +130,11 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
     }
 
     private fun configureOverlay() {
+
+        visibleMarkerPosts.observe(viewLifecycleOwner) {
+            setOverlayVisibilityAnimation(it.isEmpty())
+        }
+
         context?.let {
             citySelectionSpinnerAdapter = SpinnerArrayAdapter(it,viewModel.availablePositions)
             citySelectionSpinner.adapter = citySelectionSpinnerAdapter
@@ -193,5 +212,16 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
                 position = markerPostDocument.position
             )
         )
+    }
+
+    private fun setOverlayVisibilityAnimation(setToVisible: Boolean, duration: Long = 1000) {
+        if(setToVisible) {
+            overlayLayout.visibility = View.VISIBLE
+            overlayLayout.animate().alpha(1f ).setDuration(duration).start()
+        } else {
+            overlayLayout.animate().alpha(0f).setDuration(duration).withEndAction {
+                overlayLayout.visibility = View.INVISIBLE
+            }.start()
+        }
     }
 }

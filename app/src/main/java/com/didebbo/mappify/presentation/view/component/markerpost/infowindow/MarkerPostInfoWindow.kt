@@ -10,6 +10,7 @@ import com.didebbo.mappify.R
 import com.didebbo.mappify.data.model.MarkerPostDocument
 import com.didebbo.mappify.databinding.MarkerPostLayoutBinding
 import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentDestination
+import com.didebbo.mappify.presentation.view.fragment.destination.postlogin.MapViewPage
 import com.didebbo.mappify.presentation.viewmodel.PostLoginViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -34,6 +35,13 @@ class MarkerPostInfoWindow(parent: Fragment, mapView: MapView, private val data:
         val position: MarkerPostDocument.GeoPoint
     )
     override fun onOpen(item: Any?) {
+
+        (parentDestination as? MapViewPage)?.let { mapViewPage ->
+            mapViewPage._visibleMarkerPosts.value?.apply {
+                this.add(this@MarkerPostInfoWindow)
+                mapViewPage._visibleMarkerPosts.postValue(this)
+            }
+        }
 
         binding.root.setOnClickListener{
             close()
@@ -67,6 +75,11 @@ class MarkerPostInfoWindow(parent: Fragment, mapView: MapView, private val data:
     }
 
     override fun onClose() {
-
+        (parentDestination as? MapViewPage)?.let { mapViewPage ->
+            mapViewPage._visibleMarkerPosts.value?.apply{
+                this.remove(this@MarkerPostInfoWindow)
+                mapViewPage._visibleMarkerPosts.postValue(this)
+            }
+        }
     }
 }

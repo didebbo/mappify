@@ -12,36 +12,41 @@
         android:layout_height="match_parent">
     </org.osmdroid.views.MapView>
 
-    <ImageView
-        android:id="@+id/add_location_indicator"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_centerInParent="true"
-        android:src="@drawable/direct_hit"
-        android:clickable="true">
-    </ImageView>
-
-    <LinearLayout
+    <RelativeLayout
+        android:id="@+id/overlay_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:divider="@drawable/vertical_divider_10dp"
-        android:gravity="end"
-        android:showDividers="middle"
-        android:orientation="vertical"
-        android:padding="10dp">
-        <Button
-            android:id="@+id/add_location_button"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:text="Add Position"
-            style="@style/RoundButtonStyle">
-        </Button>
-        <Spinner
-            android:id="@+id/city_selection_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:gravity="center">
-        </Spinner>
-    </LinearLayout>
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/add_location_indicator"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/direct_hit"
+            android:clickable="true">
+        </ImageView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="@drawable/vertical_divider_10dp"
+            android:gravity="end"
+            android:showDividers="middle"
+            android:orientation="vertical"
+            android:padding="10dp">
+            <Button
+                android:id="@+id/add_location_button"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="Add Position"
+                style="@style/RoundButtonStyle">
+            </Button>
+            <Spinner
+                android:id="@+id/city_selection_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:gravity="center">
+            </Spinner>
+        </LinearLayout>
+    </RelativeLayout>
 
 </RelativeLayout>
