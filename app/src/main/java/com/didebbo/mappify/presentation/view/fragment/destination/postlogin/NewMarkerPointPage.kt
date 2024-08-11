@@ -2,17 +2,21 @@ package com.didebbo.mappify.presentation.view.fragment.destination.postlogin
 
 import android.app.Activity
 import android.content.Intent
+import android.content.IntentSender
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
+import com.didebbo.mappify.R
 import com.didebbo.mappify.data.model.MarkerPostDocument
+import com.didebbo.mappify.data.model.Position
 import com.didebbo.mappify.databinding.AddMarkerPointLayoutBinding
 import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentDestination
 import com.didebbo.mappify.presentation.viewmodel.AddNewMarkerPointViewModel
 import com.didebbo.mappify.presentation.viewmodel.PostLoginViewModel
 import kotlinx.coroutines.launch
+import org.osmdroid.util.GeoPoint
 
 class NewMarkerPointPage: BaseFragmentDestination<AddNewMarkerPointViewModel>(AddNewMarkerPointViewModel::class.java) {
 
@@ -52,7 +56,15 @@ class NewMarkerPointPage: BaseFragmentDestination<AddNewMarkerPointViewModel>(Ad
                     parentActivity?.showAlertView(it.localizedMessage ?: "Undefined Error")
                 }
                 addNewMarkerPostResult.getOrNull()?.let {
-                    val resultIntent = Intent()
+                    val resultIntent = Intent().apply {
+                        putExtra("destination",Bundle().apply {
+                            putInt("resIdDestination", R.id.map_view_page_navigation_fragment)
+                            putBundle("resDestinationBundle", Bundle().apply {
+                                val position = Position(name = it.title, geoPoint = it.position.toIGeoPoint())
+                                putSerializable("navigateTo",position)
+                            })
+                        })
+                    }
                     parentActivity?.setResult(Activity.RESULT_OK, resultIntent)
                     onSupportNavigateUp()
                 }

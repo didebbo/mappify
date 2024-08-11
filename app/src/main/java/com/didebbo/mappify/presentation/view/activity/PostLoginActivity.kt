@@ -16,8 +16,6 @@ import dagger.hilt.android.AndroidEntryPoint
 class PostLoginActivity: BaseActivityNavigator<PostLoginViewModel>() {
 
     override val viewModel: PostLoginViewModel by viewModels()
-    private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
-    private var onDismissDestination: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,26 +27,9 @@ class PostLoginActivity: BaseActivityNavigator<PostLoginViewModel>() {
                 R.id.menu_page_navigation_fragment
             )
         )
-        configureActivityResultLauncher()
-    }
-
-    private fun configureActivityResultLauncher() {
-        activityResultLauncher = registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                onDismissDestination?.let {
-                    navController.navigate(it)
-                }
-            }
-        }
     }
 
     fun navigateToPreLogin() {
         finish()
-    }
-
-    fun navigateToIntentWithDismissDestination(intent: Intent, destination: Int) {
-        onDismissDestination = destination
-        activityResultLauncher.launch(intent)
     }
 }

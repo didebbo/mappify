@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.didebbo.mappify.R
 import com.didebbo.mappify.data.model.MarkerPostDocument
+import com.didebbo.mappify.data.model.Position
 import com.didebbo.mappify.data.model.UserDocument
 import com.didebbo.mappify.databinding.MenuPageLayoutBinding
 import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentDestination
@@ -47,10 +48,7 @@ class MenuPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewModel::
                     val intent = Intent(this.context,NewMarkerPointActivity::class.java).apply {
                         putExtras(bundle)
                     }
-                    postLoginActivity?.navigateToIntentWithDismissDestination(
-                        intent,
-                        R.id.map_view_page_navigation_fragment
-                    )
+                    parentActivity?.navigateToIntentWithDismissDestination(intent)
                 }
             }
         )

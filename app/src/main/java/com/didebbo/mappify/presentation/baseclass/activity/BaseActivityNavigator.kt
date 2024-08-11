@@ -9,6 +9,8 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -20,6 +22,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.didebbo.mappify.R
+import com.didebbo.mappify.data.model.Position
 import com.didebbo.mappify.databinding.BaseActivityLayoutBinding
 import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentDestination
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -73,6 +76,8 @@ abstract class BaseActivityNavigator<VM: ViewModel>(): AppCompatActivity() {
 
     abstract val viewModel: VM
 
+    private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -80,6 +85,7 @@ abstract class BaseActivityNavigator<VM: ViewModel>(): AppCompatActivity() {
         baseNavHostFragment = supportFragmentManager.findFragmentById(R.id.base_nav_host_fragment) as NavHostFragment
         bottomNavigationView.visibility = View.GONE
         setContentView(baseActivityLayoutBinding.root)
+        configureActivityResultLauncher()
     }
 
     override fun onStart() {
@@ -150,6 +156,20 @@ abstract class BaseActivityNavigator<VM: ViewModel>(): AppCompatActivity() {
         modalView.visibility = if(alertViewVisibility) View.VISIBLE else if(visible) View.VISIBLE else View.GONE
     }
 
+    private fun configureActivityResultLauncher() {
+        activityResultLauncher = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                result.data?.getBundleExtra("destination")?.let {
+                    val destinationBundle = it
+                    val resIdDestination = destinationBundle.getInt("resIdDestination")
+                    val resDestinationBundle = destinationBundle.getBundle("resDestinationBundle")
+                    navController.navigate(resIdDestination,resDestinationBundle)
+                }
+            }
+        }
+    }
+
     fun showAlertView(
         message: String,
         confirmAction: (()->Unit)? = null,
@@ -202,5 +222,9 @@ abstract class BaseActivityNavigator<VM: ViewModel>(): AppCompatActivity() {
             task.invoke()
             showLoader(false)
         }
+    }
+
+    fun navigateToIntentWithDismissDestination(intent: Intent) {
+        activityResultLauncher.launch(intent)
     }
 }
