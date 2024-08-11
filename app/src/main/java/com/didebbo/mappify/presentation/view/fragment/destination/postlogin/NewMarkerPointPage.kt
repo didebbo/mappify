@@ -60,7 +60,7 @@ class NewMarkerPointPage: BaseFragmentDestination<AddNewMarkerPointViewModel>(Ad
                         putExtra("destination",Bundle().apply {
                             putInt("resIdDestination", R.id.map_view_page_navigation_fragment)
                             putBundle("resDestinationBundle", Bundle().apply {
-                                val position = Position(name = it.title, geoPoint = it.position.toIGeoPoint())
+                                val position = Position("CUSTOM",it.title, it.position.toIGeoPoint())
                                 putSerializable("navigateTo",position)
                             })
                         })
