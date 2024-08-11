@@ -1,6 +1,8 @@
 package com.didebbo.mappify.presentation.view.fragment.destination.postlogin
 
+import android.content.Context
 import android.content.Context.MODE_PRIVATE
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,6 +15,8 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.Spinner
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -181,6 +185,7 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
                 val marker = Marker(mapView).apply {
                     position = GeoPoint(it.position.latitude,it.position.longitude)
                     infoWindow = generateMarkerPostInfoWindow(it)
+                    icon = AppCompatResources.getDrawable(requireContext(),R.drawable.map_marker)
                 }
                 mapView.overlays.add(marker)
             }

@@ -37,8 +37,8 @@
                 android:id="@+id/add_location_button"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:text="Add Position"
-                style="@style/RoundButtonStyle">
+                style="@style/RoundButtonStyle"
+                android:text="Add Position">
             </Button>
             <Spinner
                 android:id="@+id/city_selection_spinner"

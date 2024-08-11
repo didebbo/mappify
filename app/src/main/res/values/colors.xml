@@ -2,9 +2,11 @@
 <resources>
 
     <!-- THEME -->
-    <color name="colorPrimary">#FF212121</color>
-    <color name="colorSecondary">#FF535353</color>
-    <color name="colorAccent">#FF1DB954</color>
+    <color name="colorPrimary">#1a73e8</color>
+    <color name="colorPrimaryAccent">#9bbff4</color>
+    <color name="colorSecondary">#34a853</color>
+    <color name="colorTertiary">#ea4335</color>
+    <color name="colorTertiaryAccent">#fbbc04</color>
 
     <color name="red">#FFFF0000</color>
     <color name="green">#FF00FF00</color>

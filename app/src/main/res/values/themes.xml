@@ -2,8 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.Mappify" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorSecondary">@color/colorSecondary</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/colorPrimaryAccent</item>
         <item name="spinnerStyle">@style/MapViewSpinnerStyle</item>
     </style>
 </resources>
