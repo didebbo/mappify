@@ -9,7 +9,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.LayoutManager
+import com.didebbo.mappify.R
 import com.didebbo.mappify.data.model.MarkerPostDocument
+import com.didebbo.mappify.data.model.Position
 import com.didebbo.mappify.data.model.UserDocument
 import com.didebbo.mappify.databinding.AddMarkerPointLayoutBinding
 import com.didebbo.mappify.databinding.UserDetailLayoutBinding
@@ -120,7 +122,19 @@ class UserDetailPage: BaseFragmentDestination<UserDetailViewModel>(UserDetailVie
     private fun configureMarkerPostRecyclerView(data: List<MarkerPostDocument>) {
         val recyclerView = binding.userMarkerPostRecyclerView
         recyclerView.layoutManager = LinearLayoutManager(this.context).apply { orientation = LinearLayoutManager.VERTICAL }
-        val data = data.map{ MarkerPostAdapter.ViewHolder.Data.fromMarkerDocument(it) }
+        val data = data.map{ MarkerPostAdapter.ViewHolder.Data.fromMarkerDocument(it).copy(
+            onCLick = {
+                val resultIntent = Intent().apply {
+                    putExtra("destination",Bundle().apply {
+                        putInt("resIdDestination", R.id.map_view_page_navigation_fragment)
+                        putBundle("resDestinationBundle", Bundle().apply {
+                            val position = Position(name = it.title, geoPoint = it.position.toIGeoPoint())
+                            putSerializable("navigateTo",position)
+                        })
+                    })
+                }
+            }
+        ) }
         recyclerView.adapter = MarkerPostAdapter(data)
     }
 }

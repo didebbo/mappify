@@ -1,5 +1,6 @@
 package com.didebbo.mappify.presentation.view.component.markerpost.infowindow
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import com.didebbo.mappify.R
 import com.didebbo.mappify.data.model.MarkerPostDocument
 import com.didebbo.mappify.databinding.MarkerPostLayoutBinding
 import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentDestination
+import com.didebbo.mappify.presentation.view.activity.UserDetailActivity
 import com.didebbo.mappify.presentation.view.fragment.destination.postlogin.MapViewPage
 import com.didebbo.mappify.presentation.viewmodel.PostLoginViewModel
 import kotlinx.coroutines.delay
@@ -62,8 +64,10 @@ class MarkerPostInfoWindow(parent: Fragment, mapView: MapView, private val data:
                     binding.root.visibility = View.VISIBLE
 
                     binding.userNameText.setOnClickListener {
-                        val bundle = Bundle().apply { putString("userId", userDocument.id) }
-                        parentDestination.navController?.navigate(R.id.user_detail_activity_navigation,bundle)
+                        val intent = Intent(parentDestination.context,UserDetailActivity::class.java).apply {
+                            putExtra("userId", userDocument.id)
+                        }
+                        parentDestination.parentActivity?.navigateToIntentWithDismissDestination(intent)
                         parentDestination.lifecycleScope.launch {
                             delay(1000)
                             close()
