@@ -137,6 +137,8 @@ class UserDetailPage: BaseFragmentDestination<UserDetailViewModel>(UserDetailVie
                 onSupportNavigateUp()
             }
         ) }
-        recyclerView.adapter = MarkerPostAdapter(data)
+        context?.let {
+            recyclerView.adapter = MarkerPostAdapter(it, data)
+        }
     }
 }

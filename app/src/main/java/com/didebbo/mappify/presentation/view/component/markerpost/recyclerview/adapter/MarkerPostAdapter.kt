@@ -1,14 +1,16 @@
 package com.didebbo.mappify.presentation.view.component.markerpost.recyclerview.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.ViewManager
 import androidx.recyclerview.widget.RecyclerView
+import com.didebbo.mappify.R
 import com.didebbo.mappify.data.model.MarkerPostDocument
 import com.didebbo.mappify.data.model.UserDocument
 import com.didebbo.mappify.databinding.MarkerPostItemLayoutBinding
 
-class MarkerPostAdapter(private val data: List<ViewHolder.Data>): RecyclerView.Adapter<MarkerPostAdapter.ViewHolder>()  {
+class MarkerPostAdapter(private val ctx: Context, private val data: List<ViewHolder.Data>): RecyclerView.Adapter<MarkerPostAdapter.ViewHolder>()  {
 
     class ViewHolder(val binding: MarkerPostItemLayoutBinding): RecyclerView.ViewHolder(binding.root) {
      data class Data(
@@ -26,10 +28,14 @@ class MarkerPostAdapter(private val data: List<ViewHolder.Data>): RecyclerView.A
      }
     }
 
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding =
-            MarkerPostItemLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return MarkerPostAdapter.ViewHolder(binding)
+        val binding = MarkerPostItemLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        if(viewType > 0) { binding.root.background = ctx.getDrawable(R.drawable.recycler_view_item_background) }
+        return ViewHolder(binding)
     }
 
     override fun getItemCount(): Int {

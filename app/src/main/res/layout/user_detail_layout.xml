@@ -86,6 +86,7 @@
         </com.google.android.material.textfield.TextInputLayout>
         <androidx.recyclerview.widget.RecyclerView
             android:layout_marginTop="10dp"
+            android:background="@drawable/recycler_view_background"
             android:id="@+id/user_marker_post_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

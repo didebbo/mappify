@@ -62,7 +62,9 @@ class MarkerPostsListPage: BaseFragmentDestination<PostLoginViewModel>(PostLogin
                 }
             )
         }
-        recyclerView.adapter = MarkerPostAdapter(data)
+        parentActivity?.let {
+            recyclerView.adapter = MarkerPostAdapter(it,data)
+        }
     }
 
 }
