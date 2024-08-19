@@ -8,11 +8,11 @@
         <item name="android:background">@drawable/round_shape</item>
         <item name="android:paddingTop">0dp</item>
         <item name="android:paddingBottom">0dp</item>
-        <item name="backgroundTint">@color/colorTertiary</item>
+        <item name="backgroundTint">@color/g_red_800</item>
     </style>
 
     <style name="MapBottomNavigationView">
-        <item name="android:background">@color/colorTertiaryAccent</item>
+        <item name="android:background">@color/g_green</item>
         <item name="itemIconSize">0dp</item>
         <item name="itemTextColor">@color/bottom_navigation_view_text_color</item>
         <item name="itemPaddingBottom">20dp</item>

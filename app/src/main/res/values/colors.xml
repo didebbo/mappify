@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- THEME -->
-    <color name="colorPrimary">#1a73e8</color>
-    <color name="colorPrimaryAccent">#9bbff4</color>
-    <color name="colorSecondary">#34a853</color>
-    <color name="colorTertiary">#ea4335</color>
-    <color name="colorTertiaryAccent">#fbbc04</color>
+    <!-- GOOGLE COLORS -->
+    <color name="g_red_800">#b52132</color>
+    <color name="g_red">#e94336</color>
+    <color name="g_orange">#fcbc05</color>
+    <color name="g_green">#34a853</color>
+    <color name="g_blue_400">#1973e7</color>
+    <color name="g_blue_200">#4385f5</color>
+    <color name="g_gray">#d4d4d4</color>
+    <color name="g_white">#f1f1f1</color>
 
+    <!-- BASE COLORS -->
     <color name="red">#FFFF0000</color>
     <color name="green">#FF00FF00</color>
     <color name="blue">#FF0000FF</color>

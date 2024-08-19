@@ -12,7 +12,7 @@
         android:padding="10dp"
         android:gravity="center"
         android:textColor="@color/white"
-        tools:background="@color/colorPrimary"
+        tools:background="@color/g_red"
         android:text="Item">
     </TextView>
 </RelativeLayout>
