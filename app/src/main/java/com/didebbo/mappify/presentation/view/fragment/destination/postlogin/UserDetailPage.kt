@@ -139,7 +139,7 @@ class UserDetailPage: BaseFragmentDestination<UserDetailViewModel>(UserDetailVie
                         putExtra("destination",Bundle().apply {
                             putInt("resIdDestination", R.id.map_view_page_navigation_fragment)
                             putBundle("resDestinationBundle", Bundle().apply {
-                                val position = Position("CUSTOM",it.title, GeoPoint(it.latitude,it.longitude))
+                                val position = Position("CUSTOM",it.title.uppercase(), GeoPoint(it.latitude,it.longitude))
                                 putSerializable("navigateTo",position)
                             })
                         })
