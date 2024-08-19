@@ -11,6 +11,11 @@
     <color name="g_gray">#d4d4d4</color>
     <color name="g_white">#f1f1f1</color>
 
+    <!-- AVATAR COLORS -->
+    <color name="avatar_gray">@android:color/darker_gray</color>
+    <color name="avatar_red">#C62828</color>
+    <color name="avatar_green">#00695C</color>
+
     <!-- BASE COLORS -->
     <color name="red">#FFFF0000</color>
     <color name="green">#FF00FF00</color>

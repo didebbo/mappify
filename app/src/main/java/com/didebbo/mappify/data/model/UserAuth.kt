@@ -1,10 +1,13 @@
 package com.didebbo.mappify.data.model
 
+import com.didebbo.mappify.R
+
 data class UserAuth(
     val name: String? = null,
     val surname: String? = null,
     val email: String,
-    val password: String
+    val password: String,
+    val avatarColor: Int? = R.color.avatar_gray
 ) {
 
     private fun hasValidName(): Boolean {

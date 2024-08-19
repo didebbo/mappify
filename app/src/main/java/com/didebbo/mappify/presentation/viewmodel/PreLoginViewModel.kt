@@ -1,8 +1,12 @@
 package com.didebbo.mappify.presentation.viewmodel
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.didebbo.mappify.R
+import com.didebbo.mappify.data.model.AvatarColor
 import com.didebbo.mappify.data.model.UserAuth
+import com.didebbo.mappify.data.model.UserDocument
 import com.didebbo.mappify.domain.repository.PreLoginRepository
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,6 +19,10 @@ class PreLoginViewModel @Inject constructor(
 
     fun getUser(): LiveData<FirebaseUser?> {
         return preLoginRepository.getUser()
+    }
+
+    suspend fun getOwnerUserDocument(): Result<UserDocument> {
+        return  preLoginRepository.getOwnerUserDocument()
     }
 
     suspend fun createUserWithEmailAndPassword(userAuth: UserAuth): Result<Unit?> {

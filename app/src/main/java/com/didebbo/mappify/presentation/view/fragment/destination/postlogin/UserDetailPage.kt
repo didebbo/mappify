@@ -2,6 +2,7 @@ package com.didebbo.mappify.presentation.view.fragment.destination.postlogin
 
 import android.app.Activity
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -117,6 +118,11 @@ class UserDetailPage: BaseFragmentDestination<UserDetailViewModel>(UserDetailVie
     }
 
     private fun bindUserDocument(data: UserDocument) {
+        data.avatarColor?.let { resId ->
+            parentActivity?.getColor(resId)?.let {
+                binding.avatarNameTextView.backgroundTintList = ColorStateList.valueOf(it)
+            }
+        }
         binding.avatarNameTextView.text = data.getAvatarName()
         binding.userNameTextView.text = data.getFullName()
         binding.userEmailTextView.text = data.email

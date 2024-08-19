@@ -2,6 +2,7 @@ package com.didebbo.mappify.domain.repository
 
 import androidx.lifecycle.LiveData
 import com.didebbo.mappify.data.model.UserAuth
+import com.didebbo.mappify.data.model.UserDocument
 import com.didebbo.mappify.data.provider.FirebaseDataProvider
 import com.google.firebase.auth.FirebaseUser
 import javax.inject.Inject
@@ -13,6 +14,10 @@ class PreLoginRepository @Inject constructor(
 
     fun getUser(): LiveData<FirebaseUser?> {
         return firebaseDataProvider.getUserAuth()
+    }
+
+    suspend fun getOwnerUserDocument(): Result<UserDocument> {
+        return firebaseDataProvider.getOwnerUserDocument()
     }
 
     suspend fun createUserWithEmailAndPassword(userAuth: UserAuth): Result<Unit> {

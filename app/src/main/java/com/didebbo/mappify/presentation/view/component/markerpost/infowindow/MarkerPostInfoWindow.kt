@@ -1,6 +1,7 @@
 package com.didebbo.mappify.presentation.view.component.markerpost.infowindow
 
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -56,6 +57,11 @@ class MarkerPostInfoWindow(parent: Fragment, mapView: MapView, private val data:
                     close()
                 }
                 userDocumentResult.getOrNull()?.let { userDocument ->
+                    userDocument.avatarColor?.let { resId ->
+                        parentDestination.context?.getColor(resId)?.let {
+                            binding.avatarIconText.backgroundTintList = ColorStateList.valueOf(it)
+                        }
+                    }
                     binding.avatarIconText.text = userDocument.getAvatarName()
                     binding.userNameText.text = userDocument.getFullName()
                     binding.postTitleText.text = data.title

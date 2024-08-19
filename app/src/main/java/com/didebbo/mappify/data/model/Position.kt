@@ -1,11 +1,9 @@
 package com.didebbo.mappify.data.model
 
-import android.util.Log
 import org.osmdroid.api.IGeoPoint
 import org.osmdroid.util.GeoPoint
 import java.io.Serializable
 import java.util.UUID
-import kotlin.random.Random
 
 data class Position(val id: String = UUID.randomUUID().toString(), val name: String, val geoPoint: IGeoPoint): Serializable {
 
@@ -22,3 +20,4 @@ data class Position(val id: String = UUID.randomUUID().toString(), val name: Str
                 CATANIA(Position(name = "CATANIA", geoPoint = GeoPoint(37.5079, 15.0830)));
         }
 }
+

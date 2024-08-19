@@ -1,5 +1,6 @@
 package com.didebbo.mappify.data.model
 
+import com.didebbo.mappify.R
 import java.util.UUID
 data class UserDocument(
     val id: String = UUID.randomUUID().toString(),
@@ -7,6 +8,7 @@ data class UserDocument(
     val surname: String = "Undefined Surname",
     val email: String = "Undefined Email",
     val description: String = "",
+    val avatarColor: Int? = R.color.avatar_gray,
     val markerPostsIds: List<String> = listOf()
 ) {
 

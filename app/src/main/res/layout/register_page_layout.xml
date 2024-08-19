@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -11,6 +13,18 @@
         android:showDividers="middle"
         android:divider="@drawable/vertical_divider_10dp"
         android:orientation="vertical">
+        <TextView
+            android:id="@+id/avatar_name_text_view"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:textColor="@color/white"
+            android:background="@drawable/icon_avatar_shape"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:text="NS">
+        </TextView>
         <EditText
             android:id="@+id/name_text_field"
             android:layout_width="match_parent"
@@ -39,6 +53,16 @@
             android:inputType="textPassword"
             android:hint="Password"
             />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/color_picker_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:orientation="horizontal"
+            tools:listitem="@layout/color_picker_item"
+            tools:itemCount="4">
+        </androidx.recyclerview.widget.RecyclerView>
         <Button
             android:id="@+id/email_register_button"
             android:layout_width="match_parent"

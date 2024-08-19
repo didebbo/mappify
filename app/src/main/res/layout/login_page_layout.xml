@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -11,6 +12,18 @@
         android:showDividers="middle"
         android:divider="@drawable/vertical_divider_10dp"
         android:orientation="vertical">
+        <TextView
+            android:id="@+id/avatar_name_text_view"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:textColor="@color/white"
+            android:background="@drawable/icon_avatar_shape"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_gravity="center"
+            tools:text="NS">
+        </TextView>
         <TextView
             android:id="@+id/user_email_text_view"
             android:layout_width="match_parent"

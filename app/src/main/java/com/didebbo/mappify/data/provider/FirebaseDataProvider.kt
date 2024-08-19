@@ -16,8 +16,8 @@ import kotlinx.coroutines.tasks.await
 class FirebaseDataProvider {
     private val auth: FirebaseAuth = Firebase.auth
     private val fireStore = Firebase.firestore
-    private val userCollection = fireStore.collection("users")
-    private val markerPostCollection = fireStore.collection("marker_posts")
+    private val userCollection = fireStore.collection("user_collection")
+    private val markerPostCollection = fireStore.collection("marker_collection")
 
     private val _currentUser: MutableLiveData<FirebaseUser?> = MutableLiveData(auth.currentUser)
 
@@ -46,9 +46,9 @@ class FirebaseDataProvider {
     suspend fun createUserWithEmailAndPassword(userAuth: UserAuth): Result<Unit> {
         return try {
             userAuth.registerException()?.let { return Result.failure(it) }
-            auth.createUserWithEmailAndPassword(userAuth.email, userAuth.password).await().user
+            auth.createUserWithEmailAndPassword(userAuth.email, userAuth.password).await()
             val reference = userCollection.document()
-            val data = UserDocument(reference.id,userAuth.name ?: "", userAuth.surname ?: "", userAuth.email)
+            val data = UserDocument(id = reference.id, name = userAuth.name ?: "", surname = userAuth.surname ?: "", email = userAuth.email, avatarColor = userAuth.avatarColor)
             reference.set(data).await()
             _currentUser.postValue(auth.currentUser)
             Result.success(Unit)
