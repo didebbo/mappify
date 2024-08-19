@@ -1,6 +1,7 @@
 package com.didebbo.mappify.presentation.view.fragment.destination.postlogin
 
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -99,6 +100,11 @@ class MenuPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewModel::
     }
 
     private fun bindUser(data: UserDocument) {
+        data.avatarColor?.let {
+            context?.getColor(it)?.let { color ->
+                binding.avatarNameTextView.backgroundTintList = ColorStateList.valueOf(color)
+            }
+        }
         binding.avatarNameTextView.text = data.getAvatarName()
         binding.userNameTextView.text = data.getFullName()
         binding.userEmailTextView.text = data.email

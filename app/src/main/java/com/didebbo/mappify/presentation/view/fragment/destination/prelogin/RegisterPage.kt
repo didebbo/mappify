@@ -51,14 +51,14 @@ class RegisterPage: BaseFragmentDestination<PreLoginViewModel>(PreLoginViewModel
         }
 
         binding.nameTextField.doOnTextChanged { n, _, _, _ ->
-            val name = n?.first()?.uppercase() ?: "U"
+            val name = n?.firstOrNull()?.uppercase() ?: "U"
             val surname = binding.surnameTextField.text.firstOrNull()?.uppercase() ?: "N"
          binding.avatarNameTextView.text = "$name$surname"
         }
 
         binding.surnameTextField.doOnTextChanged { s, _, _, _ ->
             val name = binding.nameTextField.text.firstOrNull()?.uppercase() ?: "U"
-            val surname = s?.first()?.uppercase() ?: "N"
+            val surname = s?.firstOrNull()?.uppercase() ?: "N"
             binding.avatarNameTextView.text = "$name$surname"
         }
 
