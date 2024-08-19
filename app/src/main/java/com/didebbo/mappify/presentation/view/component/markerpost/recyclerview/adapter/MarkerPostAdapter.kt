@@ -1,5 +1,6 @@
 package com.didebbo.mappify.presentation.view.component.markerpost.recyclerview.adapter
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import com.didebbo.mappify.R
 import com.didebbo.mappify.data.model.MarkerPostDocument
 import com.didebbo.mappify.databinding.MarkerPostItemLayoutBinding
 import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentDestination
+import com.didebbo.mappify.presentation.view.activity.UserDetailActivity
 import com.didebbo.mappify.presentation.viewmodel.PostLoginViewModel
 
 class MarkerPostAdapter(private val parent: Fragment, private val data: List<ViewHolder.Data>): RecyclerView.Adapter<MarkerPostAdapter.ViewHolder>()  {
@@ -68,6 +70,12 @@ class MarkerPostAdapter(private val parent: Fragment, private val data: List<Vie
             postLoginViewModel?.getUserDocument(data.ownerId)?.onSuccess {
                 holder.binding.userTextView.text = it.getFullName()
                 holder.binding.userTextView.visibility = View.VISIBLE
+                holder.binding.userTextView.setOnClickListener {
+                    val intent = Intent(parentDestination.context, UserDetailActivity::class.java).apply {
+                        putExtra("userId", data.ownerId)
+                    }
+                    parentDestination.parentActivity?.navigateToIntentWithDismissDestination(intent)
+                }
             }
             holder.binding.root.visibility = View.VISIBLE
         }
