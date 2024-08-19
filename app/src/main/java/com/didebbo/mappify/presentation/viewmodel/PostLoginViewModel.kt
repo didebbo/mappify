@@ -53,6 +53,19 @@ class PostLoginViewModel @Inject constructor(
         }
     }
 
+    suspend fun fetchUserDocuments(): Result<List<UserDocument>> {
+        return withContext(Dispatchers.IO) {
+            val userDocumentsResult = postLoginRepository.fetchUserDocuments()
+            userDocumentsResult.exceptionOrNull()?.let {
+                return@withContext Result.failure(it)
+            }
+            userDocumentsResult.getOrNull()?.let {
+                return@withContext Result.success(it)
+            }
+            return@withContext Result.failure(Exception("fetchUserDocuments() userDocuments Not Found"))
+        }
+    }
+
     suspend fun getOwnerUserDocument(): Result<UserDocument> {
         return withContext(Dispatchers.IO) {
             val userDocumentResult = postLoginRepository.getOwnerUserDocument()

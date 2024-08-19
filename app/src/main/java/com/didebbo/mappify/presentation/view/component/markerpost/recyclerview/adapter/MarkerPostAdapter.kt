@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.RecyclerView
 import com.didebbo.mappify.R
 import com.didebbo.mappify.data.model.MarkerPostDocument
+import com.didebbo.mappify.data.model.UserDocument
 import com.didebbo.mappify.databinding.MarkerPostItemLayoutBinding
 import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentDestination
 import com.didebbo.mappify.presentation.view.activity.UserDetailActivity
@@ -25,14 +26,14 @@ class MarkerPostAdapter(private val parent: Fragment, private val data: List<Vie
      data class Data(
          val id: String,
          val title: String,
-         val ownerId: String,
+         val owner: UserDocument? = null,
          val latitude: Double,
          val longitude: Double,
          val onCLick: (()->Unit)? = null
      ) {
          companion object {
              fun fromMarkerDocument(data: MarkerPostDocument): Data {
-                 return Data(data.id,data.title, data.ownerId, data.position.latitude, data.position.longitude)
+                 return Data(id = data.id,title = data.title, latitude = data.position.latitude, longitude = data.position.longitude)
              }
          }
      }
@@ -44,7 +45,6 @@ class MarkerPostAdapter(private val parent: Fragment, private val data: List<Vie
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = MarkerPostItemLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        binding.root.visibility = View.INVISIBLE
         binding.userTextView.visibility = View.GONE
         parentDestination?.parentActivity?.let {
             if(viewType > 0) { binding.root.background = AppCompatResources.getDrawable(it,R.drawable.recycler_view_item_background) }
@@ -66,18 +66,15 @@ class MarkerPostAdapter(private val parent: Fragment, private val data: List<Vie
             data.onCLick?.invoke()
         }
 
-        parentDestination?.parentActivity?.loaderCoroutineScope {
-            postLoginViewModel?.getUserDocument(data.ownerId)?.onSuccess {
-                holder.binding.userTextView.text = it.getFullName()
-                holder.binding.userTextView.visibility = View.VISIBLE
-                holder.binding.userTextView.setOnClickListener {
-                    val intent = Intent(parentDestination.context, UserDetailActivity::class.java).apply {
-                        putExtra("userId", data.ownerId)
-                    }
-                    parentDestination.parentActivity?.navigateToIntentWithDismissDestination(intent)
+        data.owner?.let { owner ->
+            holder.binding.userTextView.text = owner.getFullName()
+            holder.binding.userTextView.visibility = View.VISIBLE
+            holder.binding.userTextView.setOnClickListener {
+                val intent = Intent(parentDestination?.context, UserDetailActivity::class.java).apply {
+                    putExtra("userId", owner.id)
                 }
+                parentDestination?.parentActivity?.navigateToIntentWithDismissDestination(intent)
             }
-            holder.binding.root.visibility = View.VISIBLE
         }
     }
 

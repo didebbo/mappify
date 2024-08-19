@@ -34,6 +34,15 @@ class FirebaseDataProvider {
         }
     }
 
+    suspend fun fetchUserDocuments(): Result<List<UserDocument>> {
+        return try {
+            val userDocuments = userCollection.get().await().documents.mapNotNull { it.toObject(UserDocument::class.java) }
+            Result.success(userDocuments)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
     suspend fun createUserWithEmailAndPassword(userAuth: UserAuth): Result<Unit> {
         return try {
             userAuth.registerException()?.let { return Result.failure(it) }
