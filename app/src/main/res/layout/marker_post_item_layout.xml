@@ -8,8 +8,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingVertical="10dp"
-        android:showDividers="middle"
-        android:divider="@drawable/vertical_divider_10dp"
         android:orientation="vertical">
         <TextView
             android:id="@+id/title_text_view"
@@ -20,8 +18,16 @@
             tools:text="Marker Post Title">
         </TextView>
         <TextView
+            android:id="@+id/user_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:textSize="10sp"
+            tools:text="User Name Surname">
+        </TextView>
+        <TextView
             android:id="@+id/geo_point_text_view"
-            android:textSize="14dp"
+            android:textSize="12dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="40.0000,20.0000">
