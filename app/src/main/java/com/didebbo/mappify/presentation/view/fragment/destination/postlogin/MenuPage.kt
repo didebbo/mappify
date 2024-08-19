@@ -51,6 +51,12 @@ class MenuPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewModel::
                     parentActivity?.navigateToIntentWithDismissDestination(intent)
                 }
             }
+        ),
+        MenuPageAdapter.ItemViewData(
+            title = "Log Out",
+            action = {
+                postLoginActivity?.navigateToPreLogin()
+            }
         )
     )
 
@@ -70,11 +76,8 @@ class MenuPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewModel::
         fetchOwnerUserDocument()
 
         recyclerView.layoutManager = LinearLayoutManager(context).apply { orientation = LinearLayoutManager.VERTICAL }
-        recyclerView.adapter = MenuPageAdapter(menuItemsData)
-
-
-        binding.logOutItemMenu.setOnClickListener{
-            postLoginActivity?.navigateToPreLogin()
+        parentActivity?.let {
+            recyclerView.adapter = MenuPageAdapter(it, menuItemsData)
         }
     }
 
