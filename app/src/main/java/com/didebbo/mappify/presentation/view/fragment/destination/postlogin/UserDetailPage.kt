@@ -22,6 +22,7 @@ import com.didebbo.mappify.presentation.viewmodel.UserDetailViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
+import org.osmdroid.util.GeoPoint
 
 class UserDetailPage: BaseFragmentDestination<UserDetailViewModel>(UserDetailViewModel::class.java) {
 
@@ -52,7 +53,16 @@ class UserDetailPage: BaseFragmentDestination<UserDetailViewModel>(UserDetailVie
                 bindUserDocument(other)
                 val userMarkerPosts = getUserMarkerPost(other.id)
                 userMarkerPosts?.let { markerPosts ->
-                    configureMarkerPostRecyclerView(markerPosts)
+                    val data = markerPosts.map {
+                        MarkerPostAdapter.ViewHolder.Data(
+                            it.id,
+                            it.title,
+                            null,
+                            it.position.latitude,
+                            it.position.longitude
+                        )
+                    }
+                    configureMarkerPostRecyclerView(data)
                 }
                 userOwnerDocument?.let { owner ->
                     bindUserOwnerDocument(owner, other)
@@ -119,24 +129,26 @@ class UserDetailPage: BaseFragmentDestination<UserDetailViewModel>(UserDetailVie
         val isOwner = owner.id == other.id
         if(isOwner) binding.editDescriptionButton.visibility = View.VISIBLE
     }
-    private fun configureMarkerPostRecyclerView(data: List<MarkerPostDocument>) {
+    private fun configureMarkerPostRecyclerView(data: List<MarkerPostAdapter.ViewHolder.Data>) {
         val recyclerView = binding.userMarkerPostRecyclerView
         recyclerView.layoutManager = LinearLayoutManager(this.context).apply { orientation = LinearLayoutManager.VERTICAL }
-        val data = data.map{ MarkerPostAdapter.ViewHolder.Data.fromMarkerDocument(it).copy(
-            onCLick = {
-                val resultIntent = Intent().apply {
-                    putExtra("destination",Bundle().apply {
-                        putInt("resIdDestination", R.id.map_view_page_navigation_fragment)
-                        putBundle("resDestinationBundle", Bundle().apply {
-                            val position = Position("CUSTOM",it.title, it.position.toIGeoPoint())
-                            putSerializable("navigateTo",position)
+        val data = data.map {
+            it.copy(
+                onCLick = {
+                    val resultIntent = Intent().apply {
+                        putExtra("destination",Bundle().apply {
+                            putInt("resIdDestination", R.id.map_view_page_navigation_fragment)
+                            putBundle("resDestinationBundle", Bundle().apply {
+                                val position = Position("CUSTOM",it.title, GeoPoint(it.latitude,it.longitude))
+                                putSerializable("navigateTo",position)
+                            })
                         })
-                    })
+                    }
+                    parentActivity?.setResult(Activity.RESULT_OK, resultIntent)
+                    onSupportNavigateUp()
                 }
-                parentActivity?.setResult(Activity.RESULT_OK, resultIntent)
-                onSupportNavigateUp()
-            }
-        ) }
+            )
+        }
         recyclerView.adapter = MarkerPostAdapter(this, data)
     }
 }
