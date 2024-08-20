@@ -17,6 +17,7 @@ import com.didebbo.mappify.databinding.MenuPageLayoutBinding
 import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentDestination
 import com.didebbo.mappify.presentation.view.activity.NewMarkerPointActivity
 import com.didebbo.mappify.presentation.view.activity.PostLoginActivity
+import com.didebbo.mappify.presentation.view.activity.UserDetailActivity
 import com.didebbo.mappify.presentation.view.component.menu.recyclerview.MenuPageAdapter
 import com.didebbo.mappify.presentation.viewmodel.PostLoginViewModel
 import kotlinx.coroutines.Dispatchers
@@ -33,10 +34,10 @@ class MenuPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewModel::
         MenuPageAdapter.ItemViewData(
             title = "User Details",
             action = {
-                val bundle = Bundle().apply {
-                    putString("userId", viewModel.ownerUserDocument?.id)
+                val intent = Intent(context, UserDetailActivity::class.java).apply {
+                    putExtra("userId", viewModel.ownerUserDocument?.id)
                 }
-                navController?.navigate(R.id.user_detail_activity_navigation,bundle)
+                parentActivity?.navigateToIntentWithDismissDestination(intent)
             }
         ),
         MenuPageAdapter.ItemViewData(
