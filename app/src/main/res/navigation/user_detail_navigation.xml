@@ -7,6 +7,7 @@
 
     <fragment android:name="com.didebbo.mappify.presentation.view.fragment.destination.postlogin.UserDetailPage"
         android:id="@+id/user_detail_page_navigation_fragment"
+        android:label="User Detail"
         tools:layout="@layout/user_detail_layout">
     </fragment>
 </navigation>
