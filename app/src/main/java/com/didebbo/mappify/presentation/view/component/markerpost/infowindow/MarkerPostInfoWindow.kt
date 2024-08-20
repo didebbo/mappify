@@ -57,7 +57,8 @@ class MarkerPostInfoWindow(parent: Fragment, mapView: MapView, private val data:
                     close()
                 }
                 userDocumentResult.getOrNull()?.let { userDocument ->
-                    parentDestination.context?.getColor(userDocument.avatarColor.resId)?.let {
+                    val resId = (parentDestination as? MapViewPage)?.getAvatarColor(userDocument.avatarColorId)?.resId ?: R.color.avatar_gray
+                    parentDestination.context?.getColor(resId)?.let {
                         binding.avatarIconText.backgroundTintList = ColorStateList.valueOf(it)
                     }
                     binding.avatarIconText.text = userDocument.getAvatarName()

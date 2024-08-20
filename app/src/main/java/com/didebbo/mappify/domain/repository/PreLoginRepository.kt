@@ -1,6 +1,7 @@
 package com.didebbo.mappify.domain.repository
 
 import androidx.lifecycle.LiveData
+import com.didebbo.mappify.data.model.AvatarColor
 import com.didebbo.mappify.data.model.UserAuth
 import com.didebbo.mappify.data.model.UserDocument
 import com.didebbo.mappify.data.provider.FirebaseDataProvider
@@ -30,5 +31,9 @@ class PreLoginRepository @Inject constructor(
 
     fun signOut() {
         firebaseDataProvider.signOut()
+    }
+
+    suspend fun getAvatarColor(id: String): Result<AvatarColor> {
+        return firebaseDataProvider.getAvatarColor(id)
     }
 }

@@ -20,7 +20,7 @@ class FirebaseDataProvider {
     private val fireStore = Firebase.firestore
     private val userCollection = fireStore.collection("user_collection")
     private val markerPostCollection = fireStore.collection("marker_collection")
-    private val avatarColorCollection = fireStore.collection("avatar_collection")
+    private val avatarColorCollection = fireStore.collection("avatar_color_collection")
 
     private val _currentUser: MutableLiveData<FirebaseUser?> = MutableLiveData(auth.currentUser)
 
@@ -48,14 +48,10 @@ class FirebaseDataProvider {
 
     suspend fun createUserWithEmailAndPassword(userAuth: UserAuth): Result<Unit> {
         return try {
-            userAuth.registerException()?.let { return Result.failure(it) }
+            userAuth.registerException()?.let { throw it }
             auth.createUserWithEmailAndPassword(userAuth.email, userAuth.password).await()
             val userDocument = addUserDocument(userAuth)
-            userDocument.exceptionOrNull()?.let {  return Result.failure(it) }
-            userDocument.getOrNull()?.let {
-                val avatarColor = addAvatarColor(it.avatarColor)
-                avatarColor.exceptionOrNull()?.let { avatarError -> return Result.failure(avatarError) }
-            }
+            userDocument.exceptionOrNull()?.let { throw it }
             _currentUser.postValue(auth.currentUser)
             Result.success(Unit)
         } catch (e: Exception) {
@@ -84,7 +80,7 @@ class FirebaseDataProvider {
             val email = getUserAuth().value?.email
             val userDocument = userCollection.whereEqualTo("email",email).get().await().documents.firstOrNull()?.toObject(UserDocument::class.java)
             userDocument?.let { Result.success(it) } ?:
-            Result.failure(Exception("getOwnerUserDocument() UserDocument not fount"))
+            throw Exception("getOwnerUserDocument() userDocument not fount")
         } catch (e: Exception) {
             Result.failure(e)
         }
@@ -93,12 +89,16 @@ class FirebaseDataProvider {
     private suspend fun addUserDocument(userAuth: UserAuth): Result<UserDocument> {
         return try {
             val userDocument = userCollection.document()
-            val data = UserDocument(id = userDocument.id, name = userAuth.name ?: "", surname = userAuth.surname ?: "", email = userAuth.email, avatarColor = userAuth.avatarColor)
-            userDocument.set(data).await()
-            userDocument.get().await().toObject(UserDocument::class.java)?.let {
-                Result.success(it)
-            } ?:
-            Result.failure(Exception("addUserDocument() UserDocument not found"))
+            val randomColor = getRandomAvatarColor()
+            randomColor.exceptionOrNull()?.let { throw it }
+            randomColor.getOrNull()?.let { safeAvatarColor ->
+                val data = UserDocument(id = userDocument.id, name = userAuth.name ?: "", surname = userAuth.surname ?: "", email = userAuth.email, avatarColorId = safeAvatarColor.id)
+                userDocument.set(data).await()
+                userDocument.get().await().toObject(UserDocument::class.java)?.let {
+                    Result.success(it)
+                } ?:
+                throw Exception("addUserDocument() userDocument is null")
+            } ?: throw Exception("addUserDocument() randomColor is null")
         } catch(e: Exception) {
             Result.failure(e)
         }
@@ -108,7 +108,7 @@ class FirebaseDataProvider {
         return try {
             val userDocument = userCollection.document(id).get().await().toObject(UserDocument::class.java)
             userDocument?.let { Result.success(it) } ?:
-            Result.failure(Exception("getUserDocument() UserDocument not fount"))
+            throw Exception("getUserDocument() userDocument not fount")
         } catch (e: Exception) {
             Result.failure(e)
         }
@@ -127,7 +127,7 @@ class FirebaseDataProvider {
         return try {
             val document = markerPostCollection.document(id).get().await().toObject(MarkerPostDocument::class.java)
             document?.let { Result.success(it) } ?:
-            Result.failure(Exception("getMarkerPostDocument() MarkerDocument not found"))
+            throw Exception("getMarkerPostDocument() markerDocument not found")
         } catch (e: Exception) {
             Result.failure(e)
         }
@@ -140,7 +140,7 @@ class FirebaseDataProvider {
             reference.set(data).await()
             val addedMarkerPostDocument = reference.get().await().toObject(MarkerPostDocument::class.java)
             addedMarkerPostDocument?.let { Result.success(it) } ?:
-            Result.failure(Exception("addMarkerPostDocument() MarkerPostDocument not found"))
+            throw Exception("addMarkerPostDocument() markerPostDocument not found")
         } catch (e: Exception) {
             Result.failure(e)
         }
@@ -154,25 +154,56 @@ class FirebaseDataProvider {
                 val ownerUserDocument = it.get().await().toObject(UserDocument::class.java)
                 ownerUserDocument?.let { userDocument ->
                     Result.success(userDocument)
-                } ?: Result.failure(Exception("updateUserDocument() UserDocument not found"))
+                } ?:
+                throw Exception("updateUserDocument() ownerUserDocument not found")
             } ?:
-            Result.failure(Exception("updateUserDocument() UserDocument not found"))
+            throw Exception("updateUserDocument() userDocument not found")
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
 
-    private suspend fun addAvatarColor(avatarColor: AvatarColor): Result<AvatarColor> {
+    private suspend fun addAvatarColors(): Result<List<AvatarColor>> {
         return try {
-            val avatarColorRef = avatarColorCollection.document(avatarColor.id)
-            avatarColorRef.get().await().toObject(AvatarColor::class.java)?.let {
-                Result.success(it)
-            } ?: avatarColorRef.set(avatarColor)
-            val avatarColor = avatarColorRef.get().await().toObject(AvatarColor::class.java)
-            avatarColor?.let { Result.success(it) } ?:
-            Result.failure(Exception("addAvatarColor() AvatarColor not found"))
+            val colors: MutableList<AvatarColor> = mutableListOf()
+            AvatarColor.AvatarColors.entries.forEach {
+                val ref = avatarColorCollection.document(it.avatarColor.id)
+                val exist = ref.get().await().toObject(AvatarColor::class.java)
+                exist?.let { safeColor ->
+                    colors.add(safeColor)
+                } ?: ref.set(it.avatarColor).await()
+                ref.get().await().toObject(AvatarColor::class.java)?.let { safeColor ->
+                    colors.add(safeColor)
+                }
+            }
+            Result.success(colors)
         } catch(e: Exception) {
             return Result.failure(e)
+        }
+    }
+    private suspend fun getRandomAvatarColor(): Result<AvatarColor> {
+        return try {
+            val ref = avatarColorCollection.get().await()
+            val colors = addAvatarColors()
+            colors.exceptionOrNull()?.let { throw Exception(it) }
+            colors.getOrNull()?.let { safeColors ->
+                val color = safeColors.randomOrNull()
+                color?.let { Result.success(it) } ?:
+                throw Exception("getRandomColor() AvatarColor not found")
+            } ?:
+            throw Exception("getRandomColor() AvatarColors not found")
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun getAvatarColor(id: String): Result<AvatarColor> {
+        return try {
+            avatarColorCollection.document(id).get().await().toObject(AvatarColor::class.java)?.let {
+                Result.success(it)
+            } ?: throw Exception("getAvatarColor(id) avatarColor not found")
+        } catch (e: Exception) {
+            Result.failure(e)
         }
     }
 }

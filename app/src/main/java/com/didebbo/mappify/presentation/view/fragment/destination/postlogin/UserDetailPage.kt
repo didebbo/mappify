@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.didebbo.mappify.R
+import com.didebbo.mappify.data.model.AvatarColor
 import com.didebbo.mappify.data.model.MarkerPostDocument
 import com.didebbo.mappify.data.model.Position
 import com.didebbo.mappify.data.model.UserDocument
@@ -118,14 +119,17 @@ class UserDetailPage: BaseFragmentDestination<UserDetailViewModel>(UserDetailVie
     }
 
     private fun bindUserDocument(data: UserDocument) {
-        parentActivity?.getColor(data.avatarColor.resId)?.let {
-            binding.avatarNameTextView.backgroundTintList = ColorStateList.valueOf(it)
+        parentActivity?.loaderCoroutineScope {
+            val resId = getAvatarColor(data.avatarColorId)?.resId ?: R.color.avatar_gray
+            parentActivity?.getColor(resId)?.let {
+                binding.avatarNameTextView.backgroundTintList = ColorStateList.valueOf(it)
+            }
+            binding.avatarNameTextView.text = data.getAvatarName()
+            binding.userNameTextView.text = data.getFullName()
+            binding.userEmailTextView.text = data.email
+            binding.postCounterTextVIew.text = "Marker Posts: ${data.markerPostsIds.size}"
+            binding.descriptionEditText.setText(data.description)
         }
-        binding.avatarNameTextView.text = data.getAvatarName()
-        binding.userNameTextView.text = data.getFullName()
-        binding.userEmailTextView.text = data.email
-        binding.postCounterTextVIew.text = "Marker Posts: ${data.markerPostsIds.size}"
-        binding.descriptionEditText.setText(data.description)
     }
 
     private fun bindUserOwnerDocument(owner: UserDocument, other: UserDocument) {
@@ -154,5 +158,13 @@ class UserDetailPage: BaseFragmentDestination<UserDetailViewModel>(UserDetailVie
             )
         }
         recyclerView.adapter = MarkerPostAdapter(this, data)
+    }
+
+    suspend fun getAvatarColor(id: String): AvatarColor? {
+        val result = viewModel.getAvatarColor(id)
+        result.exceptionOrNull()?.let {
+            parentActivity?.showAlertView(it.localizedMessage ?: "Undefined Error")
+        }
+        return result.getOrNull()
     }
 }

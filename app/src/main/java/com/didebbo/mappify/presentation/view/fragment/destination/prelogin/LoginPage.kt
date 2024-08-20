@@ -10,6 +10,7 @@ import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentDest
 import com.didebbo.mappify.presentation.view.activity.PreLoginActivity
 import com.didebbo.mappify.presentation.viewmodel.PreLoginViewModel
 import com.didebbo.mappify.R
+import com.didebbo.mappify.data.model.AvatarColor
 import com.didebbo.mappify.data.model.UserDocument
 import com.didebbo.mappify.databinding.LoginPageLayoutBinding
 import kotlinx.coroutines.Dispatchers
@@ -53,7 +54,8 @@ class LoginPage: BaseFragmentDestination<PreLoginViewModel>(PreLoginViewModel::c
                 parentActivity?.loaderCoroutineScope {
                     getOwnerUserDocument()?.let { userDocument ->
                         binding.avatarNameTextView.text = userDocument.getAvatarName()
-                        parentActivity?.getColor(userDocument.avatarColor.resId)?.let { resId ->
+                        val resId = getAvatarColor(userDocument.avatarColorId)?.resId ?: R.color.avatar_gray
+                        parentActivity?.getColor(resId)?.let { resId ->
                             binding.avatarNameTextView.backgroundTintList = ColorStateList.valueOf(resId)
                         }
                     }
@@ -99,6 +101,16 @@ class LoginPage: BaseFragmentDestination<PreLoginViewModel>(PreLoginViewModel::c
     private suspend fun getOwnerUserDocument(): UserDocument? {
         return withContext(Dispatchers.IO) {
             val result = viewModel.getOwnerUserDocument()
+            result.exceptionOrNull()?.let {
+                parentActivity?.showAlertView(it.localizedMessage ?: "Undefined Error")
+            }
+            result.getOrNull()
+        }
+    }
+
+    private suspend fun getAvatarColor(id: String): AvatarColor? {
+        return withContext(Dispatchers.IO) {
+            val result = viewModel.getAvatarColor(id)
             result.exceptionOrNull()?.let {
                 parentActivity?.showAlertView(it.localizedMessage ?: "Undefined Error")
             }

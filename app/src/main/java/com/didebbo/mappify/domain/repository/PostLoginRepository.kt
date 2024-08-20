@@ -1,5 +1,6 @@
 package com.didebbo.mappify.domain.repository
 
+import com.didebbo.mappify.data.model.AvatarColor
 import com.didebbo.mappify.data.model.MarkerPostDocument
 import com.didebbo.mappify.data.model.UserDocument
 import com.didebbo.mappify.data.provider.FirebaseDataProvider
@@ -23,5 +24,9 @@ class PostLoginRepository @Inject constructor(
 
     suspend fun getUserDocument(id: String): Result<UserDocument> {
         return firebaseDataProvider.getUserDocument(id)
+    }
+
+    suspend fun getAvatarColor(id: String): Result<AvatarColor> {
+        return firebaseDataProvider.getAvatarColor(id)
     }
 }

@@ -51,8 +51,7 @@ class RegisterPage: BaseFragmentDestination<PreLoginViewModel>(PreLoginViewModel
                 name = binding.nameTextField.text.toString(),
                 surname = binding.surnameTextField.text.toString(),
                 email = binding.emailTextField.text.toString(),
-                password = binding.passwordTextField.text.toString(),
-                avatarColor = AvatarColor.AvatarColors.entries.random().avatarColor
+                password = binding.passwordTextField.text.toString()
             )
 
             parentActivity?.loaderCoroutineScope {

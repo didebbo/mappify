@@ -22,6 +22,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import com.didebbo.mappify.R
+import com.didebbo.mappify.data.model.AvatarColor
 import com.didebbo.mappify.data.model.MarkerPostDocument
 import com.didebbo.mappify.data.model.Position
 import com.didebbo.mappify.databinding.MapViewLayoutBinding
@@ -31,8 +32,10 @@ import com.didebbo.mappify.presentation.view.component.markerpost.infowindow.Mar
 import com.didebbo.mappify.presentation.view.component.spinner.adapter.SpinnerArrayAdapter
 import com.didebbo.mappify.presentation.viewmodel.PostLoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.osmdroid.api.IMapController
 import org.osmdroid.config.Configuration
 import org.osmdroid.events.MapListener
@@ -227,6 +230,16 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
             overlayLayout.animate().alpha(0f).setDuration(duration).withEndAction {
                 overlayLayout.visibility = View.INVISIBLE
             }.start()
+        }
+    }
+
+    suspend fun getAvatarColor(id: String): AvatarColor? {
+        return withContext(Dispatchers.IO) {
+            val result = viewModel.getAvatarColor(id)
+            result.exceptionOrNull()?.let {
+                parentActivity?.showAlertView(it.localizedMessage ?: "Undefined Error")
+            }
+            result.getOrNull()
         }
     }
 }

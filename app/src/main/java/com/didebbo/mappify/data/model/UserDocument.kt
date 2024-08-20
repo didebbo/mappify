@@ -8,7 +8,7 @@ data class UserDocument(
     val surname: String = "Undefined Surname",
     val email: String = "Undefined Email",
     val description: String = "",
-    val avatarColor: AvatarColor = AvatarColor(),
+    val avatarColorId: String = UUID.randomUUID().toString(),
     val markerPostsIds: List<String> = listOf()
 ) {
 

@@ -3,6 +3,7 @@ package com.didebbo.mappify.presentation.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.didebbo.mappify.data.model.AvatarColor
 import com.didebbo.mappify.data.model.MarkerPostDocument
 import com.didebbo.mappify.data.model.Position
 import com.didebbo.mappify.data.model.UserDocument
@@ -77,6 +78,12 @@ class PostLoginViewModel @Inject constructor(
     suspend fun getUserDocument(id: String): Result<UserDocument> {
         return withContext(Dispatchers.IO) {
             postLoginRepository.getUserDocument(id)
+        }
+    }
+
+    suspend fun getAvatarColor(id: String): Result<AvatarColor> {
+        return withContext(Dispatchers.IO) {
+            postLoginRepository.getAvatarColor(id)
         }
     }
 }

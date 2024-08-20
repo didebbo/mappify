@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.didebbo.mappify.R
+import com.didebbo.mappify.data.model.AvatarColor
 import com.didebbo.mappify.data.model.MarkerPostDocument
 import com.didebbo.mappify.data.model.Position
 import com.didebbo.mappify.data.model.UserDocument
@@ -18,6 +19,8 @@ import com.didebbo.mappify.presentation.view.activity.NewMarkerPointActivity
 import com.didebbo.mappify.presentation.view.activity.PostLoginActivity
 import com.didebbo.mappify.presentation.view.component.menu.recyclerview.MenuPageAdapter
 import com.didebbo.mappify.presentation.viewmodel.PostLoginViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class MenuPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewModel::class.java) {
 
@@ -83,12 +86,11 @@ class MenuPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewModel::
     }
 
     private fun fetchOwnerUserDocument() {
-        var userDocument: UserDocument? = null
-        viewModel.ownerUserDocument?.let {
-            bindUser(it)
-            return
-        }
         parentActivity?.loaderCoroutineScope {
+            viewModel.ownerUserDocument?.let {
+                bindUser(it)
+                return@loaderCoroutineScope
+            }
             val userDocumentResult = viewModel.getOwnerUserDocument()
             userDocumentResult.exceptionOrNull()?.let {
                 parentActivity?.showAlertView(it.localizedMessage ?: "")
@@ -99,13 +101,24 @@ class MenuPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewModel::
         }
     }
 
-    private fun bindUser(data: UserDocument) {
-        context?.getColor(data.avatarColor.resId)?.let { color ->
+    private suspend fun bindUser(data: UserDocument) {
+        val resId = getAvatarColor(data.avatarColorId)?.resId ?: R.color.avatar_gray
+        context?.getColor(resId)?.let { color ->
             binding.avatarNameTextView.backgroundTintList = ColorStateList.valueOf(color)
         }
         binding.avatarNameTextView.text = data.getAvatarName()
         binding.userNameTextView.text = data.getFullName()
         binding.userEmailTextView.text = data.email
         binding.postCounterTextVIew.text = "Marker Posts: ${data.markerPostsIds.size}"
+    }
+
+    private suspend fun getAvatarColor(id: String): AvatarColor? {
+        return withContext(Dispatchers.IO) {
+            val result = viewModel.getAvatarColor(id)
+            result.exceptionOrNull()?.let {
+                parentActivity?.showAlertView(it.localizedMessage ?: "Undefined Error")
+            }
+            result.getOrNull()
+        }
     }
 }

@@ -5,6 +5,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.didebbo.mappify.data.model.AvatarColor
 import com.didebbo.mappify.data.model.MarkerPostDocument
 import com.didebbo.mappify.data.model.UserDocument
 import com.didebbo.mappify.domain.repository.MarkerPostRepository
@@ -55,6 +56,12 @@ class UserDetailViewModel @Inject constructor(
     suspend fun fetchUserMarkerPosts(id: String): Result<List<MarkerPostDocument>> {
         return withContext(Dispatchers.IO) {
             userDetailRepository.getUserMarkerPosts(id)
+        }
+    }
+
+    suspend fun getAvatarColor(id: String): Result<AvatarColor> {
+        return withContext(Dispatchers.IO) {
+            userDetailRepository.getAvatarColor(id)
         }
     }
 }

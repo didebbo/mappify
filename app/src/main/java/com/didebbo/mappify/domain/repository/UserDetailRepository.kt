@@ -1,5 +1,6 @@
 package com.didebbo.mappify.domain.repository
 
+import com.didebbo.mappify.data.model.AvatarColor
 import com.didebbo.mappify.data.model.MarkerPostDocument
 import com.didebbo.mappify.data.model.UserDocument
 import com.didebbo.mappify.data.provider.FirebaseDataProvider
@@ -22,5 +23,9 @@ class UserDetailRepository @Inject constructor(
 
     suspend fun getUserMarkerPosts(id: String): Result<List<MarkerPostDocument>> {
         return firebaseDataProvider.getUserMarkerPosts(id)
+    }
+
+    suspend fun getAvatarColor(id: String): Result<AvatarColor> {
+        return firebaseDataProvider.getAvatarColor(id)
     }
 }

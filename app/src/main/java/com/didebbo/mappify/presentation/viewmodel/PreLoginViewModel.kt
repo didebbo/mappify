@@ -10,6 +10,8 @@ import com.didebbo.mappify.data.model.UserDocument
 import com.didebbo.mappify.domain.repository.PreLoginRepository
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -35,5 +37,11 @@ class PreLoginViewModel @Inject constructor(
 
     fun signOut() {
         preLoginRepository.signOut()
+    }
+
+    suspend fun getAvatarColor(id: String): Result<AvatarColor> {
+        return withContext(Dispatchers.IO) {
+            preLoginRepository.getAvatarColor(id)
+        }
     }
 }
