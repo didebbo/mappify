@@ -32,6 +32,17 @@ class LoginPage: BaseFragmentDestination<PreLoginViewModel>(PreLoginViewModel::c
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setObservable()
+        setListener()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        binding.emailTextField.setText("")
+        binding.passwordTextField.setText("")
+    }
+
+    private fun setObservable() {
         viewModel.getUser().observe(viewLifecycleOwner) {
             binding.userEmailTextView.text = it?.email
             binding.avatarNameTextView.visibility = if(it != null) View.VISIBLE else View.GONE
@@ -49,6 +60,9 @@ class LoginPage: BaseFragmentDestination<PreLoginViewModel>(PreLoginViewModel::c
                 }
             }
         }
+    }
+
+    private fun setListener() {
 
         binding.createNewAccountButton.setOnClickListener {
             navController?.navigate(resId = R.id.register_page_navigation_fragment)
@@ -79,12 +93,7 @@ class LoginPage: BaseFragmentDestination<PreLoginViewModel>(PreLoginViewModel::c
         binding.signOutButton.setOnClickListener {
             viewModel.signOut()
         }
-    }
 
-    override fun onStop() {
-        super.onStop()
-        binding.emailTextField.setText("")
-        binding.passwordTextField.setText("")
     }
 
     private suspend fun getOwnerUserDocument(): UserDocument? {
