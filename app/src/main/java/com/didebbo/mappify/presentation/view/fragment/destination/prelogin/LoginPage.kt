@@ -91,9 +91,7 @@ class LoginPage: BaseFragmentDestination<PreLoginViewModel>(PreLoginViewModel::c
         return withContext(Dispatchers.IO) {
             val result = viewModel.getOwnerUserDocument()
             result.exceptionOrNull()?.let {
-                withContext(Dispatchers.Main) {
-                    parentActivity?.showAlertView(it.localizedMessage ?: "Undefined Error")
-                }
+                parentActivity?.showAlertView(it.localizedMessage ?: "Undefined Error")
             }
             result.getOrNull()
         }

@@ -170,18 +170,20 @@ abstract class BaseActivityNavigator<VM: ViewModel>(): AppCompatActivity() {
         }
     }
 
-    fun showAlertView(
+    suspend fun showAlertView(
         message: String,
         confirmAction: (()->Unit)? = null,
         deleteAction: (()->Unit)? = null
         ) {
-        alertTextView.text = message
-        alertConfirmAction = confirmAction
-        alertDeleteAction = deleteAction
+        withContext(Dispatchers.Main) {
+            alertTextView.text = message
+            alertConfirmAction = confirmAction
+            alertDeleteAction = deleteAction
 
-        alertView.visibility = View.VISIBLE
-        alertDeleteButton.visibility = if(deleteAction != null) View.VISIBLE else View.GONE
-        modalView.visibility = View.VISIBLE
+            alertView.visibility = View.VISIBLE
+            alertDeleteButton.visibility = if(deleteAction != null) View.VISIBLE else View.GONE
+            modalView.visibility = View.VISIBLE
+        }
     }
 
     fun configureSystemNavigation(
