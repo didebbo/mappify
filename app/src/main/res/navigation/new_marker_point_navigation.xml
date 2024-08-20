@@ -7,6 +7,7 @@
 
     <fragment android:name="com.didebbo.mappify.presentation.view.fragment.destination.postlogin.NewMarkerPointPage"
         android:id="@+id/new_marker_point_page_navigation_fragment"
+        android:label="New Marker Post"
         tools:layout="@layout/add_marker_point_layout">
     </fragment>
 </navigation>
