@@ -2,6 +2,7 @@ package com.didebbo.mappify.data.provider
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.didebbo.mappify.data.model.AvatarColor
 import com.didebbo.mappify.data.model.MarkerPostDocument
 import com.didebbo.mappify.data.model.UserAuth
 import com.didebbo.mappify.data.model.UserDocument
@@ -10,6 +11,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
+import com.google.firebase.firestore.toObject
 import kotlinx.coroutines.tasks.await
 
 
@@ -18,6 +20,7 @@ class FirebaseDataProvider {
     private val fireStore = Firebase.firestore
     private val userCollection = fireStore.collection("user_collection")
     private val markerPostCollection = fireStore.collection("marker_collection")
+    private val avatarColorCollection = fireStore.collection("avatar_collection")
 
     private val _currentUser: MutableLiveData<FirebaseUser?> = MutableLiveData(auth.currentUser)
 
@@ -47,9 +50,12 @@ class FirebaseDataProvider {
         return try {
             userAuth.registerException()?.let { return Result.failure(it) }
             auth.createUserWithEmailAndPassword(userAuth.email, userAuth.password).await()
-            val reference = userCollection.document()
-            val data = UserDocument(id = reference.id, name = userAuth.name ?: "", surname = userAuth.surname ?: "", email = userAuth.email, avatarColor = userAuth.avatarColor)
-            reference.set(data).await()
+            val userDocument = addUserDocument(userAuth)
+            userDocument.exceptionOrNull()?.let {  return Result.failure(it) }
+            userDocument.getOrNull()?.let {
+                val avatarColor = addAvatarColor(it.avatarColor)
+                avatarColor.exceptionOrNull()?.let { avatarError -> return Result.failure(avatarError) }
+            }
             _currentUser.postValue(auth.currentUser)
             Result.success(Unit)
         } catch (e: Exception) {
@@ -80,6 +86,20 @@ class FirebaseDataProvider {
             userDocument?.let { Result.success(it) } ?:
             Result.failure(Exception("getOwnerUserDocument() UserDocument not fount"))
         } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    private suspend fun addUserDocument(userAuth: UserAuth): Result<UserDocument> {
+        return try {
+            val userDocument = userCollection.document()
+            val data = UserDocument(id = userDocument.id, name = userAuth.name ?: "", surname = userAuth.surname ?: "", email = userAuth.email, avatarColor = userAuth.avatarColor)
+            userDocument.set(data).await()
+            userDocument.get().await().toObject(UserDocument::class.java)?.let {
+                Result.success(it)
+            } ?:
+            Result.failure(Exception("addUserDocument() UserDocument not found"))
+        } catch(e: Exception) {
             Result.failure(e)
         }
     }
@@ -139,6 +159,20 @@ class FirebaseDataProvider {
             Result.failure(Exception("updateUserDocument() UserDocument not found"))
         } catch (e: Exception) {
             Result.failure(e)
+        }
+    }
+
+    private suspend fun addAvatarColor(avatarColor: AvatarColor): Result<AvatarColor> {
+        return try {
+            val avatarColorRef = avatarColorCollection.document(avatarColor.id)
+            avatarColorRef.get().await().toObject(AvatarColor::class.java)?.let {
+                Result.success(it)
+            } ?: avatarColorRef.set(avatarColor)
+            val avatarColor = avatarColorRef.get().await().toObject(AvatarColor::class.java)
+            avatarColor?.let { Result.success(it) } ?:
+            Result.failure(Exception("addAvatarColor() AvatarColor not found"))
+        } catch(e: Exception) {
+            return Result.failure(e)
         }
     }
 }

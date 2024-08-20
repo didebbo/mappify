@@ -42,10 +42,8 @@ class LoginPage: BaseFragmentDestination<PreLoginViewModel>(PreLoginViewModel::c
                 parentActivity?.loaderCoroutineScope {
                     getOwnerUserDocument()?.let { userDocument ->
                         binding.avatarNameTextView.text = userDocument.getAvatarName()
-                        userDocument.avatarColor?.let { avatarColor ->
-                            parentActivity?.getColor(avatarColor)?.let { resId ->
-                                binding.avatarNameTextView.backgroundTintList = ColorStateList.valueOf(resId)
-                            }
+                        parentActivity?.getColor(userDocument.avatarColor.resId)?.let { resId ->
+                            binding.avatarNameTextView.backgroundTintList = ColorStateList.valueOf(resId)
                         }
                     }
                 }
@@ -93,7 +91,9 @@ class LoginPage: BaseFragmentDestination<PreLoginViewModel>(PreLoginViewModel::c
         return withContext(Dispatchers.IO) {
             val result = viewModel.getOwnerUserDocument()
             result.exceptionOrNull()?.let {
-                parentActivity?.showAlertView(it.localizedMessage ?: "Undefined Error")
+                withContext(Dispatchers.Main) {
+                    parentActivity?.showAlertView(it.localizedMessage ?: "Undefined Error")
+                }
             }
             result.getOrNull()
         }

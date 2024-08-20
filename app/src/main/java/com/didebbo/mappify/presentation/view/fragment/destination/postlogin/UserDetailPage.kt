@@ -118,10 +118,8 @@ class UserDetailPage: BaseFragmentDestination<UserDetailViewModel>(UserDetailVie
     }
 
     private fun bindUserDocument(data: UserDocument) {
-        data.avatarColor?.let { resId ->
-            parentActivity?.getColor(resId)?.let {
-                binding.avatarNameTextView.backgroundTintList = ColorStateList.valueOf(it)
-            }
+        parentActivity?.getColor(data.avatarColor.resId)?.let {
+            binding.avatarNameTextView.backgroundTintList = ColorStateList.valueOf(it)
         }
         binding.avatarNameTextView.text = data.getAvatarName()
         binding.userNameTextView.text = data.getFullName()

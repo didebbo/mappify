@@ -7,7 +7,7 @@ data class UserAuth(
     val surname: String? = null,
     val email: String,
     val password: String,
-    val avatarColor: Int? = R.color.avatar_gray
+    val avatarColor: AvatarColor = AvatarColor()
 ) {
 
     private fun hasValidName(): Boolean {

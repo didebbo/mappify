@@ -100,10 +100,8 @@ class MenuPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewModel::
     }
 
     private fun bindUser(data: UserDocument) {
-        data.avatarColor?.let {
-            context?.getColor(it)?.let { color ->
-                binding.avatarNameTextView.backgroundTintList = ColorStateList.valueOf(color)
-            }
+        context?.getColor(data.avatarColor.resId)?.let { color ->
+            binding.avatarNameTextView.backgroundTintList = ColorStateList.valueOf(color)
         }
         binding.avatarNameTextView.text = data.getAvatarName()
         binding.userNameTextView.text = data.getFullName()
