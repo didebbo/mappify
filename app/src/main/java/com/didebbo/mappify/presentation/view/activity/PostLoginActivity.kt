@@ -23,6 +23,7 @@ class PostLoginActivity: BaseActivityNavigator<PostLoginViewModel>() {
             R.navigation.post_login_navigation,
             R.menu.post_login_bottom_menu,
             setOf(
+                R.id.marker_post_list_page_navigation_fragment,
                 R.id.map_view_page_navigation_fragment,
                 R.id.menu_page_navigation_fragment
             )
