@@ -50,6 +50,7 @@ class LoginPage: BaseFragmentDestination<PreLoginViewModel>(PreLoginViewModel::c
             binding.userEmailTextView.visibility = if(it != null) View.VISIBLE else View.GONE
             binding.emailTextField.visibility = if(it == null) View.VISIBLE else View.GONE
             binding.createNewAccountButton.visibility = if(it == null) View.VISIBLE else View.GONE
+            binding.signOutButton.visibility = if(it != null) View.VISIBLE else View.GONE
             it?.let {
                 parentActivity?.loaderCoroutineScope {
                     getOwnerUserDocument()?.let { userDocument ->
