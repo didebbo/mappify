@@ -1,24 +1,15 @@
 package com.didebbo.mappify.presentation.view.fragment.destination.postlogin
 
-import android.content.Context
 import android.content.Context.MODE_PRIVATE
-import android.graphics.drawable.Drawable
-import android.icu.text.Transliterator
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
-import android.view.View.OnTouchListener
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.Spinner
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
@@ -153,26 +144,13 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
         }
 
         context?.let {
-            citySelectionSpinnerAdapter = SpinnerArrayAdapter(it,viewModel.availablePositions)
-            citySelectionSpinner.adapter = citySelectionSpinnerAdapter
-            var firstInit = true
-            citySelectionSpinner.onItemSelectedListener = object :AdapterView.OnItemSelectedListener{
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    if(firstInit) {
-                        firstInit = false
-                        return
-                    }
-                    val item = citySelectionSpinnerAdapter.getItem(position)
-                    viewModel.currentPosition = item
-                    mapController.setCenter(item.geoPoint)
-                }
-                override fun onNothingSelected(parent: AdapterView<*>?) {}
+            citySelectionSpinnerAdapter = SpinnerArrayAdapter(it, viewModel.availablePositions) { item ->
+                viewModel.currentPosition = item
+                mapController.setCenter(item.geoPoint)
+                val position = citySelectionSpinnerAdapter.data.indexOf(item)
+                citySelectionSpinner.setSelection(position)
             }
+            citySelectionSpinner.adapter = citySelectionSpinnerAdapter
         }
 
         mapView.addMapListener(object : MapListener {
@@ -200,7 +178,7 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
                     infoWindow = generateMarkerPostInfoWindow(it)
                     icon = AppCompatResources.getDrawable(requireContext(),R.drawable.map_marker)
 
-                    setOnMarkerClickListener { marker, view ->
+                    setOnMarkerClickListener { marker, _ ->
                         if (!marker.isInfoWindowShown) {
                             marker.showInfoWindow()
                             val markerPostInfoWindow = marker.infoWindow as? MarkerPostInfoWindow

@@ -8,7 +8,11 @@ import android.widget.BaseAdapter
 import com.didebbo.mappify.data.model.Position
 import com.didebbo.mappify.databinding.SpinnerDropdownItemBinding
 
-class SpinnerArrayAdapter(private val ctx: Context, var data: MutableList<Position>): BaseAdapter() {
+class SpinnerArrayAdapter(
+    private val ctx: Context, 
+    var data: MutableList<Position>,
+    private val onClickItem: ((Position) -> Unit)? = null
+): BaseAdapter() {
     class ViewHolder(val binding: SpinnerDropdownItemBinding)
     override fun getCount(): Int {
         return data.size
@@ -27,7 +31,6 @@ class SpinnerArrayAdapter(private val ctx: Context, var data: MutableList<Positi
         val view: View
 
         if (convertView == null) {
-            // Se convertView è null, inflatamo una nuova vista e creiamo un nuovo ViewHolder
             val binding = SpinnerDropdownItemBinding.inflate(LayoutInflater.from(ctx), parent, false)
             view = binding.root
             viewHolder = ViewHolder(binding)
@@ -38,7 +41,20 @@ class SpinnerArrayAdapter(private val ctx: Context, var data: MutableList<Positi
         }
 
         val item = data[position]
-        viewHolder.binding.textView.text = "${item.name}"
+        viewHolder.binding.textView.text = item.name
+        return view
+    }
+
+    override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup?): View {
+        val view = getView(position, convertView, parent)
+        view.setOnClickListener {
+            val item = getItem(position)
+            onClickItem?.invoke(item)
+            parent?.post {
+                view.rootView.dispatchKeyEvent(android.view.KeyEvent(android.view.KeyEvent.ACTION_DOWN, android.view.KeyEvent.KEYCODE_BACK))
+                view.rootView.dispatchKeyEvent(android.view.KeyEvent(android.view.KeyEvent.ACTION_UP, android.view.KeyEvent.KEYCODE_BACK))
+            }
+        }
         return view
     }
 }
