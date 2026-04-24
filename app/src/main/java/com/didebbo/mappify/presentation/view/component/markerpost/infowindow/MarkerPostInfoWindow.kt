@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.infowindow.InfoWindow
 
-class MarkerPostInfoWindow(parent: Fragment, mapView: MapView, private val data: ViewData): InfoWindow(
+class MarkerPostInfoWindow(parent: Fragment, mapView: MapView, val data: ViewData): InfoWindow(
     R.layout.marker_post_layout, mapView) {
 
     private val binding: MarkerPostLayoutBinding =

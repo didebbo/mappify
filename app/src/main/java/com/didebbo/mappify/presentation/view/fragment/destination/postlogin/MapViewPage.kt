@@ -3,6 +3,7 @@ package com.didebbo.mappify.presentation.view.fragment.destination.postlogin
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.graphics.drawable.Drawable
+import android.icu.text.Transliterator
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -114,17 +115,26 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
     private fun bundleNavigateTo() {
         arguments?.let {
          it.getSerializable("navigateTo",Position::class.java)?.let { customPosition ->
-             Log.i("gn","$customPosition")
-             viewModel.currentPosition = customPosition
-             viewModel.currentGeoPoint = customPosition.geoPoint
-             val getCustomItem = citySelectionSpinnerAdapter.data.firstOrNull { item -> item.id == customPosition.id }
-             getCustomItem?.let { item -> citySelectionSpinnerAdapter.data.remove(item) }
-             citySelectionSpinnerAdapter.data.add(0,customPosition)
-             val position = citySelectionSpinnerAdapter.data.indexOf(customPosition)
-             citySelectionSpinner.setSelection(position)
-             mapController.setCenter(customPosition.geoPoint)
+             setCustomPosition(customPosition)
          }
         }
+    }
+
+    private fun setCustomPosition(customPosition: Position) {
+        viewModel.currentPosition = customPosition
+        viewModel.currentGeoPoint = customPosition.geoPoint
+        val getCustomItem = citySelectionSpinnerAdapter.data.firstOrNull { item -> item.id == customPosition.id }
+        getCustomItem?.let { item -> citySelectionSpinnerAdapter.data.remove(item) }
+        citySelectionSpinnerAdapter.data.add(0, customPosition)
+        citySelectionSpinnerAdapter.notifyDataSetChanged()
+
+        citySelectionSpinner.post {
+            val position = citySelectionSpinnerAdapter.data.indexOf(customPosition)
+            if (position != -1) {
+                citySelectionSpinner.setSelection(position)
+            }
+        }
+        mapController.setCenter(customPosition.geoPoint)
     }
 
     private fun configuredMapView() {
@@ -189,6 +199,22 @@ class MapViewPage: BaseFragmentDestination<PostLoginViewModel>(PostLoginViewMode
                     position = GeoPoint(it.position.latitude,it.position.longitude)
                     infoWindow = generateMarkerPostInfoWindow(it)
                     icon = AppCompatResources.getDrawable(requireContext(),R.drawable.map_marker)
+
+                    setOnMarkerClickListener { marker, view ->
+                        if (!marker.isInfoWindowShown) {
+                            marker.showInfoWindow()
+                            val markerPostInfoWindow = marker.infoWindow as? MarkerPostInfoWindow
+                            markerPostInfoWindow?.let { infoWindow ->
+                                val name = infoWindow.data.title
+                                val geoPoint = GeoPoint(infoWindow.data.position.latitude, infoWindow.data.position.longitude)
+                                val position = Position("CUSTOM", name, geoPoint)
+                                setCustomPosition(position)
+                            }
+                        }
+                        else marker.closeInfoWindow()
+
+                        true
+                    }
                 }
                 mapView.overlays.add(marker)
             }

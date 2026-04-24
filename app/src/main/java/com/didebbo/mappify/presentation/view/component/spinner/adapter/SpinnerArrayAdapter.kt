@@ -28,8 +28,7 @@ class SpinnerArrayAdapter(private val ctx: Context, var data: MutableList<Positi
 
         if (convertView == null) {
             // Se convertView è null, inflatamo una nuova vista e creiamo un nuovo ViewHolder
-            val binding =
-                SpinnerDropdownItemBinding.inflate(LayoutInflater.from(ctx), parent, false)
+            val binding = SpinnerDropdownItemBinding.inflate(LayoutInflater.from(ctx), parent, false)
             view = binding.root
             viewHolder = ViewHolder(binding)
             view.tag = viewHolder

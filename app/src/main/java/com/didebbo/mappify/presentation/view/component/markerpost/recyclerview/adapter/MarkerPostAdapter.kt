@@ -14,13 +14,11 @@ import com.didebbo.mappify.data.model.UserDocument
 import com.didebbo.mappify.databinding.MarkerPostItemLayoutBinding
 import com.didebbo.mappify.presentation.baseclass.fragment.page.BaseFragmentDestination
 import com.didebbo.mappify.presentation.view.activity.UserDetailActivity
-import com.didebbo.mappify.presentation.viewmodel.PostLoginViewModel
 
 class MarkerPostAdapter(private val parent: Fragment, private val data: List<ViewHolder.Data>): RecyclerView.Adapter<MarkerPostAdapter.ViewHolder>()  {
 
     @Suppress("UNCHECKED_CAST")
     private val parentDestination: BaseFragmentDestination<ViewModel>? = parent as? BaseFragmentDestination<ViewModel>
-    private val postLoginViewModel: PostLoginViewModel? = parentDestination?.viewModel as? PostLoginViewModel
 
     class ViewHolder(val binding: MarkerPostItemLayoutBinding): RecyclerView.ViewHolder(binding.root) {
      data class Data(
